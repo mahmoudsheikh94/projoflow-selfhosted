@@ -189,14 +189,17 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // 6. Create workspace settings
+    // 6. Create workspace settings (with workspace_id)
+    const settingsInsert: Record<string, unknown> = {
+      company_name: companyName || '',
+      logo_url: logoUrl || null,
+      setup_completed_at: new Date().toISOString(),
+    }
+    if (workspaceId) settingsInsert.workspace_id = workspaceId
+
     const { error: settingsError } = await supabase
       .from('workspace_settings')
-      .insert({
-        company_name: companyName || '',
-        logo_url: logoUrl || null,
-        setup_completed_at: new Date().toISOString(),
-      })
+      .insert(settingsInsert)
 
     if (settingsError) {
       console.error('Workspace settings error:', settingsError)

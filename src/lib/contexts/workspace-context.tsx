@@ -76,6 +76,7 @@ export const defaultThemeConfig: ThemeConfig = {
 
 export interface WorkspaceSettings {
   id: string
+  workspace_id: string
   company_name: string
   logo_url: string | null
   theme_config: ThemeConfig | null
@@ -123,12 +124,15 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
   const [settings, setSettings] = useState<WorkspaceSettings | null>(null)
   const [isLoading, setIsLoading] = useState(true)
 
-  const loadSettings = useCallback(async () => {
+  const loadSettings = useCallback(async (workspaceId?: string) => {
     try {
       const supabase = createClient()
+      const wsId = workspaceId || workspace?.id
+      if (!wsId) return
       const { data, error } = await supabase
         .from('workspace_settings')
         .select('*')
+        .eq('workspace_id', wsId)
         .limit(1)
         .single()
 
@@ -174,10 +178,9 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
           const member = members[0] as unknown as { workspace_id: string; role: WorkspaceMemberRole; workspaces: Workspace }
           setWorkspace(member.workspaces)
           setRole(member.role)
+          // Load workspace settings with the workspace ID
+          await loadSettings(member.workspaces?.id || member.workspace_id)
         }
-
-        // Load workspace settings
-        await loadSettings()
       } catch (err) {
         console.warn('Workspace context error:', err)
       } finally {
