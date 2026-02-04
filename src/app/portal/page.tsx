@@ -7,7 +7,9 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { useAuthUser, useClientAccess, useClientProjects, useSignOut } from '@/lib/hooks/use-client-portal'
 import { ProjectStatus } from '@/types/database'
-import { Zap, FolderKanban, LogOut, Loader2, Clock, CheckCircle2, Menu } from 'lucide-react'
+import { FolderKanban, LogOut, Loader2, Clock, CheckCircle2, Menu } from 'lucide-react'
+import Image from 'next/image'
+import { appConfig } from '@/lib/config/theme'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
 import { format } from 'date-fns'
@@ -79,9 +81,9 @@ export default function PortalDashboard() {
       <header className="border-b border-zinc-800 bg-zinc-900">
         <div className="max-w-6xl mx-auto px-4 py-3 md:py-4 flex items-center justify-between">
           <div className="flex items-center gap-2 md:gap-3">
-            <Zap className="h-6 w-6 md:h-7 md:w-7 text-emerald-500" />
+            <Image src={appConfig.logo} alt={appConfig.name} width={28} height={28} className="h-6 w-6 md:h-7 md:w-7" />
             <div>
-              <span className="text-base md:text-lg font-bold text-white">z-flow</span>
+              <span className="text-base md:text-lg font-bold text-white">{appConfig.name}</span>
               <span className="text-zinc-500 text-xs md:text-sm ml-1 md:ml-2 hidden sm:inline">Client Portal</span>
             </div>
           </div>

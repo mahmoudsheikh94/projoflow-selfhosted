@@ -1,17 +1,17 @@
 {
-  "name": "zflow-mcp-server",
+  "name": "taskflow-pro-mcp-server",
   "version": "1.0.0",
-  "description": "MCP server for z-flow project management",
+  "description": "MCP server for TaskFlow Pro project management",
   "main": "index.js",
   "type": "module",
   "bin": {
-    "zflow-mcp": "./index.js"
+    "taskflow-mcp": "./index.js"
   },
   "scripts": {
     "start": "node index.js"
   },
-  "keywords": ["mcp", "project-management", "z-flow"],
-  "author": "z-flow",
+  "keywords": ["mcp", "project-management", "taskflow-pro"],
+  "author": "TaskFlow Pro",
   "license": "MIT",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0",

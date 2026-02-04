@@ -2,11 +2,12 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "../globals.css";
 import { Providers } from "@/components/providers";
+import { appConfig } from "@/lib/config/theme";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Client Portal | z-flow",
+  title: `Client Portal | ${appConfig.name}`,
   description: "View your projects and track progress",
 };
 

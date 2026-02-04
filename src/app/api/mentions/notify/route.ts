@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { Resend } from 'resend'
+import { appConfig } from '@/lib/config/theme'
 
-const TELEGRAM_BOT_TOKEN = '7775389753:AAGJpdZ8KK1cODTN2L42D_xyZWMCv8aRCPs'
-const TELEGRAM_CHAT_ID = '6203550531'
-const MCP_EMAIL = 'mcp@z-flow.de'
+const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || ''
+const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID || ''
+const MCP_EMAIL = process.env.MCP_NOTIFICATION_EMAIL || ''
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
@@ -204,7 +205,7 @@ async function sendTelegramNotification({
     }
   }
 
-  message += `\n🔗 [Open Task](https://app.z-flow.de)`
+  message += `\n🔗 [Open Task](${appConfig.url})`
 
   const response = await fetch(
     `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,
@@ -248,12 +249,12 @@ async function sendEmailNotification({
   commentContent: string
   taskId: string
 }) {
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://app.z-flow.de'
+  const appUrl = appConfig.url
 
   await resend.emails.send({
-    from: 'Z-Flow <no-reply@send.z-flow.de>',
+    from: appConfig.emailFrom,
     to,
-    subject: `${authorName} mentioned you in "${taskTitle}" — Z-Flow`,
+    subject: `${authorName} mentioned you in "${taskTitle}" — ${appConfig.name}`,
     html: `
       <!DOCTYPE html>
       <html>
@@ -268,7 +269,7 @@ async function sendEmailNotification({
               <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="background-color: #18181b; border-radius: 16px; border: 1px solid #27272a;">
                 <tr>
                   <td style="background: linear-gradient(135deg, #059669 0%, #047857 100%); padding: 32px 40px;">
-                    <h1 style="margin: 0; font-size: 24px; font-weight: 700; color: #ffffff;">Z-Flow</h1>
+                    <h1 style="margin: 0; font-size: 24px; font-weight: 700; color: #ffffff;">${appConfig.name}</h1>
                     <p style="margin: 8px 0 0; font-size: 14px; color: #d1fae5;">You were mentioned in a comment</p>
                   </td>
                 </tr>
@@ -294,7 +295,7 @@ async function sendEmailNotification({
                       <tr>
                         <td align="center">
                           <a href="${appUrl}" style="display: inline-block; padding: 14px 36px; background: linear-gradient(135deg, #059669 0%, #047857 100%); color: #ffffff; text-decoration: none; font-size: 14px; font-weight: 600; border-radius: 10px;">
-                            View in Z-Flow →
+                            View in ${appConfig.name} →
                           </a>
                         </td>
                       </tr>
@@ -304,7 +305,7 @@ async function sendEmailNotification({
                 <tr>
                   <td style="padding: 24px 40px; background-color: #09090b; border-top: 1px solid #27272a; border-radius: 0 0 16px 16px;">
                     <p style="margin: 0; font-size: 12px; color: #52525b; text-align: center;">
-                      This email was sent because you were @mentioned in a comment on Z-Flow.
+                      This email was sent because you were @mentioned in a comment on ${appConfig.name}.
                     </p>
                   </td>
                 </tr>

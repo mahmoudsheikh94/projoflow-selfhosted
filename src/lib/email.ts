@@ -1,6 +1,7 @@
 import { Resend } from 'resend'
 import fs from 'fs'
 import path from 'path'
+import { appConfig } from '@/lib/config/theme'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
@@ -19,13 +20,16 @@ export async function sendInvitationEmail(
     .replace(/{{CLIENT_NAME}}/g, clientName)
     .replace(/{{CLIENT_EMAIL}}/g, to)
     .replace(/{{INVITATION_LINK}}/g, invitationLink)
+    .replace(/{{APP_NAME}}/g, appConfig.name)
+    .replace(/{{SUPPORT_EMAIL}}/g, appConfig.supportEmail)
+    .replace(/{{COPYRIGHT_YEAR}}/g, String(appConfig.copyrightYear))
 
   let lastError: Error | null = null
 
   for (let attempt = 1; attempt <= retries; attempt++) {
     try {
       await resend.emails.send({
-        from: 'Z-Flow Portal <no-reply@send.z-flow.de>',
+        from: appConfig.emailFrom,
         to,
         subject: `You're invited to ${clientName} Client Portal`,
         html
@@ -54,9 +58,9 @@ export async function sendWelcomeEmail(
 ): Promise<void> {
   try {
     await resend.emails.send({
-      from: 'Z-Flow Portal <no-reply@send.z-flow.de>',
+      from: appConfig.emailFrom,
       to,
-      subject: 'Welcome to Z-Flow Client Portal',
+      subject: `Welcome to ${appConfig.name} Client Portal`,
       html: `
         <!DOCTYPE html>
         <html>
@@ -70,8 +74,8 @@ export async function sendWelcomeEmail(
               <td align="center" style="padding: 40px 20px;">
                 <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="background-color: #18181b; border-radius: 16px; border: 1px solid #27272a;">
                   <tr>
-                    <td style="background: linear-gradient(135deg, #059669 0%, #047857 100%); padding: 40px;">
-                      <h1 style="margin: 0; font-size: 28px; font-weight: 700; color: #ffffff;">Z-Flow</h1>
+                    <td style="background: linear-gradient(135deg, ${appConfig.accentColor} 0%, #047857 100%); padding: 40px;">
+                      <h1 style="margin: 0; font-size: 28px; font-weight: 700; color: #ffffff;">${appConfig.name}</h1>
                       <p style="margin: 8px 0 0; font-size: 14px; color: #d1fae5;">Project Management Portal</p>
                     </td>
                   </tr>
@@ -87,7 +91,7 @@ export async function sendWelcomeEmail(
                       <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
                         <tr>
                           <td align="center">
-                            <a href="https://app.z-flow.de/portal" style="display: inline-block; padding: 16px 40px; background: linear-gradient(135deg, #059669 0%, #047857 100%); color: #ffffff; text-decoration: none; font-size: 16px; font-weight: 600; border-radius: 12px;">
+                            <a href="${appConfig.url}/portal" style="display: inline-block; padding: 16px 40px; background: linear-gradient(135deg, ${appConfig.accentColor} 0%, #047857 100%); color: #ffffff; text-decoration: none; font-size: 16px; font-weight: 600; border-radius: 12px;">
                               Go to Portal →
                             </a>
                           </td>
@@ -98,7 +102,7 @@ export async function sendWelcomeEmail(
                   <tr>
                     <td style="padding: 32px 40px; background-color: #09090b; border-top: 1px solid #27272a;">
                       <p style="margin: 0; font-size: 14px; color: #71717a; text-align: center;">
-                        Need help? Contact us at <a href="mailto:tech@z-flow.de" style="color: #10b981; text-decoration: none;">tech@z-flow.de</a>
+                        Need help? Contact us at <a href="mailto:${appConfig.supportEmail}" style="color: ${appConfig.primaryColor}; text-decoration: none;">${appConfig.supportEmail}</a>
                       </p>
                     </td>
                   </tr>

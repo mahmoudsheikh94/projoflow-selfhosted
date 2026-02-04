@@ -3,7 +3,9 @@
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { useSignOut } from '@/lib/hooks/use-client-portal'
-import { Zap, Lock } from 'lucide-react'
+import { Lock } from 'lucide-react'
+import Image from 'next/image'
+import { appConfig } from '@/lib/config/theme'
 import { useRouter } from 'next/navigation'
 
 export default function NoAccessPage() {
@@ -20,8 +22,8 @@ export default function NoAccessPage() {
       <Card className="w-full max-w-md bg-zinc-900 border-zinc-800">
         <CardContent className="pt-6 text-center">
           <div className="flex items-center justify-center gap-2 mb-6">
-            <Zap className="h-8 w-8 text-emerald-500" />
-            <span className="text-2xl font-bold text-white">z-flow</span>
+            <Image src={appConfig.logo} alt={appConfig.name} width={32} height={32} className="h-8 w-8" />
+            <span className="text-2xl font-bold text-white">{appConfig.name}</span>
           </div>
           <div className="h-16 w-16 rounded-full bg-zinc-800 flex items-center justify-center mx-auto mb-4">
             <Lock className="h-8 w-8 text-zinc-500" />
@@ -32,7 +34,7 @@ export default function NoAccessPage() {
             please contact us or ask for an invitation link.
           </p>
           <div className="space-y-3">
-            <a href="mailto:hello@z-flow.de">
+            <a href={`mailto:${appConfig.supportEmail}`}>
               <Button className="w-full bg-emerald-600 hover:bg-emerald-700">
                 Contact Us
               </Button>

@@ -7,7 +7,9 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useClientSignIn, useAuthUser } from '@/lib/hooks/use-client-portal'
-import { Zap, Loader2 } from 'lucide-react'
+import { Loader2 } from 'lucide-react'
+import Image from 'next/image'
+import { appConfig } from '@/lib/config/theme'
 import Link from 'next/link'
 import { toast } from 'sonner'
 
@@ -58,8 +60,8 @@ function LoginForm() {
       <Card className="w-full max-w-md bg-zinc-900 border-zinc-800">
         <CardHeader className="text-center">
           <div className="flex items-center justify-center gap-2 mb-4">
-            <Zap className="h-8 w-8 text-emerald-500" />
-            <span className="text-2xl font-bold text-white">z-flow</span>
+            <Image src={appConfig.logo} alt={appConfig.name} width={32} height={32} className="h-8 w-8" />
+            <span className="text-2xl font-bold text-white">{appConfig.name}</span>
           </div>
           <CardTitle className="text-white">Client Portal</CardTitle>
           <CardDescription className="text-zinc-400">

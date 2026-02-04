@@ -7,7 +7,9 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useValidateInvitation, useAcceptInvitation, useAuthUser, useClientSignUp } from '@/lib/hooks/use-client-portal'
-import { Zap, Loader2, CheckCircle2, XCircle } from 'lucide-react'
+import { Loader2, CheckCircle2, XCircle } from 'lucide-react'
+import Image from 'next/image'
+import { appConfig } from '@/lib/config/theme'
 import Link from 'next/link'
 import { toast } from 'sonner'
 
@@ -126,7 +128,7 @@ export default function InviteAcceptPage() {
             <p className="text-sm text-zinc-500">
               Please contact us for a new invitation.
             </p>
-            <a href="mailto:tech@z-flow.de" className="mt-4 inline-block">
+            <a href={`mailto:${appConfig.supportEmail}`} className="mt-4 inline-block">
               <Button variant="outline" className="border-zinc-700 text-zinc-300 hover:bg-zinc-800">
                 Contact Support
               </Button>
@@ -167,8 +169,8 @@ export default function InviteAcceptPage() {
         <Card className="w-full max-w-md bg-zinc-900 border-zinc-800">
           <CardHeader className="text-center">
             <div className="flex items-center justify-center gap-2 mb-4">
-              <Zap className="h-8 w-8 text-emerald-500" />
-              <span className="text-2xl font-bold text-white">z-flow</span>
+              <Image src={appConfig.logo} alt={appConfig.name} width={32} height={32} className="h-8 w-8" />
+              <span className="text-2xl font-bold text-white">{appConfig.name}</span>
             </div>
             <CardTitle className="text-white text-xl">You&apos;re Invited!</CardTitle>
             <p className="text-zinc-400 text-sm mt-2">

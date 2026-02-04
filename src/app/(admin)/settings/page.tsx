@@ -5,7 +5,9 @@ import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Settings, Database, Zap } from 'lucide-react'
+import { Settings, Database } from 'lucide-react'
+import Image from 'next/image'
+import { appConfig } from '@/lib/config/theme'
 
 export default function SettingsPage() {
   return (
@@ -49,7 +51,7 @@ export default function SettingsPage() {
           <div className="space-y-2">
             <Label>Business Name</Label>
             <Input
-              defaultValue="z-flow"
+              defaultValue={appConfig.name}
               className="bg-zinc-900 border-zinc-700"
             />
           </div>
@@ -99,14 +101,13 @@ export default function SettingsPage() {
       <Card className="bg-zinc-800 border-zinc-700">
         <CardHeader>
           <div className="flex items-center gap-2">
-            <Zap className="h-5 w-5 text-emerald-500" />
-            <CardTitle className="text-white">z-flow Project Management</CardTitle>
+            <Image src={appConfig.logo} alt={appConfig.name} width={20} height={20} className="h-5 w-5" />
+            <CardTitle className="text-white">{appConfig.name}</CardTitle>
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
           <p className="text-zinc-400">
-            A lightweight project management system built for z-flow agency. 
-            Track projects, clients, time, and tasks in one place.
+            {appConfig.tagline}. Track projects, clients, time, and tasks in one place.
           </p>
           <div className="flex gap-2">
             <Badge variant="outline" className="border-zinc-600 text-zinc-400">

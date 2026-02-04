@@ -1,0 +1,51 @@
+/**
+ * Theme configuration for TaskFlow Pro
+ *
+ * All branding values are driven by environment variables with sensible defaults.
+ * Override any value by setting the corresponding NEXT_PUBLIC_* env var.
+ *
+ * @example .env.local
+ * NEXT_PUBLIC_APP_NAME="My Agency PM"
+ * NEXT_PUBLIC_APP_TAGLINE="Manage projects like a boss"
+ * NEXT_PUBLIC_PRIMARY_COLOR="#6366f1"
+ */
+
+export const appConfig = {
+  /** Display name shown in sidebar, login, emails, metadata */
+  name: process.env.NEXT_PUBLIC_APP_NAME || 'TaskFlow Pro',
+
+  /** One-liner shown on marketing / onboarding pages */
+  tagline:
+    process.env.NEXT_PUBLIC_APP_TAGLINE ||
+    'Project management that gets out of your way',
+
+  /** Path to logo (relative to /public or an absolute URL) */
+  logo: process.env.NEXT_PUBLIC_APP_LOGO || '/logo.svg',
+
+  /** Primary brand colour – used for accents, buttons, active states */
+  primaryColor: process.env.NEXT_PUBLIC_PRIMARY_COLOR || '#10b981',
+
+  /** Secondary / darker accent – gradients, hover states */
+  accentColor: process.env.NEXT_PUBLIC_ACCENT_COLOR || '#059669',
+
+  /** Canonical app URL (no trailing slash) */
+  url: process.env.NEXT_PUBLIC_APP_URL || 'https://taskflow.pro',
+
+  /** Support email shown to users */
+  supportEmail: process.env.NEXT_PUBLIC_SUPPORT_EMAIL || 'support@taskflow.pro',
+
+  /** "From" address for transactional email */
+  emailFrom:
+    process.env.NEXT_PUBLIC_EMAIL_FROM ||
+    `${process.env.NEXT_PUBLIC_APP_NAME || 'TaskFlow Pro'} <no-reply@${
+      process.env.NEXT_PUBLIC_EMAIL_DOMAIN || 'taskflow.pro'
+    }>`,
+
+  /** Domain used for sending email (Resend, SES, etc.) */
+  emailDomain: process.env.NEXT_PUBLIC_EMAIL_DOMAIN || 'taskflow.pro',
+
+  /** Current year for copyright notices */
+  copyrightYear: new Date().getFullYear(),
+} as const
+
+export type AppConfig = typeof appConfig

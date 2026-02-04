@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import {
@@ -18,6 +19,7 @@ import {
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { Button } from '@/components/ui/button'
 import { useState } from 'react'
+import { appConfig } from '@/lib/config/theme'
 
 const navigation = [
   { name: 'Dashboard', href: '/', icon: LayoutDashboard },
@@ -35,8 +37,8 @@ function NavContent({ onNavigate }: { onNavigate?: () => void }) {
     <>
       {/* Logo */}
       <div className="flex h-16 items-center gap-2 px-6 border-b border-zinc-800">
-        <Zap className="h-8 w-8 text-emerald-500" />
-        <span className="text-xl font-bold">z-flow</span>
+        <Image src={appConfig.logo} alt={appConfig.name} width={32} height={32} className="h-8 w-8" />
+        <span className="text-xl font-bold">{appConfig.name}</span>
       </div>
 
       {/* Navigation */}
@@ -100,8 +102,8 @@ export function MobileHeader() {
   return (
     <div className="lg:hidden flex items-center justify-between h-14 px-4 bg-zinc-950 border-b border-zinc-800">
       <div className="flex items-center gap-2">
-        <Zap className="h-6 w-6 text-emerald-500" />
-        <span className="text-lg font-bold text-white">z-flow</span>
+        <Image src={appConfig.logo} alt={appConfig.name} width={24} height={24} className="h-6 w-6" />
+        <span className="text-lg font-bold text-white">{appConfig.name}</span>
       </div>
       
       <Sheet open={open} onOpenChange={setOpen}>

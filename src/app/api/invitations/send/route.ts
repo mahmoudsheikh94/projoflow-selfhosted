@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { sendInvitationEmail } from '@/lib/email'
+import { appConfig } from '@/lib/config/theme'
 
 export async function POST(request: NextRequest) {
   try {
@@ -29,7 +30,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Build invitation link
-    const invitationLink = `${process.env.NEXT_PUBLIC_APP_URL || 'https://app.z-flow.de'}/portal/invite/${invitation.token}`
+    const invitationLink = `${appConfig.url}/portal/invite/${invitation.token}`
 
     // Send email with retries
     await sendInvitationEmail(

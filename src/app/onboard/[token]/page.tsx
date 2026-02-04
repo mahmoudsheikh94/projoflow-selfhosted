@@ -15,7 +15,9 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { createClient } from '@/lib/supabase/client'
-import { Zap, CheckCircle2, ArrowRight, ArrowLeft, Loader2 } from 'lucide-react'
+import { CheckCircle2, ArrowRight, ArrowLeft, Loader2 } from 'lucide-react'
+import Image from 'next/image'
+import { appConfig } from '@/lib/config/theme'
 import { cn } from '@/lib/utils'
 
 type Step = 1 | 2 | 3
@@ -196,8 +198,8 @@ export default function OnboardingPage() {
             <p className="text-zinc-400">{error}</p>
             <p className="text-sm text-zinc-500 mt-4">
               Please contact us directly at{' '}
-              <a href="mailto:hello@z-flow.de" className="text-emerald-500 hover:underline">
-                hello@z-flow.de
+              <a href={`mailto:${appConfig.supportEmail}`} className="text-emerald-500 hover:underline">
+                {appConfig.supportEmail}
               </a>
             </p>
           </CardContent>
@@ -247,8 +249,8 @@ export default function OnboardingPage() {
         {/* Header */}
         <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-2 mb-4">
-            <Zap className="h-8 w-8 text-emerald-500" />
-            <span className="text-2xl font-bold text-white">z-flow</span>
+            <Image src={appConfig.logo} alt={appConfig.name} width={32} height={32} className="h-8 w-8" />
+            <span className="text-2xl font-bold text-white">{appConfig.name}</span>
           </div>
           <h1 className="text-2xl font-semibold text-white">Let&apos;s Build Something Great</h1>
           <p className="text-zinc-400 mt-2">Tell us about your project and we&apos;ll get back to you soon.</p>
@@ -472,8 +474,8 @@ export default function OnboardingPage() {
         {/* Footer */}
         <p className="text-center text-sm text-zinc-500 mt-6">
           Questions? Email us at{' '}
-          <a href="mailto:hello@z-flow.de" className="text-emerald-500 hover:underline">
-            hello@z-flow.de
+          <a href={`mailto:${appConfig.supportEmail}`} className="text-emerald-500 hover:underline">
+            {appConfig.supportEmail}
           </a>
         </p>
       </div>

@@ -580,7 +580,7 @@ async function handleTool(name, args) {
 
 // Create server
 const server = new Server(
-  { name: "zflow-mcp", version: "1.0.0" },
+  { name: "taskflow-mcp", version: "1.0.0" },
   { capabilities: { tools: {} } }
 );
 
@@ -609,7 +609,7 @@ async function main() {
   await authenticate();
   const transport = new StdioServerTransport();
   await server.connect(transport);
-  console.error("z-flow MCP server running");
+  console.error("TaskFlow Pro MCP server running");
 }
 
 main().catch(err => {
