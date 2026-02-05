@@ -1,10 +1,11 @@
 import { NextResponse } from 'next/server'
+import { createClient } from '@supabase/supabase-js'
 
 /**
  * POST /api/license/validate
  * 
- * Validates a ProjoFlow license key.
- * License keys are checked against Gumroad's API.
+ * Validates a ProjoFlow license key against our database.
+ * Works with any payment platform (Gumroad, LemonSqueezy, Stripe, etc.)
  */
 export async function POST(request: Request) {
   try {
@@ -20,70 +21,92 @@ export async function POST(request: Request) {
     // Clean up the license key (remove spaces, convert to uppercase)
     const cleanKey = licenseKey.trim().toUpperCase().replace(/\s/g, '')
 
-    // Validate format: PJ-XXXXX-XXXXX-XXXXX (or similar patterns)
-    const formatRegex = /^PJ-[A-Z0-9]{5,8}-[A-Z0-9]{5,8}-[A-Z0-9]{5,8}$/
+    // Validate format: PJ-XXXXXX-XXXXXX-XXXXXX
+    const formatRegex = /^PJ-[A-Z0-9]{6}-[A-Z0-9]{6}-[A-Z0-9]{6}$/
     if (!formatRegex.test(cleanKey)) {
       return NextResponse.json(
         { 
           valid: false, 
-          error: 'Invalid license key format. Expected: PJ-XXXXX-XXXXX-XXXXX' 
+          error: 'Invalid license key format. Expected: PJ-XXXXXX-XXXXXX-XXXXXX' 
         },
         { status: 400 }
       )
     }
 
-    // For now, we'll use Gumroad's license verification API
-    // You'll need to set GUMROAD_PRODUCT_ID in your env vars
-    const gumroadProductId = process.env.GUMROAD_PRODUCT_ID
+    // Check license in our database
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
     
-    if (!gumroadProductId) {
-      // Fallback: If Gumroad is not configured, accept any properly formatted key
-      // (You can remove this in production once Gumroad is set up)
-      console.warn('GUMROAD_PRODUCT_ID not set, accepting all formatted keys')
-      return NextResponse.json({
-        valid: true,
-        message: 'License key accepted',
-        productName: 'ProjoFlow Self-Hosted',
-      })
+    if (!supabaseUrl || !supabaseAnonKey) {
+      return NextResponse.json(
+        { error: 'Database not configured' },
+        { status: 500 }
+      )
     }
 
-    // Verify with Gumroad
-    const gumroadResponse = await fetch('https://api.gumroad.com/v2/licenses/verify', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: new URLSearchParams({
-        product_id: gumroadProductId,
-        license_key: cleanKey,
-      }),
-    })
+    const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
-    const gumroadData = await gumroadResponse.json()
+    const { data: license, error: dbError } = await supabase
+      .from('licenses')
+      .select('*')
+      .eq('license_key', cleanKey)
+      .single()
 
-    if (!gumroadResponse.ok || !gumroadData.success) {
+    if (dbError || !license) {
       return NextResponse.json(
         { 
           valid: false, 
-          error: 'Invalid or expired license key. Please check your purchase email.' 
+          error: 'Invalid license key. Please check your purchase email or contact support.' 
         },
         { status: 401 }
       )
     }
 
-    // Check if license has been used (optional - remove if you want to allow multiple installs)
-    // if (gumroadData.uses > 1) {
+    // Check if license is active
+    if (license.status !== 'active') {
+      return NextResponse.json(
+        { 
+          valid: false, 
+          error: `License is ${license.status}. Please contact support.` 
+        },
+        { status: 401 }
+      )
+    }
+
+    // Check if license is expired
+    if (license.expires_at && new Date(license.expires_at) < new Date()) {
+      return NextResponse.json(
+        { 
+          valid: false, 
+          error: 'License has expired. Please renew your license or contact support.' 
+        },
+        { status: 401 }
+      )
+    }
+
+    // Check activation limit (optional - for now we allow unlimited)
+    // if (license.activation_count >= license.max_activations) {
     //   return NextResponse.json(
-    //     { valid: false, error: 'This license has already been used' },
+    //     { 
+    //       valid: false, 
+    //       error: 'License activation limit reached. Contact support to increase limit.' 
+    //     },
     //     { status: 401 }
     //   )
     // }
 
+    // Optionally increment activation count (commented out for now - allows unlimited installs)
+    // await supabase.rpc('increment_license_activation', { p_license_key: cleanKey })
+
     return NextResponse.json({
       valid: true,
-      message: 'License key verified successfully',
-      productName: gumroadData.purchase?.product_name || 'ProjoFlow Self-Hosted',
-      purchaseEmail: gumroadData.purchase?.email,
+      message: 'License verified successfully',
+      license: {
+        productName: license.product_name,
+        purchaseEmail: license.purchase_email,
+        purchasePlatform: license.purchase_platform,
+        activations: `${license.activation_count}/${license.max_activations === 999 ? 'unlimited' : license.max_activations}`,
+      },
     })
   } catch (error: any) {
     console.error('License validation error:', error)
