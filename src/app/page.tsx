@@ -19,6 +19,7 @@ import {
   Shield,
   Menu,
   X,
+  Bot,
 } from 'lucide-react'
 
 /* ────────────────────────────────────────────
@@ -70,10 +71,10 @@ const plans = [
     features: [
       'Unlimited projects',
       '10 team members',
+      'AI assistant integration (MCP)',
       'Client portal',
       'Time tracking & billing',
       '@Mentions & comments',
-      'Lead intake forms',
       'Priority email support',
     ],
     cta: 'Start Free Trial',
@@ -88,6 +89,7 @@ const plans = [
     features: [
       'Everything in Pro',
       'Unlimited team members',
+      'Full AI/MCP integration',
       'White-label branding',
       'API access',
       'Advanced reporting',
@@ -104,6 +106,12 @@ const plans = [
    Features data
    ──────────────────────────────────────────── */
 const features = [
+  {
+    icon: Bot,
+    title: 'AI Assistant Integration',
+    desc: 'Built on Model Context Protocol (MCP). Your AI assistant can create projects, add tasks, log time, and manage workflows through natural conversation.',
+    badge: 'NEW',
+  },
   {
     icon: Building2,
     title: 'Multi-Tenant Workspaces',
@@ -125,11 +133,6 @@ const features = [
     desc: 'Real-time collaboration with threaded comments and instant @mention notifications.',
   },
   {
-    icon: FileInput,
-    title: 'Lead Intake Forms',
-    desc: 'Embed branded forms to capture leads and automatically create projects on submission.',
-  },
-  {
     icon: Palette,
     title: 'White-Label Branding',
     desc: 'Custom logo, colours, and domain — your clients see your brand, not ours.',
@@ -141,7 +144,11 @@ const features = [
    ──────────────────────────────────────────── */
 const faqs = [
   {
-    q: 'Can I try TaskFlow Pro before committing?',
+    q: 'How does AI integration work?',
+    a: 'ProjoFlow is built on Model Context Protocol (MCP), which lets AI assistants like Claude Code and Cursor directly interact with your projects. Your AI can create tasks, update status, log time, and more — all through natural conversation. No API setup required.',
+  },
+  {
+    q: 'Can I try ProjoFlow before committing?',
     a: 'Absolutely. The Starter plan is free forever — no credit card required. Paid plans include a 14-day free trial so you can explore every feature risk-free.',
   },
   {
@@ -155,10 +162,6 @@ const faqs = [
   {
     q: 'Is my data secure?',
     a: 'We use Supabase (built on PostgreSQL) with row-level security, encrypted connections, and SOC 2-compliant infrastructure. Your data stays yours.',
-  },
-  {
-    q: 'Do you offer custom onboarding?',
-    a: "Business plan customers get a dedicated onboarding session. We'll help migrate your data, set up workspaces, and train your team.",
   },
   {
     q: 'What happens when I hit a plan limit?',
@@ -361,11 +364,11 @@ export default function LandingPage() {
             <span className="bg-gradient-to-r from-emerald-400 to-emerald-600 bg-clip-text text-transparent">
               gets out of your way
             </span>
+            {' '}— and works with your AI
           </h1>
 
           <p className="mx-auto mt-6 max-w-2xl text-lg text-zinc-400 leading-relaxed sm:text-xl">
-            Track projects, manage clients, log time, and close deals — all in one
-            beautiful workspace your whole team will actually enjoy using.
+            The first PM tool with native AI assistant support. Your AI can create projects, manage tasks, and log time through MCP — while you focus on what matters. Plus white-label branding, client portals, and everything agencies need.
           </p>
 
           <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
@@ -435,23 +438,10 @@ export default function LandingPage() {
         }`}
       >
         <div className="mx-auto max-w-5xl px-4 sm:px-6">
-          <div className="flex flex-col items-center gap-6 sm:flex-row sm:justify-between">
+          <div className="flex flex-col items-center gap-6 text-center">
             <p className="text-sm font-medium uppercase tracking-wider text-zinc-500">
-              Trusted by 100+ agencies worldwide
+              Built by Z-Flow · Launching February 2026
             </p>
-            <div className="flex items-center gap-8 text-zinc-600">
-              {['Agency One', 'Studio X', 'DevShop', 'PixelCraft'].map((name) => (
-                <span key={name} className="text-sm font-semibold tracking-wide whitespace-nowrap">
-                  {name}
-                </span>
-              ))}
-            </div>
-            <div className="flex items-center gap-1">
-              {[1, 2, 3, 4, 5].map((i) => (
-                <Star key={i} className="h-4 w-4 fill-emerald-500 text-emerald-500" />
-              ))}
-              <span className="ml-2 text-sm text-zinc-400">4.9/5</span>
-            </div>
           </div>
         </div>
       </section>
@@ -472,8 +462,8 @@ export default function LandingPage() {
               Powerful features, zero complexity
             </h2>
             <p className="mx-auto mt-4 max-w-2xl text-zinc-400">
-              From project tracking to client management, TaskFlow Pro gives your agency
-              superpowers without the learning curve.
+              From AI integration to client management, ProjoFlow gives your agency
+              the tools you need without the learning curve.
             </p>
           </div>
 
@@ -484,6 +474,11 @@ export default function LandingPage() {
                 className="group relative rounded-xl border border-zinc-800 bg-zinc-900/50 p-6 transition-all duration-300 hover:border-emerald-500/30 hover:bg-zinc-900"
                 style={{ animationDelay: `${i * 80}ms` }}
               >
+                {f.badge && (
+                  <div className="absolute -top-2 -right-2 rounded-full bg-emerald-600 px-2 py-0.5 text-xs font-semibold text-white">
+                    {f.badge}
+                  </div>
+                )}
                 <div className="mb-4 inline-flex rounded-lg bg-emerald-500/10 p-3 text-emerald-500 transition-colors group-hover:bg-emerald-500/20">
                   <f.icon className="h-6 w-6" />
                 </div>
@@ -511,7 +506,7 @@ export default function LandingPage() {
               Choose the plan that fits your agency
             </h2>
             <p className="mx-auto mt-4 max-w-2xl text-zinc-400">
-              Start free and scale as you grow. No hidden fees, no surprises.
+              Start free and scale as you grow. AI included in all plans.
             </p>
           </div>
 
@@ -608,11 +603,10 @@ export default function LandingPage() {
             <div className="relative">
               <Shield className="mx-auto mb-4 h-10 w-10 text-emerald-500" />
               <h2 className="text-3xl font-bold sm:text-4xl">
-                Ready to streamline your agency?
+                Ready to manage projects like it's 2026?
               </h2>
               <p className="mx-auto mt-4 max-w-lg text-zinc-400">
-                Join 100+ agencies managing projects, clients, and billing with TaskFlow Pro.
-                Free to start, scales as you grow.
+                Join agencies using AI to move faster. Free to start, no credit card required.
               </p>
               <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
                 <Link
@@ -624,7 +618,7 @@ export default function LandingPage() {
                 </Link>
               </div>
               <p className="mt-4 text-xs text-zinc-500">
-                No credit card required · Free plan available forever
+                14-day trial on paid plans · AI integration included
               </p>
             </div>
           </div>
@@ -648,7 +642,7 @@ export default function LandingPage() {
                 <span className="text-base font-bold">{appConfig.name}</span>
               </Link>
               <p className="mt-3 text-sm text-zinc-500 leading-relaxed">
-                Project management built for agencies. Track, collaborate, and bill — all in one place.
+                Project management built for agencies. AI-powered, white-label ready.
               </p>
             </div>
 

@@ -1,10 +1,10 @@
-# TaskFlow Pro
+# ProjoFlow
 
 **White-label project management for agencies and teams.**
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fmahmoudsheikh94%2Ftaskflow-pro&env=NEXT_PUBLIC_SUPABASE_URL,NEXT_PUBLIC_SUPABASE_ANON_KEY,SUPABASE_SERVICE_ROLE_KEY,NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,STRIPE_SECRET_KEY,STRIPE_WEBHOOK_SECRET,STRIPE_PRICE_PRO,STRIPE_PRICE_BUSINESS&envDescription=Required%20environment%20variables%20for%20TaskFlow%20Pro.%20See%20DEPLOYMENT.md%20for%20details.&envLink=https%3A%2F%2Fgithub.com%2Fmahmoudsheikh94%2Ftaskflow-pro%2Fblob%2Fmain%2FDEPLOYMENT.md&project-name=taskflow-pro&repository-name=taskflow-pro)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fmahmoudsheikh94%2Ftaskflow-pro&env=NEXT_PUBLIC_SUPABASE_URL,NEXT_PUBLIC_SUPABASE_ANON_KEY,SUPABASE_SERVICE_ROLE_KEY,NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,STRIPE_SECRET_KEY,STRIPE_WEBHOOK_SECRET,STRIPE_PRICE_PRO,STRIPE_PRICE_BUSINESS&envDescription=Required%20environment%20variables%20for%20ProjoFlow%20Pro.%20See%20DEPLOYMENT.md%20for%20details.&envLink=https%3A%2F%2Fgithub.com%2Fmahmoudsheikh94%2Ftaskflow-pro%2Fblob%2Fmain%2FDEPLOYMENT.md&project-name=taskflow-pro&repository-name=taskflow-pro)
 
-TaskFlow Pro is a modern, self-hosted project management tool built for agencies that want to manage client work, track time, and give clients a branded portal — all from one place. Ship it under your own brand with zero code changes.
+ProjoFlow is a modern, self-hosted project management tool built for agencies that want to manage client work, track time, and give clients a branded portal — all from one place. Ship it under your own brand with zero code changes.
 
 ---
 
@@ -40,13 +40,13 @@ TaskFlow Pro is a modern, self-hosted project management tool built for agencies
 
 ## 🚀 One-Click Deploy
 
-The fastest way to get your own TaskFlow Pro instance running.
+The fastest way to get your own ProjoFlow instance running.
 
 ### Step 1 — Deploy to Vercel
 
 Click the button below to clone this repo and deploy it to Vercel:
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fmahmoudsheikh94%2Ftaskflow-pro&env=NEXT_PUBLIC_SUPABASE_URL,NEXT_PUBLIC_SUPABASE_ANON_KEY,SUPABASE_SERVICE_ROLE_KEY,NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,STRIPE_SECRET_KEY,STRIPE_WEBHOOK_SECRET,STRIPE_PRICE_PRO,STRIPE_PRICE_BUSINESS&envDescription=Required%20environment%20variables%20for%20TaskFlow%20Pro.%20See%20DEPLOYMENT.md%20for%20details.&envLink=https%3A%2F%2Fgithub.com%2Fmahmoudsheikh94%2Ftaskflow-pro%2Fblob%2Fmain%2FDEPLOYMENT.md&project-name=taskflow-pro&repository-name=taskflow-pro)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fmahmoudsheikh94%2Ftaskflow-pro&env=NEXT_PUBLIC_SUPABASE_URL,NEXT_PUBLIC_SUPABASE_ANON_KEY,SUPABASE_SERVICE_ROLE_KEY,NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,STRIPE_SECRET_KEY,STRIPE_WEBHOOK_SECRET,STRIPE_PRICE_PRO,STRIPE_PRICE_BUSINESS&envDescription=Required%20environment%20variables%20for%20ProjoFlow%20Pro.%20See%20DEPLOYMENT.md%20for%20details.&envLink=https%3A%2F%2Fgithub.com%2Fmahmoudsheikh94%2Ftaskflow-pro%2Fblob%2Fmain%2FDEPLOYMENT.md&project-name=taskflow-pro&repository-name=taskflow-pro)
 
 Vercel will prompt you for the required environment variables. Don't worry — follow the steps below to get them.
 
@@ -97,7 +97,7 @@ Go to your Vercel project → Settings → Environment Variables and add:
 
 | Variable | Description |
 |---|---|
-| `NEXT_PUBLIC_APP_NAME` | Custom app name (default: "TaskFlow Pro") |
+| `NEXT_PUBLIC_APP_NAME` | Custom app name (default: "ProjoFlow") |
 | `NEXT_PUBLIC_APP_TAGLINE` | Custom tagline |
 | `NEXT_PUBLIC_APP_LOGO` | Path to custom logo |
 | `NEXT_PUBLIC_APP_URL` | Your app's canonical URL |
@@ -191,7 +191,7 @@ src/
 
 ## 🗄 Database
 
-TaskFlow Pro uses Supabase with row-level security. The base schema is in `supabase/schema.sql` and migrations live in `supabase/migrations/`.
+ProjoFlow uses Supabase with row-level security. The base schema is in `supabase/schema.sql` and migrations live in `supabase/migrations/`.
 
 ## 📬 Email
 

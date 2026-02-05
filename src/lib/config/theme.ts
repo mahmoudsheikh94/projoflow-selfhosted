@@ -1,5 +1,5 @@
 /**
- * Theme configuration for TaskFlow Pro
+ * Theme configuration for ProjoFlow
  *
  * All branding values are driven by environment variables with sensible defaults.
  * Override any value by setting the corresponding NEXT_PUBLIC_* env var.
@@ -12,12 +12,12 @@
 
 export const appConfig = {
   /** Display name shown in sidebar, login, emails, metadata */
-  name: process.env.NEXT_PUBLIC_APP_NAME || 'TaskFlow Pro',
+  name: process.env.NEXT_PUBLIC_APP_NAME || 'ProjoFlow',
 
   /** One-liner shown on marketing / onboarding pages */
   tagline:
     process.env.NEXT_PUBLIC_APP_TAGLINE ||
-    'Project management that gets out of your way',
+    'Project management that gets out of your way — and works with your AI',
 
   /** Path to logo (relative to /public or an absolute URL) */
   logo: process.env.NEXT_PUBLIC_APP_LOGO || '/logo.svg',
@@ -29,20 +29,20 @@ export const appConfig = {
   accentColor: process.env.NEXT_PUBLIC_ACCENT_COLOR || '#059669',
 
   /** Canonical app URL (no trailing slash) */
-  url: process.env.NEXT_PUBLIC_APP_URL || 'https://taskflow.pro',
+  url: process.env.NEXT_PUBLIC_APP_URL || 'https://projoflow.com',
 
   /** Support email shown to users */
-  supportEmail: process.env.NEXT_PUBLIC_SUPPORT_EMAIL || 'support@taskflow.pro',
+  supportEmail: process.env.NEXT_PUBLIC_SUPPORT_EMAIL || 'tech@z-flow.de',
 
   /** "From" address for transactional email */
   emailFrom:
     process.env.NEXT_PUBLIC_EMAIL_FROM ||
-    `${process.env.NEXT_PUBLIC_APP_NAME || 'TaskFlow Pro'} <no-reply@${
-      process.env.NEXT_PUBLIC_EMAIL_DOMAIN || 'taskflow.pro'
+    `${process.env.NEXT_PUBLIC_APP_NAME || 'ProjoFlow'} <no-reply@${
+      process.env.NEXT_PUBLIC_EMAIL_DOMAIN || 'projoflow.com'
     }>`,
 
   /** Domain used for sending email (Resend, SES, etc.) */
-  emailDomain: process.env.NEXT_PUBLIC_EMAIL_DOMAIN || 'taskflow.pro',
+  emailDomain: process.env.NEXT_PUBLIC_EMAIL_DOMAIN || 'projoflow.com',
 
   /** Current year for copyright notices */
   copyrightYear: new Date().getFullYear(),

@@ -7,8 +7,22 @@ import { appConfig } from "@/lib/config/theme";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: `${appConfig.name} | Project Management`,
-  description: appConfig.tagline,
+  title: `${appConfig.name} | AI-Powered Project Management`,
+  description: "The first PM tool your AI can control. Built on MCP for agencies, consultancies, and dev teams. White-label ready, client portals, time tracking.",
+  keywords: ["project management", "AI", "MCP", "Model Context Protocol", "agencies", "white-label", "client portal", "time tracking"],
+  authors: [{ name: "Z-Flow" }],
+  openGraph: {
+    title: `${appConfig.name} - AI-Powered Project Management`,
+    description: "The first PM tool your AI assistant can control through MCP. Built for agencies.",
+    url: appConfig.url,
+    siteName: appConfig.name,
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${appConfig.name} - AI-Powered Project Management`,
+    description: "The first PM tool your AI can control. Built on MCP.",
+  },
 };
 
 export default function RootLayout({
@@ -25,7 +39,7 @@ export default function RootLayout({
             __html: `
               (function() {
                 try {
-                  var mode = localStorage.getItem('taskflow-theme-mode') || 'dark';
+                  var mode = localStorage.getItem('projoflow-theme-mode') || 'dark';
                   var resolved = mode;
                   if (mode === 'system') {
                     resolved = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';

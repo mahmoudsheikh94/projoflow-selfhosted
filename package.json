@@ -1,6 +1,7 @@
 {
-  "name": "taskflow-pro",
-  "version": "0.1.0",
+  "name": "projoflow",
+  "version": "1.0.0",
+  "description": "AI-powered project management for agencies. Built on MCP.",
   "private": true,
   "scripts": {
     "dev": "next dev",

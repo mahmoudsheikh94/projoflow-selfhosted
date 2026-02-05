@@ -1,4 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" fill="none">
-  <rect width="40" height="40" rx="8" fill="#10b981"/>
-  <path d="M12 20.5L17.5 26L28 15" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- P letter with flow effect -->
+  <rect x="4" y="4" width="24" height="24" rx="6" fill="url(#gradient)" />
+  <path d="M12 10 H18 C19.66 10 21 11.34 21 13 C21 14.66 19.66 16 18 16 H12 V22 M12 10 V22" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Flow lines -->
+  <circle cx="23" cy="13" r="1.5" fill="#10b981" opacity="0.8"/>
+  <circle cx="25" cy="16" r="1" fill="#10b981" opacity="0.5"/>
+  <defs>
+    <linearGradient id="gradient" x1="4" y1="4" x2="28" y2="28">
+      <stop offset="0%" stop-color="#10b981"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+  </defs>
 </svg>

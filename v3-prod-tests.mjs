@@ -49,6 +49,7 @@ const RECORDS = {
     time_entry: '05c39d12-8678-4333-b752-79c11d9a3d05',
     admin: 'a7e02c99-d760-4925-aa78-98f4cbb2581f',
     wm: '89bed433-aa70-4a67-9078-f2034f647d74',
+    wsSettings: 'dec8c1ab-e372-4e7e-b436-c6e133ac9240',
   },
   T2: {
     project: '5add0b2f-f41c-4dc5-9069-0e647a8a443f',
@@ -60,8 +61,8 @@ const RECORDS = {
     time_entry: 'f182f279-061f-4266-b87b-ba744874668d',
     admin: '87dd7a20-5ee2-4b46-a7ff-cb5441f7a83d',
     wm: 'b65f9d0f-868e-4b75-a5ff-3557bc3951d0',
+    wsSettings: 'a6481be3-6b92-4c75-8923-ad1ddefb3d33',
   },
-  wsSettings: 'dec8c1ab-e372-4e7e-b436-c6e133ac9240',
 };
 
 // Service-role counts from DB
@@ -380,11 +381,11 @@ async function testAnonymousAccess() {
   record(cat, `workspace_settings: anon SELECT`, 'check visibility', `${wsCount} rows visible`, wsCount === 0 ? 'PASS' : 'WARN',
     wsCount > 0 ? 'SELECT policy uses USING(true) — all settings visible to anon' : '');
 
-  // client_invitations: anon can see non-expired ones (by design for invitation acceptance)
+  // client_invitations: anon should be fully blocked (v4 — ci_select_anon USING(false))
   const { data: ciData } = await anon.from('client_invitations').select('*');
   const ciCount = ciData ? ciData.length : 0;
-  record(cat, `client_invitations: anon SELECT`, 'non-expired only', `${ciCount} rows`, 'WARN',
-    'Policy allows anon to see non-expired invitations (needed for acceptance flow)');
+  record(cat, `client_invitations: anon SELECT`, '0 rows (blocked)', `${ciCount} rows`, ciCount === 0 ? 'PASS' : 'FAIL',
+    ciCount > 0 ? 'Anon should be fully blocked from client_invitations' : 'Anon correctly blocked by ci_select_anon USING(false)');
 }
 
 // ─── Category 3: User Without Workspace ──────────────────────────────────────
@@ -446,70 +447,67 @@ async function testNoWorkspaceUser() {
 async function testThemeBranding(t1Client, t2Client) {
   const cat = 'Cat4: Theme & Branding';
 
-  // workspace_settings is a singleton table (1 row total), not per-workspace
-  // ws_settings_select USING(true) means all authenticated users can read it
-  // ws_settings_update requires owner/admin role in workspace_members
+  // v4: workspace_settings now has a workspace_id column (NOT NULL, UNIQUE, FK → workspaces)
+  // Each workspace has its own settings row. RLS scopes to own workspace only.
 
-  // T1 can read settings
+  // T1 can read own settings (should see exactly 1 row — their own)
   const { data: t1Read, error: t1ReadErr } = await t1Client.from('workspace_settings').select('*');
   const t1Count = t1Read ? t1Read.length : 0;
-  record(cat, `T1: read workspace_settings`, 'readable', t1Count > 0 ? 'readable' : 'empty', t1Count > 0 ? 'PASS' : 'WARN',
-    `${t1Count} rows`);
+  const t1HasOwnOnly = t1Count === 1 && t1Read[0].workspace_id === T1.workspaceId;
+  record(cat, `T1: read workspace_settings`, '1 row (own only)', t1HasOwnOnly ? '1 row (own only)' : `${t1Count} rows`, t1HasOwnOnly ? 'PASS' : 'FAIL',
+    t1ReadErr ? t1ReadErr.message : `workspace_id=${t1Read && t1Read[0] ? t1Read[0].workspace_id : 'N/A'}`);
 
-  // T2 can read settings
+  // T2 can read own settings (should see exactly 1 row — their own)
   const { data: t2Read, error: t2ReadErr } = await t2Client.from('workspace_settings').select('*');
   const t2Count = t2Read ? t2Read.length : 0;
-  record(cat, `T2: read workspace_settings`, 'readable', t2Count > 0 ? 'readable' : 'empty', t2Count > 0 ? 'PASS' : 'WARN',
-    `${t2Count} rows`);
+  const t2HasOwnOnly = t2Count === 1 && t2Read[0].workspace_id === T2.workspaceId;
+  record(cat, `T2: read workspace_settings`, '1 row (own only)', t2HasOwnOnly ? '1 row (own only)' : `${t2Count} rows`, t2HasOwnOnly ? 'PASS' : 'FAIL',
+    t2ReadErr ? t2ReadErr.message : `workspace_id=${t2Read && t2Read[0] ? t2Read[0].workspace_id : 'N/A'}`);
 
-  // NOTE: Since this is a singleton table with USING(true) for SELECT, BOTH tenants see the SAME row.
-  // This is a design concern for multi-tenancy but checking if current design is intentional.
-
-  // T1 can update (if owner/admin)
+  // T1 can update own theme_config
   const testTheme = { dark: { primary: '#test1' }, light: { primary: '#test1' }, defaultMode: 'dark' };
   const { data: t1Update, error: t1UpdateErr } = await t1Client
     .from('workspace_settings')
     .update({ theme_config: testTheme })
-    .eq('id', RECORDS.wsSettings)
+    .eq('id', RECORDS.T1.wsSettings)
     .select();
   const t1Updated = t1Update && t1Update.length > 0;
-  record(cat, `T1: update own theme_config`, 'success', t1Updated ? 'success' : 'denied', t1Updated ? 'PASS' : 'WARN',
-    t1UpdateErr ? t1UpdateErr.message : 'Singleton — no per-workspace separation');
+  record(cat, `T1: update own theme_config`, 'success', t1Updated ? 'success' : 'denied', t1Updated ? 'PASS' : 'FAIL',
+    t1UpdateErr ? t1UpdateErr.message : '');
 
-  // T2 can update same settings? (This tests if T2 also has admin/owner role)
+  // T2 cannot update T1's settings (per-workspace isolation)
   const testTheme2 = { dark: { primary: '#test2' }, light: { primary: '#test2' }, defaultMode: 'dark' };
-  const { data: t2Update, error: t2UpdateErr } = await t2Client
+  const { data: t2CrossUpdate, error: t2CrossErr } = await t2Client
     .from('workspace_settings')
     .update({ theme_config: testTheme2 })
-    .eq('id', RECORDS.wsSettings)
+    .eq('id', RECORDS.T1.wsSettings)
     .select();
-  const t2Updated = t2Update && t2Update.length > 0;
-  // In true multi-tenant, T2 should NOT be able to update T1's settings
-  // But since it's singleton with USING(exists workspace_members where role=owner/admin), 
-  // both tenants CAN update if they're admins
-  record(cat, `T2: update theme_config (same singleton)`, 'depends on design', t2Updated ? 'updated' : 'denied', 'WARN',
-    'Singleton table — both admins can update. Consider per-workspace settings.');
+  const t2CrossBlocked = !t2CrossUpdate || t2CrossUpdate.length === 0;
+  record(cat, `T2: cannot update T1's theme_config`, 'denied (0 affected)', t2CrossBlocked ? 'denied (0 affected)' : `UPDATED ${t2CrossUpdate.length} rows!`, t2CrossBlocked ? 'PASS' : 'FAIL',
+    t2CrossErr ? t2CrossErr.message : 'Per-workspace RLS correctly blocks cross-tenant update');
 
-  // T1 cannot read T2's theme_config — N/A for singleton
-  record(cat, `T1→T2 theme isolation`, 'separate settings', 'singleton (shared)', 'WARN',
-    'workspace_settings is singleton, not per-workspace. Both tenants share same row.');
+  // T1→T2 theme isolation: T1 cannot read T2's settings row
+  const { data: t1CrossRead } = await t1Client.from('workspace_settings').select('*').eq('id', RECORDS.T2.wsSettings);
+  const t1CrossCount = t1CrossRead ? t1CrossRead.length : 0;
+  record(cat, `T1→T2 theme isolation`, '0 rows (isolated)', `${t1CrossCount} rows`, t1CrossCount === 0 ? 'PASS' : 'FAIL',
+    'Per-workspace RLS: each tenant sees only own settings row');
 
   // logo_url update test
   const { data: logoUpdate, error: logoErr } = await t1Client
     .from('workspace_settings')
     .update({ logo_url: 'https://example.com/test-logo.png' })
-    .eq('id', RECORDS.wsSettings)
+    .eq('id', RECORDS.T1.wsSettings)
     .select();
   const logoUpdated = logoUpdate && logoUpdate.length > 0;
-  record(cat, `T1: update logo_url`, 'success', logoUpdated ? 'success' : 'denied', logoUpdated ? 'PASS' : 'WARN',
+  record(cat, `T1: update logo_url`, 'success', logoUpdated ? 'success' : 'denied', logoUpdated ? 'PASS' : 'FAIL',
     logoErr ? logoErr.message : '');
 
-  // Restore original settings
+  // Restore original settings via service role
   const svc = createServiceClient();
   await svc.from('workspace_settings').update({
     theme_config: {"dark":{"text":"#fafafa","border":"#262626","primary":"#10b981","surface":"#171717","secondary":"#6366f1","background":"#0a0a0a","primaryHover":"#059669","surfaceHover":"#262626","textSecondary":"#a3a3a3"},"light":{"text":"#171717","border":"#e5e5e5","primary":"#059669","surface":"#f5f5f5","secondary":"#4f46e5","background":"#ffffff","primaryHover":"#047857","surfaceHover":"#e5e5e5","textSecondary":"#525252"},"defaultMode":"dark"},
     logo_url: null,
-  }).eq('id', RECORDS.wsSettings);
+  }).eq('id', RECORDS.T1.wsSettings);
 }
 
 // ─── Category 5: File Attachments ────────────────────────────────────────────
@@ -876,7 +874,7 @@ function generateReport() {
   const isoFails = failures.filter(r => r.category.startsWith('Cat1'));
   const launchReady = isoFails.length === 0 && failures.length === 0;
 
-  let md = `# TaskFlow Pro — v3 Production-Ready Test Report\n\n`;
+  let md = `# TaskFlow Pro — v4 Production-Ready Test Report\n\n`;
   md += `**Date:** ${new Date().toISOString()}\n`;
   md += `**Environment:** Production (Supabase + Vercel)\n`;
   md += `**Test Runner:** Automated v3 comprehensive suite\n\n`;
