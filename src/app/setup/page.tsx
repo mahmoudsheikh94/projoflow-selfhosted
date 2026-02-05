@@ -28,6 +28,9 @@ import {
   Keyboard,
   Users,
   LayoutDashboard,
+  Database,
+  CheckCircle2,
+  XCircle,
 } from 'lucide-react'
 import { appConfig } from '@/lib/config/theme'
 
@@ -45,7 +48,7 @@ interface SetupData {
   projectDescription: string
 }
 
-const TOTAL_STEPS = 5
+const TOTAL_STEPS = 6
 
 /* ------------------------------------------------------------------ */
 /*  Progress Dots                                                      */
@@ -108,11 +111,12 @@ function StepWelcome({ onNext }: { onNext: () => void }) {
       </div>
 
       <div className="flex flex-col items-center gap-3 pt-2">
-        <div className="grid grid-cols-3 gap-4 text-center max-w-sm w-full">
+        <div className="grid grid-cols-4 gap-3 text-center max-w-lg w-full">
           {[
-            { icon: KeyRound, label: 'Create Account' },
-            { icon: Building2, label: 'Set Up Workspace' },
-            { icon: FolderPlus, label: 'First Project' },
+            { icon: Database, label: 'Database' },
+            { icon: KeyRound, label: 'Account' },
+            { icon: Building2, label: 'Workspace' },
+            { icon: FolderPlus, label: 'Project' },
           ].map(({ icon: Icon, label }) => (
             <div
               key={label}
@@ -137,7 +141,180 @@ function StepWelcome({ onNext }: { onNext: () => void }) {
 }
 
 /* ------------------------------------------------------------------ */
-/*  Step 2 — Create Admin Account                                      */
+/*  Step 2 — Database Setup (Migrations)                               */
+/* ------------------------------------------------------------------ */
+
+function StepDatabaseMigration({ onComplete }: { onComplete: () => void }) {
+  const [databasePassword, setDatabasePassword] = useState('')
+  const [isRunning, setIsRunning] = useState(false)
+  const [isComplete, setIsComplete] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [results, setResults] = useState<any[]>([])
+
+  const runMigrations = async () => {
+    if (!databasePassword.trim()) {
+      setError('Please enter your database password')
+      return
+    }
+
+    setIsRunning(true)
+    setError(null)
+    setResults([])
+
+    try {
+      const res = await fetch('/api/setup/migrate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ databasePassword }),
+      })
+
+      const data = await res.json()
+
+      if (!res.ok) {
+        setError(data.error || 'Migration failed')
+        if (data.results) setResults(data.results)
+        setIsRunning(false)
+        return
+      }
+
+      setResults(data.results || [])
+      setIsComplete(true)
+      setIsRunning(false)
+    } catch (err: any) {
+      setError(err.message || 'Failed to run migrations')
+      setIsRunning(false)
+    }
+  }
+
+  return (
+    <div className="space-y-5">
+      <div className="text-center space-y-1">
+        <div className="inline-flex items-center justify-center h-12 w-12 rounded-full bg-emerald-500/10 mb-2">
+          <Database className="h-6 w-6 text-brand" />
+        </div>
+        <h2 className="text-xl font-semibold text-text-primary">
+          Database Setup
+        </h2>
+        <p className="text-text-secondary text-sm">
+          We'll automatically set up your database tables and security policies.
+        </p>
+      </div>
+
+      {!isComplete && (
+        <>
+          {error && (
+            <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/20 flex items-start gap-2">
+              <AlertCircle className="h-5 w-5 text-red-500 flex-shrink-0 mt-0.5" />
+              <div className="flex-1">
+                <p className="text-sm text-red-400">{error}</p>
+              </div>
+            </div>
+          )}
+
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label className="text-text-primary">
+                Supabase Database Password
+              </Label>
+              <Input
+                type="password"
+                value={databasePassword}
+                onChange={(e) => setDatabasePassword(e.target.value)}
+                placeholder="Enter your database password"
+                className="bg-zinc-800 border-border-default h-10 font-mono text-sm"
+                disabled={isRunning}
+              />
+              <div className="text-xs text-text-muted space-y-1">
+                <p>
+                  📍 <strong>Where to find it:</strong> Supabase Dashboard →
+                  Settings → Database → Connection String
+                </p>
+                <p>
+                  This is the password you set when creating your Supabase
+                  project (not the API keys).
+                </p>
+                <p className="text-amber-400">
+                  🔒 This password is used once and never stored.
+                </p>
+              </div>
+            </div>
+
+            <Button
+              onClick={runMigrations}
+              disabled={isRunning || !databasePassword.trim()}
+              className="w-full bg-brand hover:bg-brand-hover text-white"
+            >
+              {isRunning ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Running migrations...
+                </>
+              ) : (
+                <>
+                  <Database className="mr-2 h-4 w-4" />
+                  Setup Database
+                </>
+              )}
+            </Button>
+          </div>
+
+          {results.length > 0 && (
+            <div className="space-y-2 max-h-48 overflow-y-auto rounded-lg bg-zinc-900 border border-zinc-800 p-3">
+              <p className="text-xs font-medium text-text-secondary mb-2">
+                Migration Results:
+              </p>
+              {results.map((r, i) => (
+                <div key={i} className="flex items-start gap-2 text-xs">
+                  {r.success ? (
+                    <CheckCircle2 className="h-3 w-3 text-green-500 flex-shrink-0 mt-0.5" />
+                  ) : (
+                    <XCircle className="h-3 w-3 text-red-500 flex-shrink-0 mt-0.5" />
+                  )}
+                  <div className="flex-1">
+                    <span className="text-text-secondary font-mono">
+                      {r.file}
+                    </span>
+                    {r.error && (
+                      <p className="text-text-muted mt-0.5">{r.error}</p>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </>
+      )}
+
+      {isComplete && (
+        <div className="text-center space-y-4">
+          <div className="inline-flex items-center justify-center h-16 w-16 rounded-full bg-emerald-500/10">
+            <CheckCircle2 className="h-8 w-8 text-emerald-500" />
+          </div>
+          <div className="space-y-1">
+            <h3 className="text-lg font-semibold text-text-primary">
+              Database Ready!
+            </h3>
+            <p className="text-text-secondary text-sm">
+              All migrations completed successfully. Your database is ready to
+              use.
+            </p>
+          </div>
+
+          <Button
+            onClick={onComplete}
+            className="bg-brand hover:bg-brand-hover text-white"
+          >
+            Continue Setup
+            <ArrowRight className="ml-2 h-4 w-4" />
+          </Button>
+        </div>
+      )}
+    </div>
+  )
+}
+
+/* ------------------------------------------------------------------ */
+/*  Step 3 — Create Admin Account                                      */
 /* ------------------------------------------------------------------ */
 
 function StepAdminAccount({
@@ -442,7 +619,7 @@ export default function SetupPage() {
   }
 
   /* ---- Validation ---- */
-  const canProceedStep2 =
+  const canProceedStep3 =
     data.email.length > 0 &&
     data.password.length >= 6 &&
     data.password === data.confirmPassword
@@ -452,10 +629,12 @@ export default function SetupPage() {
       case 1:
         return true
       case 2:
-        return canProceedStep2
+        return false // Database migration handles its own navigation
       case 3:
-        return true // workspace settings are optional
+        return canProceedStep3
       case 4:
+        return true // workspace settings are optional
+      case 5:
         return true // project is optional
       default:
         return true
@@ -519,8 +698,8 @@ export default function SetupPage() {
 
   /* ---- Step advance handler ---- */
   const handleNext = async () => {
-    // On step 4, submit everything before moving to step 5
-    if (step === 4) {
+    // On step 5, submit everything before moving to step 6
+    if (step === 5) {
       await handleSubmit()
       return
     }
@@ -557,22 +736,23 @@ export default function SetupPage() {
             }
           >
             {step === 1 && <StepWelcome onNext={goNext} />}
-            {step === 2 && (
+            {step === 2 && <StepDatabaseMigration onComplete={goNext} />}
+            {step === 3 && (
               <StepAdminAccount
                 data={data}
                 onChange={updateData}
                 error={error}
               />
             )}
-            {step === 3 && <StepWorkspace data={data} onChange={updateData} />}
-            {step === 4 && (
+            {step === 4 && <StepWorkspace data={data} onChange={updateData} />}
+            {step === 5 && (
               <StepFirstProject data={data} onChange={updateData} />
             )}
-            {step === 5 && <StepComplete />}
+            {step === 6 && <StepComplete />}
           </div>
 
-          {/* Navigation buttons (hidden for step 1 and 5) */}
-          {step > 1 && step < TOTAL_STEPS && (
+          {/* Navigation buttons (hidden for step 1, 2, and 6) */}
+          {step > 2 && step < TOTAL_STEPS && (
             <div className="flex items-center justify-between mt-8 pt-4 border-t border-border-default">
               <Button
                 variant="ghost"
@@ -585,7 +765,7 @@ export default function SetupPage() {
               </Button>
 
               <div className="flex gap-2">
-                {step === 4 && (
+                {step === 5 && (
                   <Button
                     variant="ghost"
                     onClick={() => {
@@ -610,7 +790,7 @@ export default function SetupPage() {
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                       Setting up...
                     </>
-                  ) : step === 4 ? (
+                  ) : step === 5 ? (
                     <>
                       <Sparkles className="mr-1 h-4 w-4" />
                       Complete Setup

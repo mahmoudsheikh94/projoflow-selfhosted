@@ -141,11 +141,11 @@ const faqs = [
   },
   {
     q: 'Can I customize the code?',
-    a: 'Absolutely. You get the full Next.js/React source. Modify features, add integrations, change the UI — it's yours. The license only restricts reselling the code itself.',
+    a: 'Absolutely. You get the full Next.js/React source. Modify features, add integrations, change the UI — it\'s yours. The license only restricts reselling the code itself.',
   },
   {
     q: 'How hard is deployment?',
-    a: 'If you can click a Vercel "Deploy" button, you can deploy ProjoFlow. Setup wizard handles database migrations, environment variables are documented, and you'll be live in ~30 minutes.',
+    a: 'If you can click a Vercel "Deploy" button, you can deploy ProjoFlow. Setup wizard handles database migrations, environment variables are documented, and you\'ll be live in ~30 minutes.',
   },
   {
     q: 'What if I need help?',
@@ -157,7 +157,7 @@ const faqs = [
   },
   {
     q: 'Can I use this for multiple clients?',
-    a: 'Yes! The license is per entity (your agency/company), not per deployment. Use it for all your client projects. Just don't resell the code itself.',
+    a: 'Yes! The license is per entity (your agency/company), not per deployment. Use it for all your client projects. Just don\'t resell the code itself.',
   },
   {
     q: 'What about updates?',
@@ -250,9 +250,9 @@ export default function LandingPage() {
           <div className="flex h-16 items-center justify-between">
             {/* Logo */}
             <div className="flex items-center gap-3">
-              {appConfig.brandLogo ? (
+              {appConfig.logo ? (
                 <Image
-                  src={appConfig.brandLogo}
+                  src={appConfig.logo}
                   alt={appConfig.name}
                   width={32}
                   height={32}
@@ -654,9 +654,9 @@ export default function LandingPage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
             <div className="flex items-center gap-3">
-              {appConfig.brandLogo ? (
+              {appConfig.logo ? (
                 <Image
-                  src={appConfig.brandLogo}
+                  src={appConfig.logo}
                   alt={appConfig.name}
                   width={24}
                   height={24}
