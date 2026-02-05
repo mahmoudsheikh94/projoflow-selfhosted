@@ -1,458 +1,429 @@
-# Deployment Guide
+# ProjoFlow Deployment Guide
 
-Complete guide to deploying your own TaskFlow Pro instance.
-
----
-
-## Table of Contents
-
-- [Vercel Deployment (Recommended)](#-vercel-deployment-recommended)
-- [Railway Deployment](#-railway-deployment)
-- [Self-Hosted / Docker](#-self-hosted--docker)
-- [Environment Variables Reference](#-environment-variables-reference)
-- [Supabase Setup](#-supabase-setup)
-- [Stripe Setup](#-stripe-setup)
-- [White-Labeling](#-white-labeling)
-- [Updating](#-updating)
-- [Troubleshooting](#-troubleshooting)
-- [Security Notes](#-security-notes)
+**Complete guide to deploying your self-hosted ProjoFlow instance.**
 
 ---
 
-## 🚀 Vercel Deployment (Recommended)
+## 📋 Prerequisites
 
-Vercel is the recommended deployment platform — it's what Next.js is built for.
+Before you start, you'll need:
 
-### One-Click Deploy
+- **Node.js 20+** and npm/pnpm/yarn
+- **Supabase account** (free tier works fine)
+- **Vercel account** (optional, for one-click deploy)
+- **GitHub account** (for repo access)
+- **Resend account** (optional, for email invitations)
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fmahmoudsheikh94%2Ftaskflow-pro&env=NEXT_PUBLIC_SUPABASE_URL,NEXT_PUBLIC_SUPABASE_ANON_KEY,SUPABASE_SERVICE_ROLE_KEY,NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,STRIPE_SECRET_KEY,STRIPE_WEBHOOK_SECRET,STRIPE_PRICE_PRO,STRIPE_PRICE_BUSINESS&envDescription=Required%20environment%20variables%20for%20TaskFlow%20Pro.%20See%20DEPLOYMENT.md%20for%20details.&envLink=https%3A%2F%2Fgithub.com%2Fmahmoudsheikh94%2Ftaskflow-pro%2Fblob%2Fmain%2FDEPLOYMENT.md&project-name=taskflow-pro&repository-name=taskflow-pro)
+---
 
-### Manual Vercel Setup
+## 🚀 Option 1: One-Click Deploy (Vercel)
 
-If you prefer to set up manually:
+**Fastest way to get started (5-10 minutes).**
 
-1. **Fork or clone** the repository to your GitHub account
-2. Go to [vercel.com/new](https://vercel.com/new)
-3. Import your repository
-4. Set the **Framework Preset** to `Next.js` (should be auto-detected)
-5. Add environment variables (see [Environment Variables Reference](#-environment-variables-reference))
-6. Click **Deploy**
+### Step 1: Deploy to Vercel
 
-### Custom Domain
-
-1. In your domain registrar, add a CNAME record:
+1. Click the Deploy button in the README or go to:
    ```
-   Name: app  (or @ for apex domain)
-   Type: CNAME
-   Value: cname.vercel-dns.com
+   https://vercel.com/new/clone?repository-url=https://github.com/mahmoudsheikh94/projoflow-selfhosted
    ```
-2. In Vercel Dashboard → project Settings → Domains:
-   - Add your domain
-   - Vercel will auto-provision an SSL certificate
-3. Update `NEXT_PUBLIC_APP_URL` to your custom domain
-4. Update Supabase redirect URLs (see [Supabase Setup](#-supabase-setup))
 
----
+2. **Connect GitHub**  
+   Authorize Vercel to access your GitHub account.
 
-## 🚂 Railway Deployment
+3. **Create a Git Repository**  
+   Vercel will fork the repo to your account (or use the existing one).
 
-[Railway](https://railway.app) is a great alternative to Vercel with simple pricing.
+4. **Configure Environment Variables** (leave empty for now)  
+   We'll add these after setting up Supabase.
 
-### Steps
+5. **Click "Deploy"**  
+   Vercel will build the app (this will fail without env vars, but that's OK).
 
-1. Create a Railway account at [railway.app](https://railway.app)
-2. Click **New Project** → **Deploy from GitHub repo**
-3. Connect your GitHub and select the taskflow-pro repository
-4. Railway will auto-detect it as a Node.js project
-5. Add environment variables in the **Variables** tab (see [Environment Variables Reference](#-environment-variables-reference))
-6. Set the **Start Command** to:
-   ```bash
-   npm run build && npm start
-   ```
-7. Railway will assign a `*.up.railway.app` URL. Optionally add a custom domain.
+### Step 2: Create Supabase Project
 
-### Notes
-
-- Railway charges based on resource usage (CPU, memory, bandwidth)
-- You may need to set `PORT=3000` or Railway will assign a random port
-- The build step runs automatically on each push
-
----
-
-## 🐳 Self-Hosted / Docker
-
-You can self-host TaskFlow Pro on any machine that runs Node.js 18+ or Docker.
-
-### Using Docker Compose
-
-A basic `docker-compose.yml` is included in the repository. It runs the Next.js application and reads environment variables from a `.env` file.
-
-```bash
-# 1. Clone the repository
-git clone https://github.com/mahmoudsheikh94/taskflow-pro.git
-cd taskflow-pro
-
-# 2. Create your environment file
-cp .env.example .env
-# Edit .env with your actual values
-
-# 3. Build and start
-docker compose up -d --build
-
-# 4. Open http://localhost:3000
-```
-
-> **Note:** The Docker Compose setup assumes Supabase is hosted externally (e.g., [supabase.com](https://supabase.com)). The compose file does **not** include a local Supabase instance.
-
-### Without Docker
-
-```bash
-# 1. Clone & install
-git clone https://github.com/mahmoudsheikh94/taskflow-pro.git
-cd taskflow-pro
-npm install
-
-# 2. Configure
-cp .env.example .env.local
-# Edit .env.local with your actual values
-
-# 3. Build & run
-npm run build
-npm start
-```
-
-The app runs on port 3000 by default. Use a reverse proxy (nginx, Caddy) for SSL termination and custom domains.
-
-### Custom Dockerfile
-
-If you need more control, you can create a custom `Dockerfile`. The standard Next.js standalone output mode works well:
-
-```dockerfile
-FROM node:20-alpine AS builder
-WORKDIR /app
-COPY package*.json ./
-RUN npm ci
-COPY . .
-RUN npm run build
-
-FROM node:20-alpine AS runner
-WORKDIR /app
-ENV NODE_ENV=production
-COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/package.json ./package.json
-COPY --from=builder /app/public ./public
-EXPOSE 3000
-CMD ["npm", "start"]
-```
-
----
-
-## 📋 Environment Variables Reference
-
-Complete list of all environment variables. Required variables must be set for the app to function.
-
-### Required
-
-| Variable | Required | Description | Example |
-|---|---|---|---|
-| `NEXT_PUBLIC_SUPABASE_URL` | ✅ Yes | Your Supabase project URL | `https://abcdefg.supabase.co` |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | ✅ Yes | Supabase anonymous/public API key | `eyJhbGciOiJIUzI1NiIs...` |
-| `SUPABASE_SERVICE_ROLE_KEY` | ✅ Yes | Supabase service role key (server-side only, never expose to client) | `eyJhbGciOiJIUzI1NiIs...` |
-| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | ✅ Yes | Stripe publishable key | `pk_live_...` or `pk_test_...` |
-| `STRIPE_SECRET_KEY` | ✅ Yes | Stripe secret key (server-side only) | `sk_live_...` or `sk_test_...` |
-| `STRIPE_WEBHOOK_SECRET` | ✅ Yes | Stripe webhook signing secret | `whsec_...` |
-| `STRIPE_PRICE_PRO` | ✅ Yes | Stripe Price ID for the Pro plan | `price_1ABC...` |
-| `STRIPE_PRICE_BUSINESS` | ✅ Yes | Stripe Price ID for the Business plan | `price_1DEF...` |
-
-### Optional — Email
-
-| Variable | Required | Description | Example |
-|---|---|---|---|
-| `RESEND_API_KEY` | Optional | [Resend](https://resend.com) API key for transactional email (invitations, notifications) | `re_123abc...` |
-
-### Optional — Branding / White-Label
-
-| Variable | Required | Description | Example |
-|---|---|---|---|
-| `NEXT_PUBLIC_APP_NAME` | Optional | Application display name (sidebar, login, emails) | `My Agency PM` |
-| `NEXT_PUBLIC_APP_TAGLINE` | Optional | One-liner tagline shown on marketing pages | `Ship projects faster` |
-| `NEXT_PUBLIC_APP_LOGO` | Optional | Path to logo image (relative to `/public` or absolute URL) | `/my-logo.svg` |
-| `NEXT_PUBLIC_APP_URL` | Optional | Canonical app URL (no trailing slash) | `https://pm.myagency.com` |
-| `NEXT_PUBLIC_PRIMARY_COLOR` | Optional | Primary brand colour (hex) | `#6366f1` |
-| `NEXT_PUBLIC_ACCENT_COLOR` | Optional | Secondary accent colour (hex) | `#4f46e5` |
-| `NEXT_PUBLIC_SUPPORT_EMAIL` | Optional | Support email shown to users | `help@myagency.com` |
-| `NEXT_PUBLIC_EMAIL_FROM` | Optional | "From" address for transactional email | `My Agency <no-reply@myagency.com>` |
-| `NEXT_PUBLIC_EMAIL_DOMAIN` | Optional | Domain used for sending email | `myagency.com` |
-
-### Optional — Notifications
-
-| Variable | Required | Description | Example |
-|---|---|---|---|
-| `TELEGRAM_BOT_TOKEN` | Optional | Telegram bot token for admin notifications | `123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11` |
-| `TELEGRAM_CHAT_ID` | Optional | Telegram chat ID to receive notifications | `-1001234567890` |
-
----
-
-## 🗄 Supabase Setup
-
-### 1. Create a Supabase Project
-
-1. Go to [supabase.com](https://supabase.com) and sign up / log in
+1. Go to [supabase.com](https://supabase.com) and sign in
 2. Click **New Project**
-3. Choose an organization, name your project, and set a database password
-4. Select a region close to your users
-5. Click **Create new project** and wait for provisioning (~2 minutes)
+3. Fill in:
+   - **Name:** projoflow (or whatever you want)
+   - **Database Password:** (generate a strong one and save it)
+   - **Region:** Choose closest to your users
+4. Click **Create Project** (takes ~2 minutes)
 
-### 2. Get Your API Keys
+### Step 3: Run Database Migrations
 
-1. Go to **Settings → API** in the Supabase Dashboard
-2. Copy these values:
-   - **Project URL** → `NEXT_PUBLIC_SUPABASE_URL`
-   - **anon / public** key → `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-   - **service_role** key → `SUPABASE_SERVICE_ROLE_KEY`
+**Option A: Supabase CLI (Recommended)**
 
-> ⚠️ The service role key has **full access** to your database. Never expose it in client-side code.
+```bash
+# Install Supabase CLI
+npm install -g supabase
 
-### 3. Run the Database Schema
+# Clone your repo locally
+git clone https://github.com/your-username/projoflow-selfhosted.git
+cd projoflow-selfhosted
 
-Open the **SQL Editor** in Supabase Dashboard (left sidebar → SQL Editor → New query).
+# Link to your Supabase project
+npx supabase link --project-ref YOUR_PROJECT_REF
 
-Run these SQL files **in order**:
-
-1. **Base schema** — Copy the contents of [`supabase/schema.sql`](supabase/schema.sql) and run it. This creates all core tables (projects, clients, tasks, time entries, etc.), RLS policies, and database functions.
-
-2. **Multi-tenant migration** — Copy the contents of [`supabase/migrations/20260204_multi_tenant.sql`](supabase/migrations/20260204_multi_tenant.sql) and run it. This adds workspace isolation, team membership, and invite-based access.
-
-3. **Subscriptions migration** — Copy the contents of [`supabase/migrations/20260204_subscriptions.sql`](supabase/migrations/20260204_subscriptions.sql) and run it. This adds Stripe subscription tracking (plans, status, limits).
-
-> **Important:** Run them in the order listed above. Each migration builds on the previous one.
-
-### 4. Configure Authentication
-
-Go to **Authentication → Providers → Email** in Supabase Dashboard:
-
-- **Enable Auto Confirm** (Recommended): Set "Enable email confirmations" → **OFF**
-  - This allows invited users to sign up and immediately access the portal
-  - The invitation token itself validates their email address
-
-### 5. Configure Redirect URLs
-
-Go to **Authentication → URL Configuration**:
-
-**Site URL:**
-```
-https://your-app-url.vercel.app
+# Push migrations
+npx supabase db push
 ```
 
-**Redirect URLs** (add all of these):
-```
-https://your-app-url.vercel.app/portal
-https://your-app-url.vercel.app/portal/invite/*
-https://your-app-url.vercel.app/auth/callback
-http://localhost:3000/portal
-http://localhost:3000/portal/invite/*
-http://localhost:3000/auth/callback
-```
+**Option B: Manual SQL**
 
-> The wildcard `*` allows dynamic invitation tokens to work correctly.
+1. In Supabase dashboard, go to **SQL Editor**
+2. Open each file in `supabase/migrations/` folder
+3. Copy the SQL content
+4. Paste and run in SQL Editor
+5. Run in order (check timestamps in filenames)
 
----
+### Step 4: Get Supabase Credentials
 
-## 💳 Stripe Setup
-
-### 1. Create Stripe Products
-
-1. Log into [Stripe Dashboard](https://dashboard.stripe.com)
-2. Go to **Products** → **Add product**
-3. Create two products:
-
-   **Pro Plan:**
-   - Name: `Pro`
-   - Pricing: Recurring, e.g. $29/month
-   - Click **Save product**
-   - Copy the **Price ID** (starts with `price_`) → `STRIPE_PRICE_PRO`
-
-   **Business Plan:**
-   - Name: `Business`
-   - Pricing: Recurring, e.g. $79/month
-   - Click **Save product**
-   - Copy the **Price ID** → `STRIPE_PRICE_BUSINESS`
-
-### 2. Get API Keys
-
-1. Go to **Developers → API keys**
+1. In Supabase dashboard, go to **Settings → API**
 2. Copy:
-   - **Publishable key** → `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`
-   - **Secret key** → `STRIPE_SECRET_KEY`
+   - **Project URL** (e.g., `https://abc123.supabase.co`)
+   - **Anon (public) key** (starts with `eyJ...`)
 
-### 3. Create Webhook Endpoint
+### Step 5: Add Environment Variables to Vercel
 
-1. Go to **Developers → Webhooks → Add endpoint**
-2. Set the endpoint URL to:
+1. Go to your Vercel project dashboard
+2. Click **Settings → Environment Variables**
+3. Add these variables:
+
+   ```env
+   NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGc...your-anon-key
+   RESEND_API_KEY=re_your_key_here (optional)
    ```
-   https://your-app-url.vercel.app/api/stripe/webhook
-   ```
-3. Select events to listen to:
-   - `checkout.session.completed`
-   - `customer.subscription.updated`
-   - `customer.subscription.deleted`
-4. Click **Add endpoint**
-5. Copy the **Signing secret** → `STRIPE_WEBHOOK_SECRET`
 
-### Test Mode vs Live Mode
+4. Click **Save**
 
-- Use **test mode** keys (`pk_test_`, `sk_test_`) during development
-- Switch to **live mode** keys (`pk_live_`, `sk_live_`) when you're ready to accept real payments
-- You'll need separate webhook endpoints for test and live modes
+### Step 6: Redeploy
+
+1. Go to **Deployments** tab in Vercel
+2. Click the three dots (**...**) on the latest deployment
+3. Click **Redeploy**
+4. Wait for build to complete (~2 minutes)
+
+### Step 7: Run Setup Wizard
+
+1. Visit your deployed URL (e.g., `https://projoflow.vercel.app`)
+2. Go to `/setup`
+3. Create your admin account
+4. Set workspace name and branding
+5. Done! 🎉
 
 ---
 
-## 🎨 White-Labeling
+## 🛠️ Option 2: Manual Deployment (Any Platform)
 
-TaskFlow Pro is built from the ground up for white-labeling. Every customer-facing brand element is controlled via environment variables.
+**Works with Railway, Render, or your own servers.**
 
-### What You Can Customize
+### Step 1: Clone and Install
 
-| Element | Variable | Default |
-|---|---|---|
-| App name | `NEXT_PUBLIC_APP_NAME` | TaskFlow Pro |
-| Tagline | `NEXT_PUBLIC_APP_TAGLINE` | Project management that gets out of your way |
-| Logo | `NEXT_PUBLIC_APP_LOGO` | `/logo.svg` |
-| Primary colour | `NEXT_PUBLIC_PRIMARY_COLOR` | `#10b981` (emerald) |
-| Accent colour | `NEXT_PUBLIC_ACCENT_COLOR` | `#059669` |
-| Support email | `NEXT_PUBLIC_SUPPORT_EMAIL` | support@taskflow.pro |
-| Email "From" | `NEXT_PUBLIC_EMAIL_FROM` | TaskFlow Pro \<no-reply@taskflow.pro\> |
-| Email domain | `NEXT_PUBLIC_EMAIL_DOMAIN` | taskflow.pro |
+```bash
+git clone https://github.com/mahmoudsheikh94/projoflow-selfhosted.git
+cd projoflow-selfhosted
+npm install
+```
 
-### How It Works
+### Step 2: Set Up Supabase
 
-All branding values are defined in `src/lib/config/theme.ts` with environment variable overrides. Every UI component, email template, and metadata tag consumes these values — no code changes required.
+Follow **Option 1, Step 2-4** above to:
+1. Create Supabase project
+2. Run migrations
+3. Get credentials
 
-### Custom Logo
+### Step 3: Configure Environment Variables
 
-1. Add your logo file to the `public/` directory (e.g., `public/my-logo.svg`)
-2. Set `NEXT_PUBLIC_APP_LOGO=/my-logo.svg`
-3. Redeploy
+```bash
+cp .env.example .env.local
+```
 
-### Custom Domain + Branding Example
+Edit `.env.local`:
 
 ```env
-NEXT_PUBLIC_APP_NAME="Acme Projects"
-NEXT_PUBLIC_APP_TAGLINE="Manage client work effortlessly"
-NEXT_PUBLIC_APP_LOGO="/acme-logo.svg"
-NEXT_PUBLIC_PRIMARY_COLOR="#3b82f6"
-NEXT_PUBLIC_ACCENT_COLOR="#2563eb"
-NEXT_PUBLIC_APP_URL=https://projects.acme.com
-NEXT_PUBLIC_SUPPORT_EMAIL=support@acme.com
-NEXT_PUBLIC_EMAIL_FROM="Acme Projects <no-reply@acme.com>"
-NEXT_PUBLIC_EMAIL_DOMAIN=acme.com
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key-here
+RESEND_API_KEY=re_your_key_here  # Optional
+```
+
+### Step 4: Test Locally
+
+```bash
+npm run dev
+```
+
+Visit `http://localhost:3000/setup` and complete setup wizard.
+
+### Step 5: Build and Deploy
+
+**For Vercel:**
+```bash
+npx vercel
+```
+
+**For Railway:**
+1. Create new project in Railway
+2. Connect your GitHub repo
+3. Add environment variables
+4. Deploy
+
+**For Render:**
+1. Create new Web Service
+2. Connect your GitHub repo
+3. Build command: `npm install && npm run build`
+4. Start command: `npm start`
+5. Add environment variables
+
+**For Self-Hosted (PM2):**
+```bash
+npm run build
+npm install -g pm2
+pm2 start npm --name "projoflow" -- start
+pm2 save
+pm2 startup
 ```
 
 ---
 
-## 🔄 Updating
+## 🎨 Post-Deployment: Branding Setup
 
-### Vercel (automatic)
+### 1. Upload Your Logo
 
-If you deployed via the Deploy button, Vercel created a Git repository in your GitHub account. To update:
+1. Log in to your ProjoFlow instance
+2. Go to **Settings → Branding**
+3. Click **Upload Logo**
+4. Select your logo file (PNG/JPG/SVG)
+5. Logo will be stored in Supabase Storage and shown in sidebar/login
 
-1. Add the upstream remote (one-time):
-   ```bash
-   git remote add upstream https://github.com/mahmoudsheikh94/taskflow-pro.git
+### 2. Customize Colors
+
+1. Still in **Settings → Branding**
+2. Toggle between **Light** and **Dark** theme
+3. Customize:
+   - Background
+   - Foreground
+   - Card
+   - Primary
+   - Secondary
+   - Muted
+   - Accent
+   - Destructive
+   - Border
+
+4. Click **Save**
+5. Changes apply instantly across all users
+
+### 3. Set Workspace Name
+
+1. In **Settings → General**
+2. Update **Workspace Name**
+3. This shows in page titles, emails, and client portal
+
+---
+
+## 📧 Email Setup (Optional)
+
+**For client invitation emails, you'll need Resend.**
+
+### 1. Create Resend Account
+
+1. Go to [resend.com](https://resend.com)
+2. Sign up (free tier: 100 emails/day)
+3. Verify your domain (or use their test domain)
+
+### 2. Get API Key
+
+1. In Resend dashboard, go to **API Keys**
+2. Click **Create API Key**
+3. Copy the key (starts with `re_`)
+
+### 3. Add to Environment Variables
+
+**For Vercel:**
+1. Go to project **Settings → Environment Variables**
+2. Add `RESEND_API_KEY` with your key
+3. Redeploy
+
+**For local/self-hosted:**
+1. Add to `.env.local`:
+   ```env
+   RESEND_API_KEY=re_your_key_here
    ```
-2. Pull latest changes:
-   ```bash
-   git fetch upstream
-   git merge upstream/main
-   ```
-3. Resolve any conflicts and push:
-   ```bash
-   git push origin main
-   ```
-4. Vercel will automatically redeploy on push.
+2. Restart server
 
-### Railway
+### 4. Test Email
 
-Same Git-based workflow. Push to your repository and Railway redeploys automatically.
+1. Go to **Clients** in ProjoFlow
+2. Create a client
+3. Invite a user (use your own email to test)
+4. Check inbox (and spam folder)
 
-### Docker / Self-Hosted
+---
+
+## 🤖 MCP Server Setup (AI Integration)
+
+**Enable Claude Code, Cursor, and Cline to control ProjoFlow.**
+
+### 1. Navigate to MCP Server Folder
 
 ```bash
-git pull origin main
-docker compose up -d --build
+cd mcp-server
 ```
 
-Or without Docker:
-```bash
-git pull origin main
-npm install
-npm run build
-npm start   # or restart your process manager (pm2, systemd, etc.)
+### 2. Follow Setup Instructions
+
+See `mcp-server/README.md` for detailed setup for:
+- **Claude Code** (OpenClaw)
+- **Cursor**
+- **Cline** (VS Code extension)
+
+### 3. Test MCP Integration
+
+Once configured, ask your AI:
+
+```
+"Create a task in [Project Name] called 'Test MCP integration'"
 ```
 
-### Database Migrations
+If it works, your AI will create the task instantly.
 
-When updating, check the `supabase/migrations/` directory for any new migration files. Run them in order via the Supabase SQL Editor.
+---
+
+## 🔒 Security Checklist
+
+### Before Going Live:
+
+- [ ] **Change default admin password** (if you used setup wizard)
+- [ ] **Enable 2FA** in Supabase (Settings → Auth)
+- [ ] **Set up custom domain** (optional, but recommended)
+- [ ] **Configure CORS** in Supabase (if using API directly)
+- [ ] **Review RLS policies** (they're pre-configured, but double-check)
+- [ ] **Set up backups** (Supabase auto-backups on paid plans)
+- [ ] **Add environment variables** for production (never commit .env files)
+
+### Recommended:
+
+- Use **Vercel's preview deployments** for staging
+- Test branding changes in preview before merging to main
+- Keep local `.env.local` out of git (it's in .gitignore already)
 
 ---
 
 ## 🐛 Troubleshooting
 
-### Build fails on Vercel
+### Build Fails on Vercel
 
-- **Missing env vars:** Make sure all required environment variables are set. Go to Vercel → Settings → Environment Variables.
-- **TypeScript errors:** Run `npm run build` locally to see the exact error. Fix and push.
+**Error:** `Missing environment variables`
 
-### "Invalid API key" errors
-
-- Double-check your Supabase anon key and URL — they must match the project you set up the schema in.
-- Make sure you're not mixing up the **anon key** and the **service role key**.
-
-### Stripe webhook not working
-
-- Verify the webhook URL is correct: `https://your-domain.com/api/stripe/webhook`
-- Make sure the webhook is set to **active** (not disabled)
-- Check that the correct events are selected
-- In Stripe Dashboard → Webhooks, check the **Logs** tab for delivery attempts
-
-### Email not sending
-
-1. Check your `RESEND_API_KEY` is correct
-2. Verify your sending domain is verified in the [Resend dashboard](https://resend.com/domains)
-3. Check Vercel function logs for errors
-
-### Invitation link doesn't work
-
-1. Verify Supabase redirect URLs include your domain + `/portal/invite/*`
-2. Check the invitation token hasn't expired (7 days default)
-3. Ensure the invitation hasn't already been accepted
-
-### "Invalid redirect URL" error
-
-1. Go to Supabase → Authentication → URL Configuration
-2. Add the exact URL showing in the error to the Redirect URLs list
-3. Wait 1-2 minutes for the cache to clear
-
-### Setup wizard doesn't appear
-
-- The setup wizard runs automatically when no workspace exists for the logged-in user
-- Make sure you've run all three SQL scripts (schema + both migrations)
-- Check the browser console for errors
-
-### White-label changes not showing
-
-- Branding variables prefixed with `NEXT_PUBLIC_` are embedded at **build time**
-- After changing them, you must **redeploy** (Vercel does this automatically when you update env vars and redeploy)
+**Fix:**
+1. Go to Vercel project → Settings → Environment Variables
+2. Add `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+3. Redeploy
 
 ---
 
-## 🔐 Security Notes
+### Database Migration Errors
 
-- Never commit `.env.local` or `.env` files to Git
-- The `SUPABASE_SERVICE_ROLE_KEY` has full database access — keep it server-side only
-- The `STRIPE_SECRET_KEY` can create charges — never expose it to the client
-- Rotate API keys periodically
-- Enable Row Level Security (RLS) on all Supabase tables — the schema does this by default
-- Monitor Stripe webhook delivery and Supabase auth logs
-- Set up Supabase [Auth rate limits](https://supabase.com/docs/guides/auth/rate-limits) for production
+**Error:** `relation "workspaces" already exists`
+
+**Fix:**
+Migrations were already run. Skip to next step.
+
+**Error:** `permission denied for schema public`
+
+**Fix:**
+You're using the wrong Supabase key. Use the **service role key** (Settings → API) only for migrations, not in env vars.
+
+---
+
+### Setup Wizard Not Loading
+
+**Error:** `redirect to /dashboard`
+
+**Fix:**
+You're already logged in. Visit `/setup` in an incognito window or log out first.
+
+---
+
+### Logo Upload Not Working
+
+**Error:** `Storage bucket not found`
+
+**Fix:**
+1. In Supabase, go to **Storage**
+2. Create a bucket called `brand-assets`
+3. Set it to **Public**
+4. Try uploading again
+
+---
+
+### Emails Not Sending
+
+**Error:** `Resend API error`
+
+**Fix:**
+1. Check `RESEND_API_KEY` is set correctly
+2. Verify your domain in Resend dashboard
+3. Check Resend logs for errors
+
+---
+
+## 📊 Monitoring & Updates
+
+### Check for Updates
+
+ProjoFlow updates are pushed to the GitHub repo.
+
+**To update:**
+
+```bash
+git pull origin main
+npm install
+npm run build
+# Redeploy (or let Vercel auto-deploy)
+```
+
+### Database Migrations on Update
+
+If we add new features with database changes:
+
+1. Check `supabase/migrations/` for new files
+2. Run new migrations via Supabase CLI or SQL Editor
+3. Redeploy app
+
+---
+
+## 🆘 Support
+
+### First 100 Licenses
+
+Email support included: **support@projoflow.com**
+
+### After License #100
+
+- **Docs:** This guide + README
+- **Community:** Discord (link in license email)
+- **Source Code:** You have it — hire developers if needed
+
+---
+
+## 🎯 Post-Launch Checklist
+
+Once deployed:
+
+- [ ] Test user signup/login
+- [ ] Create a test project
+- [ ] Invite a test client
+- [ ] Upload your logo
+- [ ] Customize colors
+- [ ] Test MCP integration (if using)
+- [ ] Send test email invitation
+- [ ] Check mobile responsiveness
+- [ ] Bookmark your admin panel
+
+---
+
+**Need help?** Email us: support@projoflow.com
+
+**Built with ❤️ for agencies who value ownership.**

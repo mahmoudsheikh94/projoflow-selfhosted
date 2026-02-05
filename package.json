@@ -1,7 +1,7 @@
 {
   "name": "projoflow",
   "version": "1.0.0",
-  "description": "AI-powered project management for agencies. Built on MCP.",
+  "description": "White-label project management for agencies. Self-hosted with native AI integration (MCP).",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -41,7 +41,6 @@
     "react-dom": "19.2.3",
     "resend": "^6.9.1",
     "sonner": "^2.0.7",
-    "stripe": "^20.3.0",
     "tailwind-merge": "^3.4.0",
     "zustand": "^5.0.10"
   },

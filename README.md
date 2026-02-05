@@ -1,218 +1,245 @@
-# ProjoFlow
+# ProjoFlow — Self-Hosted Project Management
 
-**White-label project management for agencies and teams.**
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fmahmoudsheikh94%2Ftaskflow-pro&env=NEXT_PUBLIC_SUPABASE_URL,NEXT_PUBLIC_SUPABASE_ANON_KEY,SUPABASE_SERVICE_ROLE_KEY,NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,STRIPE_SECRET_KEY,STRIPE_WEBHOOK_SECRET,STRIPE_PRICE_PRO,STRIPE_PRICE_BUSINESS&envDescription=Required%20environment%20variables%20for%20ProjoFlow%20Pro.%20See%20DEPLOYMENT.md%20for%20details.&envLink=https%3A%2F%2Fgithub.com%2Fmahmoudsheikh94%2Ftaskflow-pro%2Fblob%2Fmain%2FDEPLOYMENT.md&project-name=taskflow-pro&repository-name=taskflow-pro)
-
-ProjoFlow is a modern, self-hosted project management tool built for agencies that want to manage client work, track time, and give clients a branded portal — all from one place. Ship it under your own brand with zero code changes.
+**White-label project management for agencies and consultancies.**  
+One-time license · Self-hosted · Full branding · Native AI integration (MCP)
 
 ---
 
-## ✨ Features
+## 🚀 What You Get
 
-- **Kanban Board** — Drag-and-drop task management with custom columns
-- **Client Portal** — Give clients a dedicated login to see project progress
-- **Time Tracking** — Log hours per task, generate reports, set hourly rates
-- **Lead Intake** — Shareable onboarding forms that feed your pipeline
-- **Client Invitations** — One-click email invites with auto-provisioned accounts
-- **Task Comments & @Mentions** — Threaded comments with real-time notifications
-- **Reports & Dashboard** — At-a-glance metrics for revenue, utilisation, and status
-- **Multi-Tenant Workspaces** — Isolated workspaces with invite-based team management
-- **Subscription Billing** — Stripe-powered Pro and Business plans with usage limits
-- **White-Label Theming** — Swap name, logo, colours, and emails via env vars
-- **Dark Mode** — Beautiful dark UI built with Tailwind CSS
-- **Setup Wizard** — First-visit guided setup for workspace creation
-
-## 🏗 Tech Stack
-
-| Layer | Technology |
-|---|---|
-| Framework | Next.js 16 (App Router) |
-| Database | Supabase (Postgres + Auth + Realtime) |
-| Payments | Stripe (Subscriptions + Webhooks) |
-| Styling | Tailwind CSS 4 + shadcn/ui |
-| State | TanStack React Query + Zustand |
-| Email | Resend |
-| Drag & Drop | dnd-kit |
-| Language | TypeScript |
+- ✅ **Full source code** (Next.js, React, TypeScript, Supabase)
+- ✅ **MCP server** for AI assistant integration (Claude Code, Cursor, Cline)
+- ✅ **White-label branding** system (logo, colors, workspace name)
+- ✅ **Client portal** with role-based access
+- ✅ **Time tracking & billing**
+- ✅ **@Mentions, comments, file attachments**
+- ✅ **Free updates forever** (via GitHub)
+- ✅ **One-time payment** (no recurring fees)
 
 ---
 
-## 🚀 One-Click Deploy
+## 📦 What's Included
 
-The fastest way to get your own ProjoFlow instance running.
+### Core Features
+- **Projects & Tasks** — Full project lifecycle management
+- **Time Tracking** — Billable hours, project rates, reporting
+- **Client Portal** — Secure client access with invitations
+- **Team Collaboration** — @Mentions, threaded comments, real-time updates
+- **File Attachments** — Per-task file uploads (Supabase Storage)
+- **Custom Branding** — Logo, colors (light/dark themes), workspace name
+- **MCP Server** — Native AI assistant integration (no API setup needed)
 
-### Step 1 — Deploy to Vercel
-
-Click the button below to clone this repo and deploy it to Vercel:
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fmahmoudsheikh94%2Ftaskflow-pro&env=NEXT_PUBLIC_SUPABASE_URL,NEXT_PUBLIC_SUPABASE_ANON_KEY,SUPABASE_SERVICE_ROLE_KEY,NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,STRIPE_SECRET_KEY,STRIPE_WEBHOOK_SECRET,STRIPE_PRICE_PRO,STRIPE_PRICE_BUSINESS&envDescription=Required%20environment%20variables%20for%20ProjoFlow%20Pro.%20See%20DEPLOYMENT.md%20for%20details.&envLink=https%3A%2F%2Fgithub.com%2Fmahmoudsheikh94%2Ftaskflow-pro%2Fblob%2Fmain%2FDEPLOYMENT.md&project-name=taskflow-pro&repository-name=taskflow-pro)
-
-Vercel will prompt you for the required environment variables. Don't worry — follow the steps below to get them.
-
-### Step 2 — Create a Supabase Project
-
-1. Go to [supabase.com](https://supabase.com) and create a new project
-2. Note your **Project URL** and **Anon Key** from Settings → API
-3. Note your **Service Role Key** from Settings → API (keep this secret!)
-
-### Step 3 — Set Up the Database
-
-Run these SQL files in order using Supabase's **SQL Editor** (Dashboard → SQL Editor → New query):
-
-1. **Base schema** — [`supabase/schema.sql`](supabase/schema.sql) — Creates all tables, RLS policies, and functions
-2. **Multi-tenant migration** — [`supabase/migrations/20260204_multi_tenant.sql`](supabase/migrations/20260204_multi_tenant.sql) — Adds workspace isolation and team management
-3. **Subscriptions migration** — [`supabase/migrations/20260204_subscriptions.sql`](supabase/migrations/20260204_subscriptions.sql) — Adds Stripe subscription tracking
-
-> **Tip:** Copy each file's contents, paste into the SQL Editor, and click **Run**.
-
-### Step 4 — Set Up Stripe
-
-1. Create a [Stripe account](https://stripe.com) (or use an existing one)
-2. Create two Products in Stripe Dashboard → Products:
-   - **Pro Plan** — e.g. $29/month. Copy the Price ID (`price_...`)
-   - **Business Plan** — e.g. $79/month. Copy the Price ID (`price_...`)
-3. Create a webhook endpoint:
-   - Go to Developers → Webhooks → Add endpoint
-   - URL: `https://your-app.vercel.app/api/stripe/webhook`
-   - Events to listen for: `checkout.session.completed`, `customer.subscription.updated`, `customer.subscription.deleted`
-   - Copy the **Webhook Signing Secret** (`whsec_...`)
-
-### Step 5 — Add Environment Variables
-
-Go to your Vercel project → Settings → Environment Variables and add:
-
-| Variable | Description |
-|---|---|
-| `NEXT_PUBLIC_SUPABASE_URL` | Your Supabase project URL |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase anonymous/public key |
-| `SUPABASE_SERVICE_ROLE_KEY` | Supabase service role key (server-side only) |
-| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Stripe publishable key (`pk_live_...` or `pk_test_...`) |
-| `STRIPE_SECRET_KEY` | Stripe secret key (`sk_live_...` or `sk_test_...`) |
-| `STRIPE_WEBHOOK_SECRET` | Stripe webhook signing secret (`whsec_...`) |
-| `STRIPE_PRICE_PRO` | Stripe Price ID for the Pro plan |
-| `STRIPE_PRICE_BUSINESS` | Stripe Price ID for the Business plan |
-
-**Optional variables** (for branding, email, notifications):
-
-| Variable | Description |
-|---|---|
-| `NEXT_PUBLIC_APP_NAME` | Custom app name (default: "ProjoFlow") |
-| `NEXT_PUBLIC_APP_TAGLINE` | Custom tagline |
-| `NEXT_PUBLIC_APP_LOGO` | Path to custom logo |
-| `NEXT_PUBLIC_APP_URL` | Your app's canonical URL |
-| `RESEND_API_KEY` | Resend API key for email notifications |
-| `TELEGRAM_BOT_TOKEN` | Telegram bot token for notifications |
-| `TELEGRAM_CHAT_ID` | Telegram chat ID for notifications |
-
-> See [`DEPLOYMENT.md`](DEPLOYMENT.md) for the complete environment variable reference.
-
-### Step 6 — Visit Your App
-
-1. Redeploy on Vercel (if you added env vars after the initial deploy)
-2. Visit your app URL
-3. The **Setup Wizard** will run on first visit — follow it to create your workspace
-4. You're live! 🎉
+### Tech Stack
+- **Frontend:** Next.js 16, React 19, TypeScript, Tailwind CSS
+- **Backend:** Supabase (PostgreSQL + Auth + Storage + Realtime)
+- **AI Integration:** Model Context Protocol (MCP) server
+- **Deployment:** Vercel-ready (or Railway, Render, self-hosted)
 
 ---
 
-## 🛠 Local Development
+## ⚙️ Quick Start
 
-### 1. Clone & install
+### Prerequisites
+- Node.js 20+ and npm/pnpm/yarn
+- Supabase account (free tier works)
+- Vercel account (optional, for one-click deploy)
 
-```bash
-git clone https://github.com/mahmoudsheikh94/taskflow-pro.git
-cd taskflow-pro
-npm install
-```
+### Option 1: One-Click Deploy (Vercel)
 
-### 2. Configure environment
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/mahmoudsheikh94/projoflow-selfhosted)
 
-```bash
-cp .env.example .env.local
-```
+1. Click the button above
+2. Connect your GitHub account
+3. Create a Supabase project
+4. Add environment variables (see below)
+5. Deploy! 🎉
 
-Fill in your Supabase and Stripe credentials. See [`.env.example`](.env.example) for all available variables.
+### Option 2: Manual Setup
 
-### 3. Run locally
+1. **Clone the repo**
+   ```bash
+   git clone https://github.com/mahmoudsheikh94/projoflow-selfhosted.git
+   cd projoflow-selfhosted
+   npm install
+   ```
 
-```bash
-npm run dev
-```
+2. **Create Supabase project**
+   - Go to [supabase.com](https://supabase.com)
+   - Create a new project
+   - Copy your project URL and anon key
 
-Open [http://localhost:3000](http://localhost:3000).
+3. **Set environment variables**
+   ```bash
+   cp .env.example .env.local
+   ```
+   Edit `.env.local`:
+   ```env
+   NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+   RESEND_API_KEY=re_... # Optional, for email invitations
+   ```
+
+4. **Run database migrations**
+   ```bash
+   # Using Supabase CLI (recommended)
+   npx supabase link --project-ref your-project-ref
+   npx supabase db push
+
+   # OR manually: Copy SQL from supabase/migrations/*.sql
+   # and run in Supabase SQL Editor
+   ```
+
+5. **Run the setup wizard**
+   ```bash
+   npm run dev
+   # Visit http://localhost:3000/setup
+   # Create your admin account
+   ```
+
+6. **Deploy to Vercel**
+   ```bash
+   npx vercel
+   ```
 
 ---
 
-## 🎨 White-Label / Theming
+## 🎨 Branding Customization
 
-Every branding touchpoint reads from environment variables with sensible defaults. Override what you need:
+### Logo & Colors
+1. Log in to your ProjoFlow instance
+2. Go to **Settings → Branding**
+3. Upload your logo
+4. Customize colors (light and dark themes)
+5. Changes apply instantly across all users
 
+### Theme System
+ProjoFlow includes a full CSS variable-based theming system:
+- 9 customizable colors per theme (light/dark)
+- 40+ components styled with theme variables
+- Persistent per-workspace (stored in `workspace_settings`)
+
+---
+
+## 🤖 AI Integration (MCP Server)
+
+### What is MCP?
+ProjoFlow includes a [Model Context Protocol](https://modelcontextprotocol.io) server that lets AI assistants natively interact with your projects.
+
+### Supported Assistants
+- **Claude Code** (OpenClaw, Claude Desktop)
+- **Cursor**
+- **Cline** (VS Code extension)
+- Any MCP-compatible client
+
+### Setup
+1. Navigate to `/mcp-server` folder
+2. Follow `mcp-server/README.md` for configuration
+3. Add ProjoFlow as an MCP server in your AI assistant settings
+4. Your AI can now create tasks, log time, update projects, etc.
+
+**Example commands:**
+- "Create a task in Project X called 'Fix login bug'"
+- "Log 2 hours to the homepage redesign task"
+- "Show me all tasks assigned to John"
+
+---
+
+## 📚 Documentation
+
+- **[DEPLOYMENT.md](./DEPLOYMENT.md)** — Detailed deployment guide
+- **[LICENSE.md](./LICENSE.md)** — License terms & restrictions
+- **[CONTRIBUTING.md](./CONTRIBUTING.md)** — How to contribute
+- **[mcp-server/README.md](./mcp-server/README.md)** — MCP server setup
+
+---
+
+## 🔒 Security
+
+- **Row-level security (RLS)** enabled on all tables
+- **Per-workspace isolation** (no cross-tenant data leakage)
+- **Auth handled by Supabase** (OAuth, magic links, email/password)
+- **Environment variables** for secrets (never commit credentials)
+
+---
+
+## 🤝 Support
+
+### First 100 Licenses
+Email support included for 90 days from purchase.  
+**Contact:** support@projoflow.com
+
+### After License #100
+- **Documentation:** This README + deployment guides
+- **Community:** Discord (invite in your license email)
+- **Source Code:** You have it — hire your own developers if needed
+
+---
+
+## 📜 License
+
+**One-time purchase · Perpetual use · Free updates**
+
+See [LICENSE.md](./LICENSE.md) for full terms.
+
+**TL;DR:**
+- ✅ Use for your agency/company
+- ✅ Deploy for all your clients
+- ✅ Modify and white-label
+- ✅ Free updates forever
+- ❌ Do NOT resell the source code
+- ❌ Do NOT create competing SaaS
+
+---
+
+## 🛠️ Tech Details
+
+### Environment Variables
 ```env
-NEXT_PUBLIC_APP_NAME="My Agency PM"
-NEXT_PUBLIC_APP_TAGLINE="Ship projects faster"
-NEXT_PUBLIC_APP_LOGO="/my-logo.svg"
-NEXT_PUBLIC_PRIMARY_COLOR="#6366f1"
-NEXT_PUBLIC_ACCENT_COLOR="#4f46e5"
-NEXT_PUBLIC_APP_URL=https://pm.myagency.com
-NEXT_PUBLIC_SUPPORT_EMAIL=help@myagency.com
-NEXT_PUBLIC_EMAIL_FROM="My Agency <no-reply@myagency.com>"
-NEXT_PUBLIC_EMAIL_DOMAIN=myagency.com
+# Supabase (required)
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+
+# Email (optional — for client invitations)
+RESEND_API_KEY=re_...
 ```
 
-Theme config lives in `src/lib/config/theme.ts`. All UI components, emails, and metadata consume these values — no find-and-replace required.
+### Database
+ProjoFlow uses Supabase (PostgreSQL) with the following schema:
+- `workspaces` — Tenant isolation
+- `projects` — Client projects
+- `tasks` — Task management
+- `time_entries` — Time tracking
+- `clients` — Client organizations
+- `client_users` — Client portal access
+- `workspace_settings` — Branding & configuration
+
+All migrations are in `supabase/migrations/`.
 
 ---
 
-## 📁 Project Structure
+## 🎯 Roadmap
 
-```
-src/
-├── app/                 # Next.js App Router pages
-│   ├── (admin)/         # Admin dashboard (projects, clients, reports…)
-│   ├── portal/          # Client-facing portal
-│   ├── onboard/         # Lead intake form
-│   ├── setup/           # First-run setup wizard
-│   ├── api/             # API routes (email, stripe, notifications)
-│   └── login/           # Admin login
-├── components/          # React components
-│   ├── layout/          # Sidebar, header
-│   ├── project/         # Kanban board, tasks, notes
-│   ├── dialogs/         # Modal forms
-│   ├── portal/          # Client portal components
-│   └── ui/              # shadcn/ui primitives
-├── emails/              # HTML email templates
-├── lib/
-│   ├── config/          # Theme & app configuration
-│   ├── hooks/           # React Query hooks
-│   └── supabase/        # Supabase client helpers
-└── types/               # TypeScript type definitions
-```
+**Current version:** 1.0.0
 
-## 🗄 Database
+**Coming soon:**
+- Gantt chart view
+- Budget tracking
+- Invoicing automation
+- Mobile app (React Native)
+- Additional MCP tools (calendar, email, etc.)
 
-ProjoFlow uses Supabase with row-level security. The base schema is in `supabase/schema.sql` and migrations live in `supabase/migrations/`.
+Updates will be pushed to GitHub. You control when to pull and deploy them.
 
-## 📬 Email
+---
 
-Transactional email is sent via [Resend](https://resend.com). Templates in `src/emails/` use mustache-style `{{VARIABLE}}` placeholders that are replaced at send time. See `src/emails/README.md` for details.
+## 💬 Questions?
 
-## 🚢 Deployment
+**Pre-sales:** sales@projoflow.com  
+**Support (first 100 licenses):** support@projoflow.com  
+**License questions:** legal@projoflow.com
 
-Deploy anywhere Next.js runs — Vercel (recommended), Railway, Docker, or any Node.js host.
+---
 
-See [`DEPLOYMENT.md`](DEPLOYMENT.md) for detailed guides covering:
-- ✅ Vercel (recommended, one-click deploy)
-- 🚂 Railway (alternative PaaS)
-- 🐳 Docker / self-hosted
-- 📋 Complete environment variable reference
-- 🎨 White-labeling guide
-- 🔄 Update / redeploy process
+**Built with ❤️ for agencies who value ownership.**
 
-## 🤝 Contributing
-
-See [`CONTRIBUTING.md`](CONTRIBUTING.md) for development setup, code style, and PR guidelines.
-
-## 📄 License
-
-All rights reserved. Contact for licensing.
+© 2025 ProjoFlow. All rights reserved.

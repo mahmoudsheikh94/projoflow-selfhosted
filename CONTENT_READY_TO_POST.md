@@ -1,623 +1,504 @@
-# Ready-to-Post Content (30 Pieces)
-**Created:** February 5, 2026  
-**For:** ProjoFlow Launch Campaign  
-**Usage:** Copy-paste-post (minor edits as needed)
+# ProjoFlow — Content Ready to Post
+
+**Target Audience:** Agencies, consultancies, dev shops, freelancers  
+**Positioning:** White-label self-hosted PM tool with native AI integration  
+**Differentiator:** The only PM tool your AI assistant can natively control (MCP)
 
 ---
 
-## 🐦 X (Twitter) - 15 Ready Posts
+## 🧵 Twitter/X Thread (Launch Announcement)
 
-### DAY 1: ANNOUNCEMENT
+**Tweet 1 (Hook):**
+> We built the project management tool we couldn't find.
+> 
+> One-time license. Self-hosted. AI-native.
+> 
+> For agencies who are tired of:
+> • $79/month forever
+> • Data on someone else's servers
+> • Generic branding
+> • Tools that can't talk to AI
+> 
+> Introducing ProjoFlow 🚀
 
-**Post 1.1 - Opening Tweet:**
-```
-I'm building the first project management tool designed for AI agents.
+**Tweet 2 (Problem):**
+> Agency PM tools are broken.
+> 
+> You pay monthly fees forever. Your client data lives on their servers. Your clients see their branding, not yours.
+> 
+> And when you want your AI assistant to help? Good luck with that API mess.
 
-Launch in 10 days.
+**Tweet 3 (Solution):**
+> ProjoFlow is different:
+> 
+> ✅ One-time purchase ($TBD)
+> ✅ Deploy on YOUR infrastructure
+> ✅ Full white-label branding
+> ✅ Native AI integration (MCP)
+> ✅ Free updates forever
+> ✅ No monthly fees, ever
 
-Here's why this matters 🧵
+**Tweet 4 (MCP Hook):**
+> Here's the killer feature:
+> 
+> ProjoFlow is built on Model Context Protocol (MCP).
+> 
+> That means Claude Code, Cursor, and Cline can:
+> • Create tasks
+> • Log time
+> • Update project status
+> • Query your data
+> 
+> All through natural conversation. No API setup.
 
-(1/8)
-```
+**Tweet 5 (Control Angle):**
+> Your agency, your infrastructure.
+> 
+> • Deploy to Vercel (free tier works)
+> • Use your own Supabase database
+> • Control who has access
+> • Own your data forever
+> 
+> No vendor lock-in. No data mining. No surprise price hikes.
 
-**Post 1.2 - The Problem:**
-```
-Current PM tools were built for humans only.
+**Tweet 6 (White-Label):**
+> Client portal with YOUR branding.
+> 
+> • Upload your logo
+> • Customize colors (light/dark themes)
+> • Your domain
+> 
+> Clients see your brand, not ours.
+> 
+> Because you're not reselling someone else's tool. You OWN it.
 
-Asana. Monday. ClickUp. Notion.
-
-Your AI assistant can't touch them.
-
-That changes today.
-
-(2/8)
-```
-
-**Post 1.3 - The Solution:**
-```
-Introducing ProjoFlow:
-
-→ Built on MCP (Model Context Protocol)
-→ Your AI can create projects
-→ Your AI can manage tasks
-→ Your AI can log time
-→ Fully autonomous or assisted
-
-The first PM tool AI assistants can actually use.
-
-(3/8)
-```
-
-**Post 1.4 - Use Case:**
-```
-Imagine this:
-
-You: "Claude, create a project for the website redesign"
-
-Your AI:
-✅ Creates project
-✅ Breaks down tasks
-✅ Assigns priorities
-✅ Estimates time
-✅ Updates you
-
-All automatically through ProjoFlow.
-
-That's the future. And it's launching in 10 days.
-
-(4/8)
-```
-
-**Post 1.5 - Tech Stack:**
-```
-Built with:
-→ Next.js 14
-→ Supabase
-→ MCP SDK
-→ Stripe
-→ TypeScript
-
-Open to feedback on the stack. What would you change?
-
-(5/8)
-```
-
-**Post 1.6 - Build Timeline:**
-```
-Timeline:
-→ Feb 1: First commit
-→ Feb 4: MCP integration working
-→ Feb 5: Landing page mockup
-→ Feb 10: Beta release
-→ Feb 15: Product Hunt launch
-
-7-day build. Fully functional. With AI co-founder.
-
-(6/8)
-```
-
-**Post 1.7 - The Team:**
-```
-Team:
-→ Me (human founder, full-stack)
-→ Mike (AI assistant, co-builder)
-
-Yes, half this product was built by an AI.
-
-The AI even tested itself using the product.
-
-Meta? Maybe. Effective? Absolutely.
-
-(7/8)
-```
-
-**Post 1.8 - Call to Action:**
-```
-Follow along for:
-→ Daily build updates
-→ Behind-the-scenes
-→ Lessons learned
-→ Launch day chaos
-
-And get early access when we go live.
-
-Let's build something different.
-
-(8/8)
-```
+**Tweet 7 (CTA):**
+> Early launch pricing: $TBD (lifetime access)
+> 
+> First 100 licenses include email support.
+> 
+> Get yours: [link]
+> 
+> Questions? Replies open.
 
 ---
 
-### DAY 2-3: BUILD IN PUBLIC
+## 📝 LinkedIn Post (B2B Angle)
 
-**Post 2.1 - Progress Update:**
-```
-Day 2 of building ProjoFlow 🛠️
+**Title:** Why We Stopped Paying $79/Month for Project Management
 
-Shipped today:
-✅ Project creation flow
-✅ Task management UI
-✅ MCP server (18 tools)
-✅ User authentication
+For the last 3 years, we paid $79/month for a project management SaaS.
 
-Tomorrow: Stripe integration + pricing page
+$79 × 36 months = $2,844.
 
-Building in public is nerve-wracking but addictive.
+And we still didn't own anything.
 
-[Add screenshot]
-```
+Our client data lived on their servers. Our clients saw their branding. And when we wanted to integrate with our AI assistant? API hell.
 
-**Post 2.2 - MCP Demo:**
-```
-Just recorded this:
+So we built our own.
 
-My AI assistant creating a project, adding tasks, and logging time.
+**Introducing ProjoFlow:**
+A white-label, self-hosted project management system built for agencies who want control.
 
-Zero clicks from me.
+**What makes it different:**
 
-This is what PM tools should have been from day one.
+1. **One-time purchase**  
+   Pay once. Use forever. No recurring fees.
 
-[Add video/GIF]
-```
+2. **Self-hosted**  
+   Deploy on Vercel, Railway, or your own servers. Your database. Your rules.
 
-**Post 2.3 - Lesson Learned:**
-```
-Lesson from building with an AI co-founder:
+3. **Full white-label branding**  
+   Custom logo, colors, and domain. Clients see YOUR brand, not ours.
 
-AI is incredible at:
-→ Boilerplate code
-→ Test writing
-→ Documentation
-→ Debugging
+4. **Native AI integration (MCP)**  
+   The only PM tool that Claude Code, Cursor, and Cline can natively control. No API setup. No middleware. Just works.
 
-Humans are better at:
-→ Architecture decisions
-→ UX intuition
-→ Product vision
+5. **You own the source code**  
+   Modify it. Extend it. Customize it. It's yours.
 
-Best combo: Human leads, AI executes.
-```
+**Who is this for?**
 
----
+• Agencies managing client projects  
+• Consultancies who value data ownership  
+• Dev shops who want to white-label  
+• Teams tired of monthly SaaS fees
 
-### DAY 4-5: FEATURE SPOTLIGHTS
+**What you get:**
 
-**Post 3.1 - Feature: MCP Integration:**
-```
-Why ProjoFlow is different (Part 1):
+• Full Next.js/React source code  
+• MCP server for AI integration  
+• Client portal with role-based access  
+• Time tracking & billing  
+• White-label branding system  
+• Deployment docs & setup wizard  
+• Free updates forever
 
-MCP Integration 🤖
+**First 100 licenses** include email support.
 
-Your AI assistant can:
-→ Read your projects
-→ Create tasks
-→ Update status
-→ Log time entries
-→ Add comments
+After that? You have the source code. Hire your own developers.
 
-No API wrestling. Just works.
+Early launch pricing: $TBD (lifetime access)
 
-[Add demo screenshot]
-```
-
-**Post 3.2 - Feature: White Label:**
-```
-Why ProjoFlow is different (Part 2):
-
-White-label ready 🎨
-
-Agencies can:
-→ Custom brand colors
-→ Upload their logo
-→ Custom domain
-→ Remove our branding
-
-Make it yours in 5 minutes.
-
-Perfect for consultancies.
-
-[Add branding screenshot]
-```
-
-**Post 3.3 - Feature: Simple Pricing:**
-```
-Why ProjoFlow is different (Part 3):
-
-Pricing that makes sense 💰
-
-Pro: $29/mo
-Business: $79/mo
-
-No per-seat pricing.
-No hidden fees.
-No "contact sales."
-
-Just pick a plan and go.
-
-Simple.
-```
+Link in comments. Questions welcome.
 
 ---
 
-### DAY 6-7: SOCIAL PROOF
+## 🎥 YouTube Video Script (5-Minute Demo)
 
-**Post 4.1 - Beta Feedback:**
-```
-First beta tester just said:
+**Title:** ProjoFlow — The Self-Hosted PM Tool Your AI Can Actually Use
 
-"This is what Monday.com should have been if it wasn't bloated with features I'll never use."
+**[0:00-0:30] Hook**
 
-Simple. Focused. AI-powered.
+"What if I told you there's a project management tool that:
+- Costs less than 6 months of ClickUp
+- You own forever
+- Your AI assistant can natively control
+- And clients see YOUR branding, not theirs?
 
-That's the goal.
+That's ProjoFlow. Let me show you."
 
-6 days to launch.
-```
+**[0:30-1:30] The Problem**
 
-**Post 4.2 - Technical Achievement:**
-```
-Small win today:
+"Agencies are stuck paying $79/month forever for PM tools.
 
-Our MCP server passed all 236 tests.
+Your data lives on their servers. Your clients see their branding. And when you want AI integration? You're stuck with janky API calls.
 
-Zero security vulnerabilities.
-100% RLS coverage.
-Multi-tenant isolation working perfectly.
+Meanwhile, you're paying $948/year. Forever.
 
-Ready for production.
+After 3 years, that's $2,844. And you own nothing."
 
-5 days to launch.
-```
+**[1:30-3:00] The Solution (Screen Recording)**
 
----
+"ProjoFlow is different. Watch this.
 
-### DAY 8-9: LAUNCH PREP
+[Screen: Vercel one-click deploy]
+- Click 'Deploy'
+- Connect Supabase
+- Set environment variables
+- 3 minutes later, you're live.
 
-**Post 5.1 - Countdown:**
-```
-48 hours until launch 🚀
+[Screen: Branding settings]
+- Upload your logo
+- Pick your colors
+- Save
 
-What we're launching:
-→ Fully functional PM tool
-→ MCP integration (18 tools)
-→ White-label ready
-→ Simple pricing ($29/$79)
-→ 14-day free trial
+Your clients now see YOUR brand.
 
-Product Hunt launch: Feb 15, 12:01 AM PST
+[Screen: MCP integration with Claude Code]
+- 'Create a task in Project X'
+- AI creates it instantly
+- No API setup. It just works."
 
-Set your alarms.
-```
+**[3:00-4:00] Who It's For**
 
-**Post 5.2 - Early Access:**
-```
-Want early access before Product Hunt?
+"This is for:
+- Agencies managing 5+ client projects
+- Consultancies who value data ownership
+- Dev shops who want white-label tools
+- Anyone tired of monthly SaaS fees
 
-Reply with "early" and I'll DM you the link.
+You pay once. You own it. Forever."
 
-Limited to 50 people.
+**[4:00-4:45] What You Get**
 
-First come, first served.
-```
+"Here's what's included:
 
----
+- Full source code (Next.js, React, TypeScript)
+- MCP server for AI integration
+- Client portal with secure invitations
+- Time tracking & billing
+- File attachments
+- White-label branding
+- Deployment docs
+- Free updates forever
 
-### DAY 10: LAUNCH DAY
+First 100 licenses get email support."
 
-**Post 6.1 - Launch Tweet (12:01 AM):**
-```
-🚀 ProjoFlow is LIVE on Product Hunt!
+**[4:45-5:00] CTA**
 
-The first project management tool your AI can control.
+"Early launch pricing: $TBD.
 
-→ MCP-native
-→ White-label ready
-→ Simple pricing
-→ Built in 10 days
+Link in description. Questions in the comments.
 
-Show some love:
-[Product Hunt link]
-
-Let's make PM tools intelligent.
-```
-
-**Post 6.2 - Milestone Updates:**
-```
-2 hours in:
-
-✅ #5 on Product Hunt
-✅ 50+ upvotes
-✅ 10 sign-ups
-✅ First paying customer
-
-This community is insane. Thank you 🙏
-```
-
-**Post 6.3 - Thank You:**
-```
-End of launch day:
-
-#3 on Product Hunt 🎉
-500+ visitors
-50+ sign-ups
-5 paying customers
-
-To everyone who supported:
-
-Thank you. This is just the beginning.
-
-Building in public works.
-```
+Stop renting. Start owning."
 
 ---
 
-## 📱 Instagram - 10 Ready Posts
+## 📱 Instagram Carousel (White-Label Benefits)
 
-### POST 1: Announcement (Reel Script)
+**Slide 1 (Cover):**
+> ProjoFlow
+> 
+> The PM tool you OWN
+> 
+> (Not rent)
 
-**Visual:** You at laptop, typing
-**Text Overlay:**
-```
-FRAME 1: "I'm building something..."
-FRAME 2: "The first PM tool..."
-FRAME 3: "Your AI can control"
-FRAME 4: "ProjoFlow"
-FRAME 5: "Launch in 10 days"
-```
+**Slide 2:**
+> ❌ STOP paying $79/month
+> 
+> ✅ START owning your tools
 
-**Caption:**
-```
-I'm building the first project management tool designed for AI agents 🤖
+**Slide 3:**
+> Your data
+> Your servers
+> Your brand
+> Your rules
 
-Imagine telling your AI assistant:
-"Create a project for the website redesign"
+**Slide 4:**
+> The only PM tool your AI can natively control
+> 
+> (Claude Code, Cursor, Cline)
 
-And it actually does it. Automatically.
+**Slide 5:**
+> One-time purchase
+> Free updates forever
+> No monthly fees
 
-That's ProjoFlow. Launching Feb 15.
+**Slide 6:**
+> Built for agencies
+> Who value ownership
 
-Follow for daily updates 👇
-
-#SaaS #AI #ProjectManagement #BuildInPublic #TechStartup
-```
-
----
-
-### POST 2: Behind-the-Scenes (Reel)
-
-**Visual:** Fast-cut montage of coding, design, testing
-**Music:** Upbeat, energetic
-**Text Overlay:**
-```
-"POV: Building a SaaS in 10 days"
-[Show timestamps]
-Day 1: First commit
-Day 2: MCP working
-Day 3: UI design
-Day 4: Stripe setup
-[Continue...]
-```
-
-**Caption:**
-```
-Building in public: Day 3 ⚡
-
-7 days until launch and we're hitting milestones:
-✅ MCP integration (AI can now control the app)
-✅ Database schema locked
-✅ Landing page mockup done
-
-Tomorrow: Payment flows + pricing page
-
-The caffeine is real ☕
-
-#BuildInPublic #SaaS #Coding #Startup
-```
+**Slide 7:**
+> Early launch: $TBD
+> Link in bio
 
 ---
 
-### POST 3: Product Demo (Reel)
+## 🔍 Reddit Post (r/AgencyOwners, r/webdev)
 
-**Visual:** Screen recording of AI creating project
-**Text Overlay:**
-```
-"Watch an AI create a project"
-"No clicks. No forms."
-"Just intelligence."
-```
+**Title:** [Tool] I built a self-hosted PM tool after 3 years of paying $79/month
 
-**Caption:**
-```
-This is wild 🤯
+**Body:**
 
-I just told my AI:
-"Create a project for the mobile app redesign"
+For the last 3 years, my agency paid $79/month for ClickUp.
 
-And it:
-✅ Created the project
-✅ Added 5 tasks
-✅ Set priorities
-✅ Estimated hours
+$2,844 later, we owned nothing. Client data on their servers. Their branding everywhere. Zero AI integration.
 
-All automatically through ProjoFlow.
+So I built **ProjoFlow** — a white-label, self-hosted PM tool with native AI integration.
 
-This is the future of project management.
+**What it is:**
+- Next.js/React project management system
+- One-time license (not SaaS)
+- Self-hosted (Vercel, Railway, your servers)
+- Full white-label branding
+- Built on Model Context Protocol (MCP) — AI assistants can natively control it
 
-Launch: Feb 15 🚀
+**What you get:**
+- Full source code
+- MCP server for Claude Code/Cursor/Cline
+- Client portal with role-based access
+- Time tracking & billing
+- Free updates forever
+- Email support (first 100 licenses)
 
-#AI #ProductDemo #ProjectManagement #MCP
-```
+**Why it exists:**
 
----
+I was tired of:
+- Monthly fees that never end
+- Data on someone else's servers
+- Generic branding
+- Tools that don't integrate with AI
 
-### POST 4: Comparison (Static Post - Carousel)
+**Who it's for:**
 
-**Slides (9 images):**
-1. **Cover:** "ProjoFlow vs Others"
-2. **Slide 1:** AI Integration (ProjoFlow ✅, Others ❌)
-3. **Slide 2:** White-label (ProjoFlow ✅, Others $$$$)
-4. **Slide 3:** Simple Pricing (ProjoFlow ✅, Others 😵‍💫)
-5. **Slide 4:** MCP Native (ProjoFlow ✅, Others ❌)
-6. **Slide 5:** No Bloat (ProjoFlow ✅, Others 📚)
-7. **Slide 6:** Fast Setup (ProjoFlow 5 min, Others 2 hrs)
-8. **Slide 7:** Developer-Friendly (ProjoFlow ✅, Others 🤷)
-9. **End:** "Try ProjoFlow - Link in bio"
+Agencies, consultancies, dev shops who want:
+- Control over their infrastructure
+- White-label branding
+- AI-native workflows
+- One-time cost instead of monthly SaaS
 
-**Caption:**
-```
-Why we built ProjoFlow different 👇
+**Early launch pricing:** $TBD (lifetime access)
 
-We looked at Asana, Monday, ClickUp...
+Not here to spam — just sharing what I built. AMA in the comments.
 
-And asked: "What if we started from scratch in 2026?"
-
-Here's what we changed:
-→ AI-first (not AI-added)
-→ Simple (not bloated)
-→ White-label ready
-→ Fair pricing
-
-Built for agencies, consultancies, and dev teams who want less complexity, more results.
-
-Launch: Feb 15 🚀
-
-#ProjectManagement #SaaS #Productivity
-```
+[Link to landing page]
 
 ---
 
-### POST 5: Story Series (10 Stories)
+## 🎤 Product Hunt Launch (Day 1)
 
-**Story 1:** Coffee + "Let's build" photo
-**Text:** "Day 4 of building ProjoFlow ☕"
+**Tagline:**
+White-label project management for agencies. Self-hosted. AI-native.
 
-**Story 2:** Code screenshot
-**Text:** "Stripe integration ✅"
+**Description:**
 
-**Story 3:** Poll
-**Text:** "Would you let an AI manage your projects?"
-**Poll:** Yes / No
+ProjoFlow is a self-hosted project management system built for agencies and consultancies who want control.
 
-**Story 4:** Progress bar
-**Text:** "4/10 days until launch"
+**Why we built it:**
 
-**Story 5:** Behind-the-scenes video
-**Text:** "Testing the MCP integration"
+After paying $79/month for 3 years to generic PM SaaS tools, we realized:
+- We didn't own anything
+- Our data lived on their servers
+- Clients saw their branding, not ours
+- AI integration was a mess
 
-**Story 6:** Milestone celebration
-**Text:** "First beta tester signed up! 🎉"
+So we built ProjoFlow.
 
-**Story 7:** Question sticker
-**Text:** "What feature should we build next?"
+**What makes it different:**
 
-**Story 8:** Countdown sticker
-**Text:** "Launch countdown"
+1. **One-time purchase** — Pay once. Use forever.
+2. **Self-hosted** — Your infrastructure. Your database. Your rules.
+3. **White-label branding** — Custom logo, colors, domain.
+4. **Native AI integration (MCP)** — Claude Code, Cursor, and Cline can create tasks, log time, and manage projects through natural conversation.
+5. **You own the source code** — Modify, extend, customize.
 
-**Story 9:** Screenshot of product
-**Text:** "Sneak peek 👀"
+**What's included:**
 
-**Story 10:** Link sticker
-**Text:** "Get early access" → [Link]
+✅ Full Next.js/React source code  
+✅ MCP server for AI assistants  
+✅ Client portal with secure invitations  
+✅ Time tracking & billing  
+✅ File attachments  
+✅ White-label branding system  
+✅ Deployment docs & setup wizard  
+✅ Free updates forever
 
----
+**Who it's for:**
 
-## 🎥 YouTube - 5 Video Scripts
+• Agencies managing client projects  
+• Consultancies who value data ownership  
+• Dev shops who want white-label tools  
+• Teams tired of monthly SaaS fees
 
-### VIDEO 1: Launch Announcement (2 min)
+**Pricing:**
 
-**Title:** "I'm Building the First AI-Controlled Project Manager"
+Early launch: $TBD (lifetime access)  
+First 100 licenses include email support.
 
-**Script:**
-```
-[0:00-0:10] HOOK
-"I just built something that shouldn't exist yet. And I'm launching it in 10 days."
+Stop renting. Start owning.
 
-[0:10-0:30] THE PROBLEM
-"Every PM tool—Asana, Monday, ClickUp—was built before AI agents existed. Your AI assistant can't touch them. That's broken."
+**Maker comment:**
 
-[0:30-1:00] THE SOLUTION
-"So we built ProjoFlow. The first PM tool your AI can actually control. Using MCP, your AI can create projects, manage tasks, log time—fully autonomous."
+Hey Product Hunt! 👋
 
-[1:00-1:30] DEMO TEASER
-[Show 20-sec clip of AI creating project]
-"This is just the beginning."
+I'm [Name], and I built ProjoFlow after realizing I'd spent $2,844 on PM SaaS over 3 years and owned nothing.
 
-[1:30-1:50] CALL TO ACTION
-"Full launch: February 15. Follow for daily updates. Link in description for early access."
+Happy to answer any questions about:
+- Self-hosting workflows
+- MCP integration (it's wild how well it works)
+- White-labeling for client work
+- Tech stack choices
 
-[1:50-2:00] OUTRO
-"Building in public. Let's make PM tools intelligent."
-```
-
----
-
-### VIDEO 2: Full Documentary (20 min)
-
-**Title:** "I Built a SaaS in 7 Days with an AI Co-Founder"
-
-**Outline:**
-1. **Intro (2 min):** The vision, why now, why AI-first
-2. **Day 1-2 (4 min):** Setting up, first commit, MCP integration
-3. **Day 3-4 (4 min):** Building features, testing, debugging
-4. **Day 5-6 (4 min):** UI polish, Stripe setup, beta testing
-5. **Day 7 (3 min):** Final push, launch prep
-6. **Behind-the-Scenes (2 min):** Working with AI, lessons learned
-7. **Launch Day (1 min):** Reaction, results, thank you
+Fire away!
 
 ---
 
-### VIDEO 3: MCP Tutorial (10 min)
+## 📧 Email Sequence (License Holders)
 
-**Title:** "How to Connect Claude Code to Your Project Manager"
+### Email 1: Welcome + Setup Guide
 
-**Outline:**
-1. What is MCP? (2 min)
-2. Installing ProjoFlow MCP server (3 min)
-3. Configuring Claude Desktop (2 min)
-4. Demo: AI managing projects (3 min)
+**Subject:** Welcome to ProjoFlow — Let's Get You Deployed
 
----
+Hey [Name],
 
-## 🎨 Graphics to Create (Mike Does This)
+Welcome to ProjoFlow! 🎉
 
-### For X:
-- [ ] Feature comparison chart
-- [ ] Tech stack visual
-- [ ] Milestone celebration templates
-- [ ] Quote graphics (beta feedback)
+You now own a lifetime license to the project management tool built for agencies who value control.
 
-### For Instagram:
-- [ ] 9-image carousel (comparison grid)
-- [ ] Story templates (15 designs)
-- [ ] Reel text overlays (10 styles)
-- [ ] Logo + tagline graphics
+**Next steps:**
 
-### For YouTube:
-- [ ] Thumbnails (5 videos)
-- [ ] Intro animation (10 sec)
-- [ ] Outro screen (subscribe CTA)
+1. **Check your GitHub access**  
+   You should have been added to the private repo: github.com/mahmoudsheikh94/projoflow-selfhosted
 
----
+2. **Deploy in 30 minutes**  
+   • Click the Vercel deploy button in the README
+   • Create a Supabase project (free tier works)
+   • Add environment variables
+   • You're live!
 
-## ✅ Next Steps
+3. **Customize your branding**  
+   • Log in to /setup
+   • Upload your logo
+   • Pick your colors
+   • Your clients will see YOUR brand
 
-**Mahmoud:**
-1. Pick favorite posts from above
-2. Approve tone/style
-3. Tell Mike what needs editing
+**Need help?**
 
-**Mike:**
-1. Create graphics (30+ images)
-2. Design story templates
-3. Write video scripts (full versions)
-4. Set up content calendar
+Reply to this email. First 100 licenses get direct email support.
 
-**Together:**
-1. Record 2-3 face videos (10 min total)
-2. Start posting tomorrow
-3. Build hype for 10 days
-4. Launch! 🚀
+**What's next:**
+
+Check tomorrow's email for MCP setup (AI integration).
+
+— The ProjoFlow Team
 
 ---
 
-**Ready to start posting?** Just say the word and I'll create the graphics! 🎨
+### Email 2: MCP Setup Guide
+
+**Subject:** ProjoFlow + Claude Code = 🤯 (Setup Guide)
+
+Hey [Name],
+
+Today we're setting up the coolest feature: MCP integration.
+
+**What is MCP?**
+
+Model Context Protocol lets AI assistants (Claude Code, Cursor, Cline) natively control ProjoFlow.
+
+No API setup. No middleware. Just works.
+
+**Setup (5 minutes):**
+
+1. Navigate to `/mcp-server` in your ProjoFlow repo
+2. Follow the README for your AI assistant:
+   • Claude Code: add to `openclaw.json`
+   • Cursor: add to MCP settings
+   • Cline: add to VS Code settings
+
+3. Test it:
+   • Ask your AI: "Create a task in [Project X]"
+   • Watch it happen instantly
+
+**What you can do:**
+
+• "Create a task called 'Fix login bug'"
+• "Log 2 hours to the homepage redesign task"
+• "Show me all tasks assigned to John"
+• "What's the status of Project X?"
+
+Your AI can now manage your projects.
+
+**Questions?**
+
+Reply anytime.
+
+— The ProjoFlow Team
+
+---
+
+## 🎬 TikTok/Reels Script (30 seconds)
+
+**[0-5s] Hook**
+
+[On screen: "$79/month × 36 months = $2,844"]
+
+"What if I told you you're wasting $3K on project management?"
+
+**[5-10s] Problem**
+
+[On screen: SaaS PM tool dashboard]
+
+"You pay monthly fees. Forever. Data on their servers. Their branding."
+
+**[10-20s] Solution**
+
+[On screen: ProjoFlow deploy + branding customization]
+
+"ProjoFlow: Pay once. Own forever. Your brand. Your servers. AI-native."
+
+**[20-25s] Demo**
+
+[On screen: Claude Code creating a task via MCP]
+
+"And your AI can actually use it."
+
+**[25-30s] CTA**
+
+"Stop renting. Start owning. Link in bio."
+
+---
+
+**Last updated:** Feb 5, 2026  
+**Next review:** After pricing is finalized

@@ -20,6 +20,11 @@ import {
   Menu,
   X,
   Bot,
+  Server,
+  Lock,
+  Rocket,
+  Code,
+  Sparkles,
 } from 'lucide-react'
 
 /* ────────────────────────────────────────────
@@ -44,98 +49,81 @@ function useInView(threshold = 0.15) {
 }
 
 /* ────────────────────────────────────────────
-   Pricing data
-   ──────────────────────────────────────────── */
-const plans = [
-  {
-    name: 'Starter',
-    price: 'Free',
-    period: '',
-    description: 'Perfect for freelancers getting started',
-    features: [
-      '1 workspace',
-      '3 projects',
-      '2 team members',
-      'Basic task management',
-      'Email support',
-    ],
-    cta: 'Get Started Free',
-    highlight: false,
-    priceId: null,
-  },
-  {
-    name: 'Pro',
-    price: '$29',
-    period: '/mo',
-    description: 'For growing agencies & teams',
-    features: [
-      'Unlimited projects',
-      '10 team members',
-      'AI assistant integration (MCP)',
-      'Client portal',
-      'Time tracking & billing',
-      '@Mentions & comments',
-      'Priority email support',
-    ],
-    cta: 'Start Free Trial',
-    highlight: true,
-    priceId: 'pro',
-  },
-  {
-    name: 'Business',
-    price: '$79',
-    period: '/mo',
-    description: 'For agencies that need it all',
-    features: [
-      'Everything in Pro',
-      'Unlimited team members',
-      'Full AI/MCP integration',
-      'White-label branding',
-      'API access',
-      'Advanced reporting',
-      'Priority support',
-      'Custom onboarding',
-    ],
-    cta: 'Start Free Trial',
-    highlight: false,
-    priceId: 'business',
-  },
-]
-
-/* ────────────────────────────────────────────
    Features data
    ──────────────────────────────────────────── */
 const features = [
   {
     icon: Bot,
-    title: 'AI Assistant Integration',
-    desc: 'Built on Model Context Protocol (MCP). Your AI assistant can create projects, add tasks, log time, and manage workflows through natural conversation.',
-    badge: 'NEW',
-  },
-  {
-    icon: Building2,
-    title: 'Multi-Tenant Workspaces',
-    desc: 'Isolated workspaces per client or team with role-based access control.',
-  },
-  {
-    icon: Eye,
-    title: 'Client Portal',
-    desc: 'Give clients real-time visibility into task progress without cluttering your workflow.',
-  },
-  {
-    icon: Clock,
-    title: 'Time Tracking & Billing',
-    desc: 'Track billable hours, set rates per project, and generate invoices effortlessly.',
-  },
-  {
-    icon: AtSign,
-    title: '@Mentions & Comments',
-    desc: 'Real-time collaboration with threaded comments and instant @mention notifications.',
+    title: 'AI Assistant Integration (MCP)',
+    desc: 'The only PM tool your AI can natively control. Built on Model Context Protocol — Claude Code, Cursor, and Cline can create tasks, log time, and manage workflows through natural conversation.',
+    badge: 'EXCLUSIVE',
   },
   {
     icon: Palette,
-    title: 'White-Label Branding',
-    desc: 'Custom logo, colours, and domain — your clients see your brand, not ours.',
+    title: 'Complete White-Label Branding',
+    desc: 'Custom logo, colors, and workspace name. Your clients see your brand, not ours. Built-in theming system with 40+ styled components.',
+  },
+  {
+    icon: Server,
+    title: 'Self-Hosted on Your Infrastructure',
+    desc: 'Deploy to Vercel, Railway, or your own servers. Your data stays on your database. Full control, no vendor lock-in.',
+  },
+  {
+    icon: Eye,
+    title: 'Client Portal Built-In',
+    desc: 'Secure client access with role-based permissions. Real-time project visibility without cluttering your workflow.',
+  },
+  {
+    icon: Lock,
+    title: 'Your Database, Your Rules',
+    desc: 'Runs on Supabase (PostgreSQL) with row-level security. You own the infrastructure. No multi-tenant data sharing.',
+  },
+  {
+    icon: Rocket,
+    title: 'Deploy in Minutes',
+    desc: 'One-click Vercel deploy, detailed docs, environment variable templates. From license to live in under 30 minutes.',
+  },
+]
+
+/* ────────────────────────────────────────────
+   Why Self-Hosted comparison
+   ──────────────────────────────────────────── */
+const comparisons = [
+  {
+    feature: 'Data ownership',
+    saas: 'Their servers',
+    selfHosted: 'Your database',
+    highlight: true,
+  },
+  {
+    feature: 'Monthly costs',
+    saas: '$29-$79/month forever',
+    selfHosted: 'One-time license',
+    highlight: true,
+  },
+  {
+    feature: 'Branding',
+    saas: 'Their logo, their colors',
+    selfHosted: 'Fully white-labeled',
+    highlight: false,
+  },
+  {
+    feature: 'Customization',
+    saas: 'Limited to their features',
+    selfHosted: 'Full source code access',
+    highlight: false,
+  },
+  {
+    feature: 'AI integration',
+    saas: 'API calls (if available)',
+    selfHosted: 'Native MCP server',
+    highlight: true,
+  },
+  {
+    feature: 'Updates',
+    saas: 'Forced on their schedule',
+    selfHosted: 'You control when',
+    highlight: false,
   },
 ]
 
@@ -144,28 +132,36 @@ const features = [
    ──────────────────────────────────────────── */
 const faqs = [
   {
-    q: 'How does AI integration work?',
-    a: 'ProjoFlow is built on Model Context Protocol (MCP), which lets AI assistants like Claude Code and Cursor directly interact with your projects. Your AI can create tasks, update status, log time, and more — all through natural conversation. No API setup required.',
+    q: 'How does the MCP integration work?',
+    a: 'ProjoFlow includes an MCP server that lets AI assistants (Claude Code, Cursor, Cline) directly interact with your project data. Your AI can create tasks, update status, log time, and query projects through natural conversation. No API setup, no middleware — just works.',
   },
   {
-    q: 'Can I try ProjoFlow before committing?',
-    a: 'Absolutely. The Starter plan is free forever — no credit card required. Paid plans include a 14-day free trial so you can explore every feature risk-free.',
+    q: 'What do I get with the license?',
+    a: 'Full source code, deployment docs, MCP server, white-label branding system, client portal, time tracking, and all features. Plus free updates forever and email support (first 100 licenses only).',
   },
   {
-    q: 'How does the client portal work?',
-    a: 'Each client gets a secure, branded portal where they can view project progress, leave comments, and upload files. You control exactly what they can see.',
+    q: 'Can I customize the code?',
+    a: 'Absolutely. You get the full Next.js/React source. Modify features, add integrations, change the UI — it's yours. The license only restricts reselling the code itself.',
   },
   {
-    q: 'Can I switch plans later?',
-    a: 'Yes. Upgrade, downgrade, or cancel anytime from your billing settings. Changes take effect immediately and we prorate the difference.',
+    q: 'How hard is deployment?',
+    a: 'If you can click a Vercel "Deploy" button, you can deploy ProjoFlow. Setup wizard handles database migrations, environment variables are documented, and you'll be live in ~30 minutes.',
   },
   {
-    q: 'Is my data secure?',
-    a: 'We use Supabase (built on PostgreSQL) with row-level security, encrypted connections, and SOC 2-compliant infrastructure. Your data stays yours.',
+    q: 'What if I need help?',
+    a: 'First 100 license holders get email support. After that, we provide detailed docs and a community Discord. You can also hire your own developers — you have the source code.',
   },
   {
-    q: 'What happens when I hit a plan limit?',
-    a: "We'll let you know before you hit any limits. You can upgrade at any time, and your existing data is never deleted.",
+    q: 'Do I need to keep paying monthly?',
+    a: 'Nope. One-time purchase. Your only ongoing costs are your own hosting (Vercel has a generous free tier, Supabase too). No recurring fees to us.',
+  },
+  {
+    q: 'Can I use this for multiple clients?',
+    a: 'Yes! The license is per entity (your agency/company), not per deployment. Use it for all your client projects. Just don't resell the code itself.',
+  },
+  {
+    q: 'What about updates?',
+    a: 'Free updates forever via GitHub. You pull updates when you want them, test in staging, and deploy on your schedule.',
   },
 ]
 
@@ -203,585 +199,490 @@ function FaqItem({ q, a }: { q: string; a: string }) {
 }
 
 /* ────────────────────────────────────────────
-   Checkout helper
+   Testimonial Card (placeholder for now)
    ──────────────────────────────────────────── */
-async function handleCheckout(priceId: string | null) {
-  if (!priceId) {
-    window.location.href = '/setup'
-    return
-  }
-
-  try {
-    const res = await fetch('/api/stripe/checkout', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ plan: priceId }),
-    })
-    const data = await res.json()
-    if (data.url) {
-      window.location.href = data.url
-    } else {
-      // Fallback: go to signup
-      window.location.href = '/setup'
-    }
-  } catch {
-    window.location.href = '/setup'
-  }
+function TestimonialCard({
+  quote,
+  name,
+  role,
+  company,
+}: {
+  quote: string
+  name: string
+  role: string
+  company: string
+}) {
+  return (
+    <div className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-6">
+      <div className="mb-4 flex gap-1">
+        {Array.from({ length: 5 }).map((_, i) => (
+          <Star key={i} className="h-4 w-4 fill-yellow-500 text-yellow-500" />
+        ))}
+      </div>
+      <p className="mb-4 text-zinc-300 leading-relaxed">"{quote}"</p>
+      <div>
+        <p className="font-medium text-white">{name}</p>
+        <p className="text-sm text-zinc-400">
+          {role} · {company}
+        </p>
+      </div>
+    </div>
+  )
 }
 
-/* ════════════════════════════════════════════
-   LANDING PAGE
-   ════════════════════════════════════════════ */
+/* ────────────────────────────────────────────
+   Main Landing Page Component
+   ──────────────────────────────────────────── */
 export default function LandingPage() {
-  const hero = useInView(0.1)
-  const social = useInView()
-  const feat = useInView()
-  const pricing = useInView()
-  const faq = useInView()
-  const cta = useInView()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
+  const hero = useInView(0.1)
+  const features1 = useInView()
+  const comparison = useInView()
+  const faq = useInView()
+  const cta = useInView()
+
   return (
-    <div className="min-h-screen bg-zinc-950 text-white antialiased">
-      {/* Schema.org Structured Data for AI Engines */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@graph": [
-              {
-                "@type": "SoftwareApplication",
-                "@id": "https://projoflow.com/#software",
-                "name": "ProjoFlow",
-                "applicationCategory": "BusinessApplication",
-                "operatingSystem": "Web",
-                "description": "The first project management tool your AI assistant can control. Built on Model Context Protocol (MCP) for agencies, consultancies, and dev teams.",
-                "offers": [
-                  {
-                    "@type": "Offer",
-                    "name": "Pro Plan",
-                    "price": "29",
-                    "priceCurrency": "USD",
-                    "priceSpecification": {
-                      "@type": "UnitPriceSpecification",
-                      "price": "29.00",
-                      "priceCurrency": "USD",
-                      "unitText": "MONTH"
-                    }
-                  },
-                  {
-                    "@type": "Offer",
-                    "name": "Business Plan",
-                    "price": "79",
-                    "priceCurrency": "USD",
-                    "priceSpecification": {
-                      "@type": "UnitPriceSpecification",
-                      "price": "79.00",
-                      "priceCurrency": "USD",
-                      "unitText": "MONTH"
-                    }
-                  }
-                ],
-                "featureList": [
-                  "AI Assistant Integration (MCP)",
-                  "Multi-Tenant Workspaces",
-                  "Client Portal",
-                  "Time Tracking & Billing",
-                  "White-Label Branding",
-                  "@Mentions & Comments"
-                ],
-                "creator": {
-                  "@type": "Organization",
-                  "@id": "https://projoflow.com/#organization"
-                }
-              },
-              {
-                "@type": "Organization",
-                "@id": "https://projoflow.com/#organization",
-                "name": "Z-Flow",
-                "url": "https://z-flow.de",
-                "logo": "https://projoflow.com/logo.svg",
-                "sameAs": [],
-                "contactPoint": {
-                  "@type": "ContactPoint",
-                  "email": "tech@z-flow.de",
-                  "contactType": "customer support"
-                }
-              },
-              {
-                "@type": "WebSite",
-                "@id": "https://projoflow.com/#website",
-                "url": "https://projoflow.com",
-                "name": "ProjoFlow",
-                "description": "AI-powered project management for agencies",
-                "publisher": {
-                  "@id": "https://projoflow.com/#organization"
-                }
-              },
-              {
-                "@type": "WebPage",
-                "@id": "https://projoflow.com/#webpage",
-                "url": "https://projoflow.com",
-                "name": "ProjoFlow - AI-Powered Project Management",
-                "description": "The first PM tool your AI can control. Built on MCP for agencies, consultancies, and dev teams.",
-                "isPartOf": {
-                  "@id": "https://projoflow.com/#website"
-                },
-                "about": {
-                  "@id": "https://projoflow.com/#software"
-                },
-                "primaryImageOfPage": {
-                  "@type": "ImageObject",
-                  "url": "https://projoflow.com/logo.svg"
-                }
-              }
-            ]
-          })
-        }}
-      />
+    <div className="min-h-screen bg-black text-white">
+      {/* ──── Navigation ──── */}
+      <nav className="fixed top-0 z-50 w-full border-b border-zinc-800 bg-black/80 backdrop-blur-md">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex h-16 items-center justify-between">
+            {/* Logo */}
+            <div className="flex items-center gap-3">
+              {appConfig.brandLogo ? (
+                <Image
+                  src={appConfig.brandLogo}
+                  alt={appConfig.name}
+                  width={32}
+                  height={32}
+                  className="rounded"
+                />
+              ) : (
+                <div className="flex h-8 w-8 items-center justify-center rounded bg-gradient-to-br from-blue-500 to-purple-600">
+                  <Building2 className="h-5 w-5" />
+                </div>
+              )}
+              <span className="text-lg font-bold">{appConfig.name}</span>
+            </div>
 
-      {/* ── Navbar ── */}
-      <nav className="fixed top-0 z-50 w-full border-b border-zinc-800/60 bg-zinc-950/80 backdrop-blur-xl">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-2">
-            <Image
-              src={appConfig.logo}
-              alt={appConfig.name}
-              width={28}
-              height={28}
-              className="h-7 w-7"
-            />
-            <span className="text-lg font-bold tracking-tight">{appConfig.name}</span>
-          </Link>
-
-          {/* Desktop nav */}
-          <div className="hidden items-center gap-8 md:flex">
-            <a href="#features" className="text-sm text-zinc-400 transition-colors hover:text-white">
-              Features
-            </a>
-            <a href="#pricing" className="text-sm text-zinc-400 transition-colors hover:text-white">
-              Pricing
-            </a>
-            <a href="#faq" className="text-sm text-zinc-400 transition-colors hover:text-white">
-              FAQ
-            </a>
-          </div>
-
-          {/* CTA buttons */}
-          <div className="hidden items-center gap-3 md:flex">
-            <Link
-              href="/login"
-              className="rounded-lg px-4 py-2 text-sm font-medium text-zinc-300 transition-colors hover:text-white"
-            >
-              Login
-            </Link>
-            <Link
-              href="/setup"
-              className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white transition-all hover:bg-emerald-500 hover:shadow-lg hover:shadow-emerald-500/25"
-            >
-              Get Started
-            </Link>
-          </div>
-
-          {/* Mobile menu toggle */}
-          <button
-            className="md:hidden rounded-lg p-2 text-zinc-400 hover:text-white"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          >
-            {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-          </button>
-        </div>
-
-        {/* Mobile menu */}
-        <div
-          className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
-            mobileMenuOpen ? 'max-h-80 border-t border-zinc-800' : 'max-h-0'
-          }`}
-        >
-          <div className="flex flex-col gap-4 p-4">
-            <a
-              href="#features"
-              onClick={() => setMobileMenuOpen(false)}
-              className="text-sm text-zinc-400 hover:text-white"
-            >
-              Features
-            </a>
-            <a
-              href="#pricing"
-              onClick={() => setMobileMenuOpen(false)}
-              className="text-sm text-zinc-400 hover:text-white"
-            >
-              Pricing
-            </a>
-            <a
-              href="#faq"
-              onClick={() => setMobileMenuOpen(false)}
-              className="text-sm text-zinc-400 hover:text-white"
-            >
-              FAQ
-            </a>
-            <div className="flex gap-3 pt-2">
-              <Link href="/login" className="text-sm font-medium text-zinc-300 hover:text-white">
-                Login
+            {/* Desktop Nav */}
+            <div className="hidden md:flex md:items-center md:gap-6">
+              <Link
+                href="#features"
+                className="text-sm text-zinc-400 transition-colors hover:text-white"
+              >
+                Features
               </Link>
               <Link
-                href="/setup"
-                className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white"
+                href="#comparison"
+                className="text-sm text-zinc-400 transition-colors hover:text-white"
               >
-                Get Started
+                Why Self-Hosted
+              </Link>
+              <Link
+                href="#faq"
+                className="text-sm text-zinc-400 transition-colors hover:text-white"
+              >
+                FAQ
+              </Link>
+              <Link
+                href="#pricing"
+                className="rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 px-4 py-2 text-sm font-medium text-white transition-all hover:from-blue-500 hover:to-purple-500"
+              >
+                Get Your License
+              </Link>
+            </div>
+
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden"
+            >
+              {mobileMenuOpen ? (
+                <X className="h-6 w-6" />
+              ) : (
+                <Menu className="h-6 w-6" />
+              )}
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile Menu */}
+        {mobileMenuOpen && (
+          <div className="border-t border-zinc-800 bg-black md:hidden">
+            <div className="space-y-1 px-4 py-3">
+              <Link
+                href="#features"
+                className="block rounded-lg px-3 py-2 text-sm text-zinc-400 hover:bg-zinc-900 hover:text-white"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Features
+              </Link>
+              <Link
+                href="#comparison"
+                className="block rounded-lg px-3 py-2 text-sm text-zinc-400 hover:bg-zinc-900 hover:text-white"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Why Self-Hosted
+              </Link>
+              <Link
+                href="#faq"
+                className="block rounded-lg px-3 py-2 text-sm text-zinc-400 hover:bg-zinc-900 hover:text-white"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                FAQ
+              </Link>
+              <Link
+                href="#pricing"
+                className="block rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 px-3 py-2 text-sm font-medium text-white"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Get Your License
               </Link>
             </div>
           </div>
-        </div>
+        )}
       </nav>
 
-      {/* ── Hero ── */}
-      <section className="relative overflow-hidden pt-32 pb-20 sm:pt-40 sm:pb-28">
-        {/* Gradient orbs */}
-        <div className="pointer-events-none absolute inset-0 overflow-hidden">
-          <div className="absolute -top-40 -right-40 h-[500px] w-[500px] rounded-full bg-emerald-500/10 blur-[120px]" />
-          <div className="absolute -bottom-20 -left-40 h-[400px] w-[400px] rounded-full bg-emerald-600/5 blur-[100px]" />
+      {/* ──── Hero Section ──── */}
+      <section className="relative overflow-hidden pt-24">
+        {/* Gradient background */}
+        <div className="absolute inset-0 -z-10">
+          <div className="absolute left-1/2 top-0 h-[500px] w-[500px] -translate-x-1/2 rounded-full bg-gradient-to-r from-blue-600/20 to-purple-600/20 blur-3xl" />
         </div>
 
         <div
           ref={hero.ref}
-          className={`relative mx-auto max-w-4xl px-4 text-center sm:px-6 transition-all duration-700 ${
-            hero.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+          className={`mx-auto max-w-7xl px-4 py-20 text-center transition-all duration-1000 sm:px-6 lg:px-8 ${
+            hero.visible
+              ? 'translate-y-0 opacity-100'
+              : 'translate-y-10 opacity-0'
           }`}
         >
           {/* Badge */}
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-4 py-1.5 text-sm text-emerald-400">
-            <Zap className="h-3.5 w-3.5" />
-            Built for agencies that move fast
+          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-zinc-800 bg-zinc-900/50 px-4 py-1.5 text-sm">
+            <Sparkles className="h-4 w-4 text-purple-400" />
+            <span className="text-zinc-300">
+              The only PM tool with native AI integration
+            </span>
           </div>
 
-          <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl">
-            Project management that{' '}
-            <span className="bg-gradient-to-r from-emerald-400 to-emerald-600 bg-clip-text text-transparent">
-              gets out of your way
+          <h1 className="mx-auto mb-6 max-w-4xl text-5xl font-bold leading-tight sm:text-6xl lg:text-7xl">
+            White-Label Project Management
+            <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+              {' '}
+              You Own & Control
             </span>
-            {' '}— and works with your AI
           </h1>
 
-          <p className="mx-auto mt-6 max-w-2xl text-lg text-zinc-400 leading-relaxed sm:text-xl">
-            The first PM tool with native AI assistant support. Your AI can create projects, manage tasks, and log time through MCP — while you focus on what matters. Plus white-label branding, client portals, and everything agencies need.
+          <p className="mx-auto mb-10 max-w-2xl text-lg text-zinc-400 sm:text-xl">
+            One-time license. Self-hosted. Full branding. Built for agencies and
+            consultancies who want control over their infrastructure and their
+            brand.
           </p>
 
-          <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
+          <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
             <Link
-              href="/setup"
-              className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-8 py-3.5 text-base font-semibold text-white transition-all hover:bg-emerald-500 hover:shadow-xl hover:shadow-emerald-500/25"
+              href="#pricing"
+              className="group flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 px-8 py-4 font-medium text-white transition-all hover:from-blue-500 hover:to-purple-500 sm:w-auto"
             >
-              Start Free — No Card Required
-              <ArrowRight className="h-4 w-4" />
+              Get Your License
+              <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
             </Link>
-            <a
-              href="#features"
-              className="inline-flex items-center gap-2 rounded-xl border border-zinc-700 px-8 py-3.5 text-base font-medium text-zinc-300 transition-colors hover:border-zinc-600 hover:text-white"
+            <Link
+              href="/demo"
+              className="flex w-full items-center justify-center gap-2 rounded-lg border border-zinc-700 px-8 py-4 font-medium text-white transition-colors hover:bg-zinc-900 sm:w-auto"
             >
-              See Features
-            </a>
+              <Code className="h-5 w-5" />
+              View Demo
+            </Link>
           </div>
 
-          {/* Dashboard mockup area */}
-          <div className="relative mt-16 sm:mt-20">
-            <div className="overflow-hidden rounded-xl border border-zinc-800 bg-zinc-900/80 shadow-2xl shadow-black/50">
-              <div className="flex items-center gap-2 border-b border-zinc-800 px-4 py-3">
-                <div className="h-3 w-3 rounded-full bg-zinc-700" />
-                <div className="h-3 w-3 rounded-full bg-zinc-700" />
-                <div className="h-3 w-3 rounded-full bg-zinc-700" />
-                <div className="ml-4 h-4 w-48 rounded bg-zinc-800" />
-              </div>
-              <div className="grid grid-cols-4 gap-3 p-4 sm:p-6">
-                {/* Stat cards mockup */}
-                {[1, 2, 3, 4].map((i) => (
-                  <div key={i} className="rounded-lg bg-zinc-800/60 p-3 sm:p-4">
-                    <div className="h-2 w-12 rounded bg-zinc-700 mb-2" />
-                    <div className="h-5 w-8 rounded bg-emerald-500/20" />
-                  </div>
-                ))}
-              </div>
-              <div className="grid grid-cols-2 gap-3 px-4 pb-4 sm:px-6 sm:pb-6">
-                <div className="space-y-2 rounded-lg bg-zinc-800/60 p-3 sm:p-4">
-                  {[1, 2, 3, 4].map((i) => (
-                    <div key={i} className="flex items-center gap-2">
-                      <div className="h-2 w-2 rounded-full bg-emerald-500/40" />
-                      <div className="h-2 flex-1 rounded bg-zinc-700" />
-                    </div>
-                  ))}
-                </div>
-                <div className="space-y-2 rounded-lg bg-zinc-800/60 p-3 sm:p-4">
-                  {[1, 2, 3].map((i) => (
-                    <div key={i} className="flex items-center gap-2">
-                      <div className="h-2 w-2 rounded-full bg-blue-500/40" />
-                      <div className="h-2 flex-1 rounded bg-zinc-700" />
-                    </div>
-                  ))}
-                </div>
-              </div>
+          {/* Trust badges */}
+          <div className="mt-12 flex flex-wrap items-center justify-center gap-8 text-sm text-zinc-500">
+            <div className="flex items-center gap-2">
+              <Shield className="h-5 w-5 text-green-500" />
+              <span>One-time payment</span>
             </div>
-            {/* Glow effect under mockup */}
-            <div className="absolute -bottom-8 left-1/2 h-16 w-3/4 -translate-x-1/2 rounded-full bg-emerald-500/10 blur-3xl" />
+            <div className="flex items-center gap-2">
+              <Code className="h-5 w-5 text-blue-500" />
+              <span>Full source code</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Zap className="h-5 w-5 text-purple-500" />
+              <span>Free updates forever</span>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* ── Social Proof ── */}
-      <section
-        ref={social.ref}
-        className={`border-y border-zinc-800/60 py-12 transition-all duration-700 delay-100 ${
-          social.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
-        }`}
-      >
-        <div className="mx-auto max-w-5xl px-4 sm:px-6">
-          <div className="flex flex-col items-center gap-6 text-center">
-            <p className="text-sm font-medium uppercase tracking-wider text-zinc-500">
-              Built by Z-Flow · Launching February 2026
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Features ── */}
-      <section id="features" className="py-24 sm:py-32">
-        <div
-          ref={feat.ref}
-          className={`mx-auto max-w-6xl px-4 sm:px-6 transition-all duration-700 ${
-            feat.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-          }`}
-        >
-          <div className="text-center">
-            <p className="text-sm font-semibold uppercase tracking-wider text-emerald-500">
-              Everything you need
-            </p>
-            <h2 className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
-              Powerful features, zero complexity
+      {/* ──── Features Section ──── */}
+      <section id="features" className="py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div
+            ref={features1.ref}
+            className={`mb-16 text-center transition-all duration-1000 ${
+              features1.visible
+                ? 'translate-y-0 opacity-100'
+                : 'translate-y-10 opacity-0'
+            }`}
+          >
+            <h2 className="mb-4 text-4xl font-bold">
+              Built for Agencies Who Need Control
             </h2>
-            <p className="mx-auto mt-4 max-w-2xl text-zinc-400">
-              From AI integration to client management, ProjoFlow gives your agency
-              the tools you need without the learning curve.
+            <p className="mx-auto max-w-2xl text-lg text-zinc-400">
+              Everything you need to manage client projects — on your
+              infrastructure, with your branding.
             </p>
           </div>
 
-          <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {features.map((f, i) => (
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+            {features.map((feature, i) => (
               <div
-                key={f.title}
-                className="group relative rounded-xl border border-zinc-800 bg-zinc-900/50 p-6 transition-all duration-300 hover:border-emerald-500/30 hover:bg-zinc-900"
-                style={{ animationDelay: `${i * 80}ms` }}
-              >
-                {f.badge && (
-                  <div className="absolute -top-2 -right-2 rounded-full bg-emerald-600 px-2 py-0.5 text-xs font-semibold text-white">
-                    {f.badge}
-                  </div>
-                )}
-                <div className="mb-4 inline-flex rounded-lg bg-emerald-500/10 p-3 text-emerald-500 transition-colors group-hover:bg-emerald-500/20">
-                  <f.icon className="h-6 w-6" />
-                </div>
-                <h3 className="text-lg font-semibold text-white">{f.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-zinc-400">{f.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Pricing ── */}
-      <section id="pricing" className="py-24 sm:py-32 bg-zinc-900/30">
-        <div
-          ref={pricing.ref}
-          className={`mx-auto max-w-6xl px-4 sm:px-6 transition-all duration-700 ${
-            pricing.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-          }`}
-        >
-          <div className="text-center">
-            <p className="text-sm font-semibold uppercase tracking-wider text-emerald-500">
-              Simple pricing
-            </p>
-            <h2 className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
-              Choose the plan that fits your agency
-            </h2>
-            <p className="mx-auto mt-4 max-w-2xl text-zinc-400">
-              Start free and scale as you grow. AI included in all plans.
-            </p>
-          </div>
-
-          <div className="mt-16 grid gap-6 lg:grid-cols-3">
-            {plans.map((plan) => (
-              <div
-                key={plan.name}
-                className={`relative flex flex-col rounded-2xl border p-8 transition-all duration-300 ${
-                  plan.highlight
-                    ? 'border-emerald-500/40 bg-zinc-900 shadow-lg shadow-emerald-500/5'
-                    : 'border-zinc-800 bg-zinc-900/50 hover:border-zinc-700'
+                key={i}
+                className={`group rounded-xl border border-zinc-800 bg-zinc-900/50 p-6 transition-all duration-500 hover:border-zinc-700 ${
+                  features1.visible
+                    ? 'translate-y-0 opacity-100'
+                    : 'translate-y-10 opacity-0'
                 }`}
+                style={{ transitionDelay: `${i * 100}ms` }}
               >
-                {plan.highlight && (
-                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 rounded-full bg-emerald-600 px-4 py-1 text-xs font-semibold text-white">
-                    Most Popular
+                <div className="mb-4 flex items-center gap-3">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500/20 to-purple-500/20">
+                    <feature.icon className="h-6 w-6 text-blue-400" />
                   </div>
-                )}
-
-                <div className="mb-6">
-                  <h3 className="text-lg font-semibold text-white">{plan.name}</h3>
-                  <p className="mt-1 text-sm text-zinc-400">{plan.description}</p>
-                </div>
-
-                <div className="mb-8">
-                  <span className="text-4xl font-extrabold text-white">{plan.price}</span>
-                  {plan.period && (
-                    <span className="text-lg text-zinc-400">{plan.period}</span>
+                  {feature.badge && (
+                    <span className="rounded-full bg-purple-500/20 px-2 py-0.5 text-xs font-medium text-purple-400">
+                      {feature.badge}
+                    </span>
                   )}
                 </div>
-
-                <ul className="mb-8 flex-1 space-y-3">
-                  {plan.features.map((feature) => (
-                    <li key={feature} className="flex items-start gap-3 text-sm text-zinc-300">
-                      <Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-emerald-500" />
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-
-                <button
-                  onClick={() => handleCheckout(plan.priceId)}
-                  className={`w-full rounded-xl py-3 text-sm font-semibold transition-all ${
-                    plan.highlight
-                      ? 'bg-emerald-600 text-white hover:bg-emerald-500 hover:shadow-lg hover:shadow-emerald-500/25'
-                      : 'border border-zinc-700 text-zinc-300 hover:border-zinc-600 hover:text-white'
-                  }`}
-                >
-                  {plan.cta}
-                </button>
+                <h3 className="mb-2 text-xl font-semibold">{feature.title}</h3>
+                <p className="text-zinc-400 leading-relaxed">{feature.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── FAQ ── */}
-      <section id="faq" className="py-24 sm:py-32">
-        <div
-          ref={faq.ref}
-          className={`mx-auto max-w-3xl px-4 sm:px-6 transition-all duration-700 ${
-            faq.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-          }`}
-        >
-          <div className="text-center">
-            <p className="text-sm font-semibold uppercase tracking-wider text-emerald-500">FAQ</p>
-            <h2 className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
-              Frequently asked questions
+      {/* ──── Comparison Table ──── */}
+      <section id="comparison" className="bg-zinc-950/50 py-20">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+          <div
+            ref={comparison.ref}
+            className={`mb-16 text-center transition-all duration-1000 ${
+              comparison.visible
+                ? 'translate-y-0 opacity-100'
+                : 'translate-y-10 opacity-0'
+            }`}
+          >
+            <h2 className="mb-4 text-4xl font-bold">
+              Why Self-Hosted Beats Generic SaaS
             </h2>
+            <p className="mx-auto max-w-2xl text-lg text-zinc-400">
+              When your business depends on it, ownership matters.
+            </p>
           </div>
 
-          <div className="mt-12 divide-y divide-zinc-800 rounded-xl border border-zinc-800 bg-zinc-900/50 px-6">
-            {faqs.map((item) => (
-              <FaqItem key={item.q} q={item.q} a={item.a} />
+          <div
+            className={`overflow-hidden rounded-xl border border-zinc-800 transition-all duration-1000 ${
+              comparison.visible
+                ? 'translate-y-0 opacity-100'
+                : 'translate-y-10 opacity-0'
+            }`}
+          >
+            <table className="w-full">
+              <thead className="bg-zinc-900/80">
+                <tr>
+                  <th className="px-6 py-4 text-left text-sm font-medium text-zinc-400"></th>
+                  <th className="px-6 py-4 text-center text-sm font-medium text-zinc-400">
+                    Generic SaaS
+                  </th>
+                  <th className="px-6 py-4 text-center text-sm font-medium text-blue-400">
+                    ProjoFlow (Self-Hosted)
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-zinc-800">
+                {comparisons.map((item, i) => (
+                  <tr
+                    key={i}
+                    className={`${
+                      item.highlight ? 'bg-zinc-900/50' : 'bg-black'
+                    }`}
+                  >
+                    <td className="px-6 py-4 font-medium text-white">
+                      {item.feature}
+                    </td>
+                    <td className="px-6 py-4 text-center text-zinc-500">
+                      {item.saas}
+                    </td>
+                    <td className="px-6 py-4 text-center font-medium text-blue-400">
+                      {item.selfHosted}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      {/* ──── Pricing Section ──── */}
+      <section id="pricing" className="py-20">
+        <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
+          <h2 className="mb-4 text-4xl font-bold">Simple, Transparent Pricing</h2>
+          <p className="mb-12 text-lg text-zinc-400">
+            One-time purchase. No recurring fees. Free updates forever.
+          </p>
+
+          <div className="rounded-2xl border-2 border-purple-500/50 bg-gradient-to-br from-zinc-900 to-zinc-950 p-8 shadow-2xl">
+            <div className="mb-6">
+              <div className="mb-2 inline-block rounded-full bg-purple-500/20 px-3 py-1 text-sm font-medium text-purple-400">
+                Early Launch Offer
+              </div>
+              <div className="mb-2 flex items-baseline justify-center gap-2">
+                <span className="text-5xl font-bold">$TBD</span>
+                <span className="text-xl text-zinc-500 line-through">$497</span>
+              </div>
+              <p className="text-zinc-400">One-time payment · Lifetime access</p>
+            </div>
+
+            <ul className="mb-8 space-y-3 text-left">
+              {[
+                'Full source code (Next.js, React, TypeScript)',
+                'MCP server for AI integration',
+                'White-label branding system',
+                'Client portal & time tracking',
+                'Deployment docs & setup wizard',
+                'Free updates forever (via GitHub)',
+                'Email support (first 100 licenses)',
+                'No monthly fees, ever',
+              ].map((item, i) => (
+                <li key={i} className="flex items-start gap-3">
+                  <Check className="mt-1 h-5 w-5 flex-shrink-0 text-green-500" />
+                  <span className="text-zinc-300">{item}</span>
+                </li>
+              ))}
+            </ul>
+
+            <Link
+              href="/purchase"
+              className="group flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 px-8 py-4 font-medium text-white transition-all hover:from-blue-500 hover:to-purple-500"
+            >
+              Get Your License Now
+              <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+            </Link>
+
+            <p className="mt-6 text-sm text-zinc-500">
+              First 100 licenses include email support. After that, docs-only.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ──── FAQ Section ──── */}
+      <section id="faq" className="bg-zinc-950/50 py-20">
+        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+          <div
+            ref={faq.ref}
+            className={`mb-12 text-center transition-all duration-1000 ${
+              faq.visible
+                ? 'translate-y-0 opacity-100'
+                : 'translate-y-10 opacity-0'
+            }`}
+          >
+            <h2 className="mb-4 text-4xl font-bold">
+              Frequently Asked Questions
+            </h2>
+            <p className="text-lg text-zinc-400">
+              Everything you need to know before purchasing.
+            </p>
+          </div>
+
+          <div
+            className={`rounded-xl border border-zinc-800 bg-zinc-900/50 p-6 transition-all duration-1000 ${
+              faq.visible
+                ? 'translate-y-0 opacity-100'
+                : 'translate-y-10 opacity-0'
+            }`}
+          >
+            {faqs.map((item, i) => (
+              <FaqItem key={i} q={item.q} a={item.a} />
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── Final CTA ── */}
-      <section className="py-24 sm:py-32">
+      {/* ──── Final CTA Section ──── */}
+      <section className="py-20">
         <div
           ref={cta.ref}
-          className={`mx-auto max-w-4xl px-4 sm:px-6 text-center transition-all duration-700 ${
-            cta.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+          className={`mx-auto max-w-4xl px-4 text-center transition-all duration-1000 sm:px-6 lg:px-8 ${
+            cta.visible
+              ? 'translate-y-0 opacity-100'
+              : 'translate-y-10 opacity-0'
           }`}
         >
-          <div className="relative overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900 p-10 sm:p-16">
-            {/* Background glow */}
-            <div className="pointer-events-none absolute inset-0">
-              <div className="absolute top-0 left-1/2 h-40 w-80 -translate-x-1/2 rounded-full bg-emerald-500/10 blur-[80px]" />
-            </div>
+          <div className="rounded-2xl bg-gradient-to-r from-blue-600/10 to-purple-600/10 p-12 border border-blue-500/20">
+            <h2 className="mb-4 text-4xl font-bold">
+              Ready to Own Your Project Management?
+            </h2>
+            <p className="mb-8 text-lg text-zinc-400">
+              Join the agencies and consultancies who chose control over
+              convenience.
+            </p>
 
-            <div className="relative">
-              <Shield className="mx-auto mb-4 h-10 w-10 text-emerald-500" />
-              <h2 className="text-3xl font-bold sm:text-4xl">
-                Ready to manage projects like it's 2026?
-              </h2>
-              <p className="mx-auto mt-4 max-w-lg text-zinc-400">
-                Join agencies using AI to move faster. Free to start, no credit card required.
-              </p>
-              <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
-                <Link
-                  href="/setup"
-                  className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-8 py-3.5 text-base font-semibold text-white transition-all hover:bg-emerald-500 hover:shadow-xl hover:shadow-emerald-500/25"
-                >
-                  Start Free Today
-                  <ArrowRight className="h-4 w-4" />
-                </Link>
-              </div>
-              <p className="mt-4 text-xs text-zinc-500">
-                14-day trial on paid plans · AI integration included
-              </p>
-            </div>
+            <Link
+              href="#pricing"
+              className="group inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 px-8 py-4 font-medium text-white transition-all hover:from-blue-500 hover:to-purple-500"
+            >
+              Get Your License
+              <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+            </Link>
+
+            <p className="mt-6 text-sm text-zinc-500">
+              Questions? Email us at support@projoflow.com
+            </p>
           </div>
         </div>
       </section>
 
-      {/* ── Footer ── */}
-      <footer className="border-t border-zinc-800/60 py-12">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6">
-          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-            {/* Brand */}
-            <div className="lg:col-span-1">
-              <Link href="/" className="flex items-center gap-2">
+      {/* ──── Footer ──── */}
+      <footer className="border-t border-zinc-800 py-12">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
+            <div className="flex items-center gap-3">
+              {appConfig.brandLogo ? (
                 <Image
-                  src={appConfig.logo}
+                  src={appConfig.brandLogo}
                   alt={appConfig.name}
                   width={24}
                   height={24}
-                  className="h-6 w-6"
+                  className="rounded"
                 />
-                <span className="text-base font-bold">{appConfig.name}</span>
+              ) : (
+                <div className="flex h-6 w-6 items-center justify-center rounded bg-gradient-to-br from-blue-500 to-purple-600">
+                  <Building2 className="h-4 w-4" />
+                </div>
+              )}
+              <span className="text-sm text-zinc-400">
+                © 2025 {appConfig.name}. All rights reserved.
+              </span>
+            </div>
+
+            <div className="flex gap-6 text-sm text-zinc-400">
+              <Link href="/docs" className="hover:text-white">
+                Documentation
               </Link>
-              <p className="mt-3 text-sm text-zinc-500 leading-relaxed">
-                Project management built for agencies. AI-powered, white-label ready.
-              </p>
+              <Link href="/license" className="hover:text-white">
+                License Terms
+              </Link>
+              <Link href="/support" className="hover:text-white">
+                Support
+              </Link>
             </div>
-
-            {/* Product */}
-            <div>
-              <h4 className="mb-3 text-sm font-semibold text-zinc-300">Product</h4>
-              <ul className="space-y-2">
-                <li><a href="#features" className="text-sm text-zinc-500 hover:text-white transition-colors">Features</a></li>
-                <li><a href="#pricing" className="text-sm text-zinc-500 hover:text-white transition-colors">Pricing</a></li>
-                <li><a href="#faq" className="text-sm text-zinc-500 hover:text-white transition-colors">FAQ</a></li>
-              </ul>
-            </div>
-
-            {/* Company */}
-            <div>
-              <h4 className="mb-3 text-sm font-semibold text-zinc-300">Company</h4>
-              <ul className="space-y-2">
-                <li><span className="text-sm text-zinc-500">About</span></li>
-                <li><span className="text-sm text-zinc-500">Blog</span></li>
-                <li><span className="text-sm text-zinc-500">Careers</span></li>
-              </ul>
-            </div>
-
-            {/* Legal */}
-            <div>
-              <h4 className="mb-3 text-sm font-semibold text-zinc-300">Legal</h4>
-              <ul className="space-y-2">
-                <li><span className="text-sm text-zinc-500">Privacy Policy</span></li>
-                <li><span className="text-sm text-zinc-500">Terms of Service</span></li>
-                <li><span className="text-sm text-zinc-500">Security</span></li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-zinc-800/60 pt-8 sm:flex-row">
-            <p className="text-sm text-zinc-600">
-              © {appConfig.copyrightYear} {appConfig.name}. All rights reserved.
-            </p>
-            <p className="text-xs text-zinc-700">
-              {appConfig.supportEmail}
-            </p>
           </div>
         </div>
       </footer>
