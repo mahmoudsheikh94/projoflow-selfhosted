@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
-/** Service-role client without strict DB typing (setup needs access to tables not in the generated types) */
+/** Anon client for checking setup status (self-hosted version uses anon key) */
 function createSetupClient() {
   return createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     { auth: { autoRefreshToken: false, persistSession: false } }
   )
 }
@@ -29,7 +29,7 @@ function slugify(text: string): string {
 export async function GET() {
   try {
     // Check if Supabase credentials are configured
-    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
       // No credentials configured yet, setup is definitely required
       console.log('No Supabase credentials configured, setup required')
       return NextResponse.json({ setupRequired: true })
