@@ -14,8 +14,14 @@ function createSetupClient() {
 function createAdminClient() {
   const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
   if (!serviceKey) {
+    console.error('[SETUP] SUPABASE_SERVICE_ROLE_KEY is not set!')
     throw new Error('SUPABASE_SERVICE_ROLE_KEY not configured')
   }
+  
+  // Log key format (first 20 chars only for security)
+  console.log('[SETUP] Using SERVICE_ROLE_KEY:', serviceKey.substring(0, 20) + '...')
+  console.log('[SETUP] Key starts with:', serviceKey.split('.')[0])
+  
   return createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     serviceKey,
@@ -112,7 +118,17 @@ export async function POST(request: NextRequest) {
     const anonClient = createSetupClient()
     
     // Use admin client for database operations (bypasses RLS)
-    const adminClient = createAdminClient()
+    let adminClient
+    try {
+      adminClient = createAdminClient()
+      console.log('[SETUP] Admin client created successfully')
+    } catch (err: any) {
+      console.error('[SETUP] Failed to create admin client:', err.message)
+      return NextResponse.json(
+        { error: 'Server configuration error: ' + err.message },
+        { status: 500 }
+      )
+    }
 
     // 1. Verify no admin users exist (setup should only run once)
     const { count, error: countError } = await adminClient
