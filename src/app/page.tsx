@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { createClient } from '@/lib/supabase/client'
 
 /**
  * Self-Hosted ProjoFlow Homepage
@@ -15,7 +15,7 @@ import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
  */
 export default function HomePage() {
   const router = useRouter()
-  const supabase = createClientComponentClient()
+  const supabase = createClient()
 
   useEffect(() => {
     async function checkSetupStatus() {
