@@ -49,6 +49,7 @@ function classifyError(err: any): { type: string; message: string; detail?: stri
  */
 function buildConnectionString(supabaseUrl: string, password: string): string {
   const projectRef = supabaseUrl.replace('https://', '').replace('.supabase.co', '')
+  console.log('Building connection string for project:', projectRef)
   return `postgresql://postgres:${encodeURIComponent(password)}@db.${projectRef}.supabase.co:5432/postgres`
 }
 
@@ -74,18 +75,26 @@ export async function POST(request: Request) {
 
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
     if (!supabaseUrl) {
+      console.error('NEXT_PUBLIC_SUPABASE_URL is not set')
       return NextResponse.json(
         { error: 'NEXT_PUBLIC_SUPABASE_URL not configured' },
         { status: 500 }
       )
     }
+    console.log('Using Supabase URL:', supabaseUrl)
 
     const connectionString = buildConnectionString(supabaseUrl, databasePassword)
-    const client = new Client({ connectionString })
+    const client = new Client({ 
+      connectionString,
+      connectionTimeoutMillis: 10000, // 10 second timeout
+    })
 
     try {
+      console.log('Attempting database connection...')
       await client.connect()
+      console.log('Database connection successful')
     } catch (connError: any) {
+      console.error('Database connection failed:', connError)
       const classified = classifyError(connError)
       return NextResponse.json(
         {
