@@ -15,25 +15,18 @@ import { createClient } from '@/lib/supabase/client'
  */
 export default function HomePage() {
   const router = useRouter()
-  const supabase = createClient()
 
   useEffect(() => {
+    // Use the /api/setup endpoint to check status
+    // This is more reliable than client-side checks
     async function checkSetupStatus() {
       try {
-        // Check if workspace_settings table exists and has data
-        const { data, error } = await supabase
-          .from('workspace_settings')
-          .select('id')
-          .limit(1)
-          .single()
-
-        if (error) {
-          // If error (table doesn't exist or no data), go to setup
-          console.log('No workspace configured, redirecting to /setup')
+        const res = await fetch('/api/setup')
+        const data = await res.json()
+        
+        if (data.setupRequired) {
           router.replace('/setup')
-        } else if (data) {
-          // Workspace exists, redirect to login
-          console.log('Workspace configured, redirecting to /login')
+        } else {
           router.replace('/login')
         }
       } catch (err) {
@@ -44,7 +37,7 @@ export default function HomePage() {
     }
 
     checkSetupStatus()
-  }, [router, supabase])
+  }, [router])
 
   // Show loading state while checking
   return (

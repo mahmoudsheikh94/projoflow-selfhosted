@@ -28,6 +28,13 @@ function slugify(text: string): string {
  */
 export async function GET() {
   try {
+    // Check if Supabase credentials are configured
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+      // No credentials configured yet, setup is definitely required
+      console.log('No Supabase credentials configured, setup required')
+      return NextResponse.json({ setupRequired: true })
+    }
+
     const supabase = createSetupClient()
 
     // Check if any admin user exists
