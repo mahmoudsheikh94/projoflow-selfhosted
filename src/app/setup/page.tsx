@@ -99,7 +99,10 @@ function StepLicenseKey({ onComplete }: { onComplete: () => void }) {
     setError(null)
 
     try {
-      const res = await fetch('/api/license/validate', {
+      // Call the central ProjoFlow license validation API
+      const licenseApiUrl = process.env.NEXT_PUBLIC_LICENSE_API_URL || 'https://projoflow.com/api/license/validate'
+      
+      const res = await fetch(licenseApiUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ licenseKey }),
@@ -108,7 +111,7 @@ function StepLicenseKey({ onComplete }: { onComplete: () => void }) {
       const data = await res.json()
 
       if (!res.ok || !data.valid) {
-        setError(data.error || 'Invalid license key')
+        setError(data.message || 'Invalid license key')
         setIsValidating(false)
         return
       }
