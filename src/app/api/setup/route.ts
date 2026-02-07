@@ -112,16 +112,31 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // 2. Create auth user
+    // 2. Create auth user using signUp (works with anon key)
     const { data: authData, error: authError } =
-      await supabase.auth.admin.createUser({
+      await supabase.auth.signUp({
         email,
         password,
-        email_confirm: true, // Auto-confirm for first admin
+        options: {
+          data: {
+            company_name: companyName,
+          },
+        },
       })
 
     if (authError) {
       console.error('Auth user creation error:', authError)
+      
+      // Check if email confirmation is required
+      if (authError.message?.includes('confirm') || authError.message?.includes('verification')) {
+        return NextResponse.json(
+          { 
+            error: 'Email confirmation is required. Please disable "Confirm email" in your Supabase project settings (Authentication → Providers → Email) and try again.' 
+          },
+          { status: 400 }
+        )
+      }
+      
       return NextResponse.json(
         { error: authError.message || 'Failed to create admin account' },
         { status: 400 }
@@ -130,7 +145,7 @@ export async function POST(request: NextRequest) {
 
     if (!authData.user) {
       return NextResponse.json(
-        { error: 'Failed to create user' },
+        { error: 'Failed to create user. Make sure email confirmation is disabled in Supabase.' },
         { status: 500 }
       )
     }

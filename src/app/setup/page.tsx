@@ -582,6 +582,25 @@ function StepAccount({
         </p>
       </div>
 
+      {/* Important notice about email confirmation */}
+      <div className="p-3 rounded-lg bg-amber-500/10 border border-amber-500/20 space-y-2">
+        <div className="flex items-start gap-2">
+          <Shield className="h-5 w-5 text-amber-500 flex-shrink-0 mt-0.5" />
+          <div className="text-sm text-amber-200">
+            <strong className="block mb-1">Before continuing:</strong>
+            <p className="text-amber-300/90">
+              Make sure email confirmation is disabled in your Supabase project:
+            </p>
+            <ol className="list-decimal ml-4 mt-2 space-y-1 text-amber-300/80 text-xs">
+              <li>Go to your Supabase dashboard</li>
+              <li>Click <strong>Authentication</strong> → <strong>Providers</strong> → <strong>Email</strong></li>
+              <li>Turn OFF <strong>"Confirm email"</strong></li>
+              <li>Click <strong>Save</strong></li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
       {error && (
         <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/20 flex items-start gap-2">
           <AlertCircle className="h-5 w-5 text-red-500 flex-shrink-0 mt-0.5" />
