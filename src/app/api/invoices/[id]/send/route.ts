@@ -1,10 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
-import { Resend } from 'resend'
 import { format } from 'date-fns'
 
-// Initialize Resend if API key is available
-const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null
+// Note: Email sending requires RESEND_API_KEY environment variable
+// Sign up for free at resend.com
 
 export async function POST(
   request: NextRequest,
@@ -51,13 +50,16 @@ export async function POST(
     const clientEmail = invoice.clients.email
 
     // Check if Resend is configured
-    if (!resend) {
-      // If no email service configured, return instructions
+    if (!process.env.RESEND_API_KEY) {
       return NextResponse.json({ 
         error: 'Email service not configured. Add RESEND_API_KEY to your environment variables.',
         suggestion: 'You can sign up for free at resend.com and add your API key to enable email sending.'
       }, { status: 400 })
     }
+
+    // Dynamically import Resend only if API key exists
+    const { Resend } = await import('resend')
+    const resend = new Resend(process.env.RESEND_API_KEY)
 
     // Format currency
     const formatCurrency = (cents: number) => {
@@ -76,7 +78,6 @@ export async function POST(
             .invoice-box { background: #f9fafb; padding: 20px; border-radius: 8px; margin: 20px 0; }
             .total { font-size: 24px; font-weight: bold; color: #10b981; }
             .footer { margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb; color: #6b7280; font-size: 14px; }
-            .button { display: inline-block; background: #10b981; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; margin-top: 20px; }
           </style>
         </head>
         <body>
@@ -87,7 +88,7 @@ export async function POST(
             
             <p>Dear ${clientName},</p>
             
-            <p>Please find attached your invoice <strong>${invoice.invoice_number}</strong>.</p>
+            <p>Please find the details of your invoice <strong>${invoice.invoice_number}</strong> below.</p>
             
             <div class="invoice-box">
               <p style="margin: 0 0 10px 0;"><strong>Invoice Number:</strong> ${invoice.invoice_number}</p>
@@ -97,6 +98,8 @@ export async function POST(
             </div>
             
             ${invoice.payment_terms ? `<p><strong>Payment Terms:</strong> ${invoice.payment_terms}</p>` : ''}
+            
+            <p>Please log in to your client portal to view the full invoice and download the PDF.</p>
             
             <p>If you have any questions about this invoice, please don't hesitate to contact us.</p>
             
@@ -112,30 +115,12 @@ export async function POST(
       </html>
     `
 
-    // Generate PDF for attachment
-    const pdfResponse = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/invoices/${id}/pdf`, {
-      headers: {
-        'Cookie': request.headers.get('Cookie') || '',
-      },
-    })
-
-    let attachments: { filename: string; content: Buffer }[] = []
-    
-    if (pdfResponse.ok) {
-      const pdfBuffer = await pdfResponse.arrayBuffer()
-      attachments = [{
-        filename: `${invoice.invoice_number}.pdf`,
-        content: Buffer.from(pdfBuffer),
-      }]
-    }
-
     // Send email via Resend
     const { data, error } = await resend.emails.send({
       from: process.env.RESEND_FROM_EMAIL || 'invoices@resend.dev',
       to: clientEmail,
       subject: `Invoice ${invoice.invoice_number} from ${companyName}`,
       html: emailHtml,
-      attachments,
     })
 
     if (error) {

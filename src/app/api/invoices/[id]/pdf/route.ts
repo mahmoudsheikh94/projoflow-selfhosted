@@ -1,198 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
-import { Document, Page, Text, View, StyleSheet, renderToBuffer, Font } from '@react-pdf/renderer'
+import { jsPDF } from 'jspdf'
 import { format } from 'date-fns'
-
-// Register a default font (optional, uses Helvetica by default)
-// Font.register({ family: 'Helvetica', src: '...' })
-
-const styles = StyleSheet.create({
-  page: {
-    padding: 40,
-    fontSize: 10,
-    fontFamily: 'Helvetica',
-    color: '#1f2937',
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 40,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#1f2937',
-  },
-  invoiceNumber: {
-    fontSize: 14,
-    color: '#6b7280',
-    marginTop: 4,
-  },
-  companyInfo: {
-    textAlign: 'right',
-  },
-  companyName: {
-    fontSize: 12,
-    fontWeight: 'bold',
-  },
-  companyDetails: {
-    fontSize: 9,
-    color: '#6b7280',
-    marginTop: 4,
-  },
-  section: {
-    flexDirection: 'row',
-    marginBottom: 30,
-  },
-  billTo: {
-    flex: 1,
-  },
-  dates: {
-    flex: 1,
-    textAlign: 'right',
-  },
-  label: {
-    fontSize: 9,
-    color: '#6b7280',
-    marginBottom: 4,
-    textTransform: 'uppercase',
-  },
-  clientName: {
-    fontSize: 12,
-    fontWeight: 'bold',
-  },
-  clientDetails: {
-    fontSize: 10,
-    color: '#4b5563',
-    marginTop: 2,
-  },
-  dateRow: {
-    fontSize: 10,
-    marginBottom: 4,
-  },
-  dateLabel: {
-    color: '#6b7280',
-  },
-  table: {
-    marginBottom: 30,
-  },
-  tableHeader: {
-    flexDirection: 'row',
-    backgroundColor: '#f9fafb',
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
-    borderColor: '#e5e7eb',
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-  },
-  tableRow: {
-    flexDirection: 'row',
-    borderBottomWidth: 1,
-    borderColor: '#e5e7eb',
-    paddingVertical: 10,
-    paddingHorizontal: 12,
-  },
-  colDescription: {
-    flex: 1,
-  },
-  colQty: {
-    width: 60,
-    textAlign: 'right',
-  },
-  colPrice: {
-    width: 80,
-    textAlign: 'right',
-  },
-  colAmount: {
-    width: 80,
-    textAlign: 'right',
-  },
-  headerText: {
-    fontSize: 9,
-    fontWeight: 'bold',
-    color: '#6b7280',
-    textTransform: 'uppercase',
-  },
-  cellText: {
-    fontSize: 10,
-  },
-  totals: {
-    alignItems: 'flex-end',
-    marginBottom: 30,
-  },
-  totalRow: {
-    flexDirection: 'row',
-    width: 200,
-    justifyContent: 'space-between',
-    paddingVertical: 4,
-  },
-  totalLabel: {
-    color: '#6b7280',
-  },
-  totalValue: {
-    fontWeight: 'bold',
-  },
-  grandTotal: {
-    flexDirection: 'row',
-    width: 200,
-    justifyContent: 'space-between',
-    paddingVertical: 8,
-    borderTopWidth: 1,
-    borderColor: '#e5e7eb',
-    marginTop: 4,
-  },
-  grandTotalLabel: {
-    fontSize: 12,
-    fontWeight: 'bold',
-  },
-  grandTotalValue: {
-    fontSize: 12,
-    fontWeight: 'bold',
-  },
-  notes: {
-    marginTop: 20,
-    paddingTop: 20,
-    borderTopWidth: 1,
-    borderColor: '#e5e7eb',
-  },
-  notesLabel: {
-    fontSize: 9,
-    color: '#6b7280',
-    marginBottom: 4,
-    textTransform: 'uppercase',
-  },
-  notesText: {
-    fontSize: 10,
-    color: '#4b5563',
-  },
-  footer: {
-    marginTop: 40,
-    paddingTop: 20,
-    borderTopWidth: 1,
-    borderColor: '#e5e7eb',
-    textAlign: 'center',
-  },
-  footerText: {
-    fontSize: 9,
-    color: '#6b7280',
-  },
-  status: {
-    position: 'absolute',
-    top: 100,
-    right: 40,
-    padding: '8 16',
-    borderRadius: 4,
-  },
-  statusPaid: {
-    backgroundColor: '#d1fae5',
-    color: '#065f46',
-  },
-  statusText: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    textTransform: 'uppercase',
-  },
-})
 
 interface InvoiceData {
   id: string
@@ -233,144 +42,224 @@ function formatCurrency(cents: number, symbol: string) {
   return `${symbol}${(cents / 100).toFixed(2)}`
 }
 
-function InvoicePDF({ invoice, settings }: { invoice: InvoiceData; settings: SettingsData }) {
-  return (
-    <Document>
-      <Page size="A4" style={styles.page}>
-        {/* Paid stamp */}
-        {invoice.status === 'paid' && (
-          <View style={[styles.status, styles.statusPaid]}>
-            <Text style={styles.statusText}>PAID</Text>
-          </View>
-        )}
+function generateInvoicePDF(invoice: InvoiceData, settings: SettingsData): ArrayBuffer {
+  const doc = new jsPDF()
+  const pageWidth = doc.internal.pageSize.getWidth()
+  const margin = 20
+  let y = 20
 
-        {/* Header */}
-        <View style={styles.header}>
-          <View>
-            <Text style={styles.title}>INVOICE</Text>
-            <Text style={styles.invoiceNumber}>{invoice.invoice_number}</Text>
-          </View>
-          <View style={styles.companyInfo}>
-            <Text style={styles.companyName}>{settings.company_name || 'Your Company'}</Text>
-            {settings.bank_details && (
-              <Text style={styles.companyDetails}>{settings.bank_details}</Text>
-            )}
-          </View>
-        </View>
+  // Colors
+  const primaryColor = '#10b981'
+  const textColor = '#1f2937'
+  const mutedColor = '#6b7280'
 
-        {/* Bill To & Dates */}
-        <View style={styles.section}>
-          <View style={styles.billTo}>
-            <Text style={styles.label}>Bill To</Text>
-            {invoice.clients ? (
-              <>
-                <Text style={styles.clientName}>{invoice.clients.name}</Text>
-                {invoice.clients.company && (
-                  <Text style={styles.clientDetails}>{invoice.clients.company}</Text>
-                )}
-                {invoice.clients.email && (
-                  <Text style={styles.clientDetails}>{invoice.clients.email}</Text>
-                )}
-                {invoice.clients.address && (
-                  <Text style={styles.clientDetails}>{invoice.clients.address}</Text>
-                )}
-              </>
-            ) : (
-              <Text style={styles.clientDetails}>No client</Text>
-            )}
-          </View>
-          <View style={styles.dates}>
-            <Text style={styles.dateRow}>
-              <Text style={styles.dateLabel}>Issue Date: </Text>
-              {format(new Date(invoice.issue_date), 'MMMM d, yyyy')}
-            </Text>
-            {invoice.due_date && (
-              <Text style={styles.dateRow}>
-                <Text style={styles.dateLabel}>Due Date: </Text>
-                {format(new Date(invoice.due_date), 'MMMM d, yyyy')}
-              </Text>
-            )}
-            {invoice.paid_date && (
-              <Text style={styles.dateRow}>
-                <Text style={styles.dateLabel}>Paid Date: </Text>
-                {format(new Date(invoice.paid_date), 'MMMM d, yyyy')}
-              </Text>
-            )}
-          </View>
-        </View>
+  // Helper function to add text
+  const addText = (text: string, x: number, yPos: number, options?: { 
+    fontSize?: number, 
+    color?: string, 
+    fontStyle?: 'normal' | 'bold',
+    align?: 'left' | 'center' | 'right'
+  }) => {
+    const { fontSize = 10, color = textColor, fontStyle = 'normal', align = 'left' } = options || {}
+    doc.setFontSize(fontSize)
+    doc.setTextColor(color)
+    doc.setFont('helvetica', fontStyle)
+    
+    let xPos = x
+    if (align === 'right') {
+      xPos = pageWidth - margin - doc.getTextWidth(text)
+    } else if (align === 'center') {
+      xPos = (pageWidth - doc.getTextWidth(text)) / 2
+    }
+    
+    doc.text(text, xPos, yPos)
+  }
 
-        {/* Line Items Table */}
-        <View style={styles.table}>
-          <View style={styles.tableHeader}>
-            <Text style={[styles.headerText, styles.colDescription]}>Description</Text>
-            <Text style={[styles.headerText, styles.colQty]}>Qty</Text>
-            <Text style={[styles.headerText, styles.colPrice]}>Price</Text>
-            <Text style={[styles.headerText, styles.colAmount]}>Amount</Text>
-          </View>
-          {invoice.invoice_items.map((item, index) => (
-            <View key={index} style={styles.tableRow}>
-              <Text style={[styles.cellText, styles.colDescription]}>{item.description}</Text>
-              <Text style={[styles.cellText, styles.colQty]}>{item.quantity}</Text>
-              <Text style={[styles.cellText, styles.colPrice]}>
-                {formatCurrency(item.unit_price, invoice.currency_symbol)}
-              </Text>
-              <Text style={[styles.cellText, styles.colAmount]}>
-                {formatCurrency(item.amount, invoice.currency_symbol)}
-              </Text>
-            </View>
-          ))}
-        </View>
+  // PAID stamp (if applicable)
+  if (invoice.status === 'paid') {
+    doc.setFontSize(40)
+    doc.setTextColor('#d1fae5')
+    doc.setFont('helvetica', 'bold')
+    doc.text('PAID', pageWidth - 70, 50, { angle: -15 })
+    doc.setTextColor(textColor)
+  }
 
-        {/* Totals */}
-        <View style={styles.totals}>
-          <View style={styles.totalRow}>
-            <Text style={styles.totalLabel}>Subtotal</Text>
-            <Text style={styles.totalValue}>
-              {formatCurrency(invoice.subtotal, invoice.currency_symbol)}
-            </Text>
-          </View>
-          {invoice.tax_amount > 0 && (
-            <View style={styles.totalRow}>
-              <Text style={styles.totalLabel}>
-                {settings.tax_label || 'Tax'} ({invoice.tax_rate}%)
-              </Text>
-              <Text style={styles.totalValue}>
-                {formatCurrency(invoice.tax_amount, invoice.currency_symbol)}
-              </Text>
-            </View>
-          )}
-          <View style={styles.grandTotal}>
-            <Text style={styles.grandTotalLabel}>Total</Text>
-            <Text style={styles.grandTotalValue}>
-              {formatCurrency(invoice.total, invoice.currency_symbol)}
-            </Text>
-          </View>
-        </View>
+  // Header - Invoice title
+  addText('INVOICE', margin, y, { fontSize: 24, fontStyle: 'bold' })
+  y += 8
+  addText(invoice.invoice_number, margin, y, { fontSize: 14, color: mutedColor })
 
-        {/* Notes */}
-        {invoice.notes && (
-          <View style={styles.notes}>
-            <Text style={styles.notesLabel}>Notes</Text>
-            <Text style={styles.notesText}>{invoice.notes}</Text>
-          </View>
-        )}
+  // Company name (right side)
+  const companyName = settings.company_name || 'Your Company'
+  addText(companyName, 0, 20, { fontSize: 12, fontStyle: 'bold', align: 'right' })
+  
+  // Bank details (right side, smaller)
+  if (settings.bank_details) {
+    const bankLines = settings.bank_details.split('\n')
+    let bankY = 28
+    bankLines.forEach(line => {
+      addText(line, 0, bankY, { fontSize: 8, color: mutedColor, align: 'right' })
+      bankY += 4
+    })
+  }
 
-        {/* Payment Terms */}
-        {invoice.payment_terms && (
-          <View style={{ marginTop: 10 }}>
-            <Text style={styles.notesText}>Payment Terms: {invoice.payment_terms}</Text>
-          </View>
-        )}
+  y = 55
 
-        {/* Footer */}
-        {settings.invoice_footer && (
-          <View style={styles.footer}>
-            <Text style={styles.footerText}>{settings.invoice_footer}</Text>
-          </View>
-        )}
-      </Page>
-    </Document>
-  )
+  // Bill To section
+  addText('BILL TO', margin, y, { fontSize: 9, color: mutedColor })
+  y += 6
+  
+  if (invoice.clients) {
+    addText(invoice.clients.name, margin, y, { fontSize: 12, fontStyle: 'bold' })
+    y += 5
+    if (invoice.clients.company) {
+      addText(invoice.clients.company, margin, y, { fontSize: 10, color: mutedColor })
+      y += 5
+    }
+    if (invoice.clients.email) {
+      addText(invoice.clients.email, margin, y, { fontSize: 10, color: mutedColor })
+      y += 5
+    }
+    if (invoice.clients.address) {
+      const addressLines = invoice.clients.address.split('\n')
+      addressLines.forEach(line => {
+        addText(line, margin, y, { fontSize: 10, color: mutedColor })
+        y += 5
+      })
+    }
+  } else {
+    addText('No client', margin, y, { fontSize: 10, color: mutedColor })
+    y += 5
+  }
+
+  // Dates (right side)
+  let dateY = 55
+  addText(`Issue Date: ${format(new Date(invoice.issue_date), 'MMMM d, yyyy')}`, 0, dateY, { fontSize: 10, align: 'right' })
+  dateY += 6
+  if (invoice.due_date) {
+    addText(`Due Date: ${format(new Date(invoice.due_date), 'MMMM d, yyyy')}`, 0, dateY, { fontSize: 10, align: 'right' })
+    dateY += 6
+  }
+  if (invoice.paid_date) {
+    addText(`Paid Date: ${format(new Date(invoice.paid_date), 'MMMM d, yyyy')}`, 0, dateY, { fontSize: 10, color: primaryColor, align: 'right' })
+  }
+
+  // Line items table
+  y = Math.max(y, 95) + 10
+
+  // Table header background
+  doc.setFillColor('#f9fafb')
+  doc.rect(margin, y - 5, pageWidth - 2 * margin, 10, 'F')
+
+  // Table header
+  doc.setFontSize(9)
+  doc.setFont('helvetica', 'bold')
+  doc.setTextColor(mutedColor)
+  doc.text('DESCRIPTION', margin + 2, y)
+  doc.text('QTY', pageWidth - margin - 80, y)
+  doc.text('PRICE', pageWidth - margin - 50, y)
+  doc.text('AMOUNT', pageWidth - margin - 20, y, { align: 'right' })
+
+  y += 8
+
+  // Table rows
+  doc.setFont('helvetica', 'normal')
+  doc.setTextColor(textColor)
+  doc.setFontSize(10)
+
+  invoice.invoice_items.forEach((item) => {
+    // Description (truncate if too long)
+    const maxDescWidth = 90
+    let desc = item.description
+    if (doc.getTextWidth(desc) > maxDescWidth) {
+      while (doc.getTextWidth(desc + '...') > maxDescWidth && desc.length > 0) {
+        desc = desc.slice(0, -1)
+      }
+      desc += '...'
+    }
+    doc.text(desc, margin + 2, y)
+    doc.text(item.quantity.toString(), pageWidth - margin - 80, y)
+    doc.text(formatCurrency(item.unit_price, invoice.currency_symbol), pageWidth - margin - 50, y)
+    doc.text(formatCurrency(item.amount, invoice.currency_symbol), pageWidth - margin - 2, y, { align: 'right' })
+    
+    // Row separator
+    y += 3
+    doc.setDrawColor('#e5e7eb')
+    doc.line(margin, y, pageWidth - margin, y)
+    y += 7
+  })
+
+  // Totals section
+  y += 5
+  const totalsX = pageWidth - 80
+
+  // Subtotal
+  doc.setTextColor(mutedColor)
+  doc.text('Subtotal', totalsX, y)
+  doc.setTextColor(textColor)
+  doc.text(formatCurrency(invoice.subtotal, invoice.currency_symbol), pageWidth - margin - 2, y, { align: 'right' })
+  y += 7
+
+  // Tax
+  if (invoice.tax_amount > 0) {
+    doc.setTextColor(mutedColor)
+    doc.text(`${settings.tax_label || 'Tax'} (${invoice.tax_rate}%)`, totalsX, y)
+    doc.setTextColor(textColor)
+    doc.text(formatCurrency(invoice.tax_amount, invoice.currency_symbol), pageWidth - margin - 2, y, { align: 'right' })
+    y += 7
+  }
+
+  // Total line
+  doc.setDrawColor('#e5e7eb')
+  doc.line(totalsX, y - 2, pageWidth - margin, y - 2)
+  y += 3
+
+  // Grand total
+  doc.setFontSize(12)
+  doc.setFont('helvetica', 'bold')
+  doc.text('Total', totalsX, y)
+  doc.text(formatCurrency(invoice.total, invoice.currency_symbol), pageWidth - margin - 2, y, { align: 'right' })
+
+  // Notes
+  if (invoice.notes) {
+    y += 20
+    doc.setDrawColor('#e5e7eb')
+    doc.line(margin, y - 5, pageWidth - margin, y - 5)
+    
+    doc.setFontSize(9)
+    doc.setFont('helvetica', 'normal')
+    doc.setTextColor(mutedColor)
+    doc.text('NOTES', margin, y)
+    y += 5
+    doc.setFontSize(10)
+    doc.setTextColor('#4b5563')
+    
+    const noteLines = doc.splitTextToSize(invoice.notes, pageWidth - 2 * margin)
+    noteLines.forEach((line: string) => {
+      doc.text(line, margin, y)
+      y += 5
+    })
+  }
+
+  // Payment terms
+  if (invoice.payment_terms) {
+    y += 5
+    doc.setFontSize(10)
+    doc.setTextColor('#4b5563')
+    doc.text(`Payment Terms: ${invoice.payment_terms}`, margin, y)
+  }
+
+  // Footer
+  if (settings.invoice_footer) {
+    y = doc.internal.pageSize.getHeight() - 20
+    doc.setDrawColor('#e5e7eb')
+    doc.line(margin, y - 10, pageWidth - margin, y - 10)
+    doc.setFontSize(9)
+    doc.setTextColor(mutedColor)
+    doc.text(settings.invoice_footer, pageWidth / 2, y, { align: 'center' })
+  }
+
+  return doc.output('arraybuffer')
 }
 
 export async function GET(
@@ -410,11 +299,9 @@ export async function GET(
       .single()
 
     // Generate PDF
-    const pdfBuffer = await renderToBuffer(
-      <InvoicePDF 
-        invoice={invoice as InvoiceData} 
-        settings={settings || { company_name: null, bank_details: null, tax_label: null, invoice_footer: null }} 
-      />
+    const pdfBuffer = generateInvoicePDF(
+      invoice as InvoiceData, 
+      settings || { company_name: null, bank_details: null, tax_label: null, invoice_footer: null }
     )
 
     // Return PDF as response
