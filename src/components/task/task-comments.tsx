@@ -6,7 +6,8 @@ import { TaskComment, CommentAuthorType } from '@/types/database'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
-import { MessageSquare, Send, Pencil, Trash2, X, Check, Loader2 } from 'lucide-react'
+import { MessageSquare, Send, Pencil, Trash2, X, Check, Loader2, Paperclip } from 'lucide-react'
+import { TaskAttachments } from '@/components/task/task-attachments'
 import { cn } from '@/lib/utils'
 import { formatDistanceToNow } from 'date-fns'
 import { toast } from 'sonner'
@@ -15,6 +16,7 @@ import { MentionTextarea, SelectedMention, renderCommentWithMentions } from '@/c
 interface TaskCommentsProps {
   taskId: string
   projectId: string
+  workspaceId: string
   currentUserId: string
   currentUserName: string
   authorType: CommentAuthorType
@@ -24,6 +26,7 @@ interface TaskCommentsProps {
 export function TaskComments({
   taskId,
   projectId,
+  workspaceId,
   currentUserId,
   currentUserName,
   authorType,
@@ -233,9 +236,19 @@ export function TaskComments({
                         </div>
                       </div>
                     ) : (
-                      <p className="text-sm text-text-secondary whitespace-pre-wrap break-words [overflow-wrap:anywhere]">
-                        {renderCommentWithMentions(comment.content)}
-                      </p>
+                      <>
+                        <p className="text-sm text-text-secondary whitespace-pre-wrap break-words [overflow-wrap:anywhere]">
+                          {renderCommentWithMentions(comment.content)}
+                        </p>
+                        {/* Comment Attachments */}
+                        <TaskAttachments 
+                          taskId={taskId}
+                          workspaceId={workspaceId}
+                          currentUserId={currentUserId}
+                          commentId={comment.id}
+                          compact
+                        />
+                      </>
                     )}
                   </div>
 
