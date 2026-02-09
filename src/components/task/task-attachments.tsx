@@ -198,7 +198,7 @@ export function TaskAttachments({
   }
 
   return (
-    <div className="space-y-3 w-full overflow-hidden">
+    <div className="space-y-3 w-full">
       {/* Header */}
       <div className="flex items-center gap-2 text-text-secondary">
         <Paperclip className="h-4 w-4" />
@@ -257,7 +257,7 @@ export function TaskAttachments({
             return (
               <div
                 key={attachment.id}
-                className="group flex items-center gap-3 p-2 rounded-lg bg-surface hover:bg-surface-hover transition-colors overflow-hidden"
+                className="group flex items-center gap-3 p-2 rounded-lg bg-surface hover:bg-surface-hover transition-colors w-full"
               >
                 {/* Thumbnail or icon */}
                 {isImg ? (
@@ -274,9 +274,9 @@ export function TaskAttachments({
                   </div>
                 )}
 
-                {/* File info */}
-                <div className="flex-1 min-w-0 overflow-hidden max-w-[calc(100%-6rem)]">
-                  <p className="text-sm font-medium text-text-primary truncate">
+                {/* File info - using break-all to prevent overflow */}
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-text-primary break-all line-clamp-1">
                     {attachment.file_name}
                   </p>
                   <p className="text-xs text-text-muted">

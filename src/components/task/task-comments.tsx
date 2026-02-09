@@ -131,7 +131,7 @@ export function TaskComments({
   }
 
   return (
-    <div className="space-y-4 w-full overflow-hidden">
+    <div className="space-y-4 w-full">
       {/* Header */}
       <div className="flex items-center gap-2 text-text-secondary">
         <MessageSquare className="h-4 w-4" />
@@ -180,7 +180,7 @@ export function TaskComments({
                   </Avatar>
 
                   {/* Content */}
-                  <div className="flex-1 min-w-0 overflow-hidden">
+                  <div className="flex-1 min-w-0">
                     {/* Header */}
                     <div className="flex items-center gap-2 mb-1 flex-wrap">
                       <span className="text-sm font-medium text-text-primary truncate max-w-[150px] sm:max-w-none">
