@@ -536,3 +536,114 @@ export interface TaskCommentInsert {
 export interface TaskCommentUpdate {
   content?: string
 }
+
+// Invoice types
+export type InvoiceStatus = 'draft' | 'sent' | 'paid' | 'overdue' | 'cancelled'
+
+export interface Invoice {
+  id: string
+  workspace_id: string
+  client_id: string | null
+  project_id: string | null
+  invoice_number: string
+  status: InvoiceStatus
+  issue_date: string
+  due_date: string | null
+  paid_date: string | null
+  subtotal: number
+  tax_rate: number
+  tax_amount: number
+  total: number
+  currency: string
+  currency_symbol: string
+  notes: string | null
+  payment_terms: string | null
+  pdf_path: string | null
+  created_at: string
+  updated_at: string
+  created_by: string | null
+}
+
+export interface InvoiceInsert {
+  workspace_id: string
+  client_id?: string | null
+  project_id?: string | null
+  invoice_number: string
+  status?: InvoiceStatus
+  issue_date?: string
+  due_date?: string | null
+  subtotal: number
+  tax_rate?: number
+  tax_amount: number
+  total: number
+  currency?: string
+  currency_symbol?: string
+  notes?: string | null
+  payment_terms?: string | null
+}
+
+export interface InvoiceUpdate {
+  client_id?: string | null
+  project_id?: string | null
+  status?: InvoiceStatus
+  issue_date?: string
+  due_date?: string | null
+  paid_date?: string | null
+  subtotal?: number
+  tax_rate?: number
+  tax_amount?: number
+  total?: number
+  notes?: string | null
+  payment_terms?: string | null
+  pdf_path?: string | null
+}
+
+export interface InvoiceItem {
+  id: string
+  invoice_id: string
+  description: string
+  quantity: number
+  unit_price: number
+  amount: number
+  time_entry_id: string | null
+  sort_order: number
+  created_at: string
+}
+
+export interface InvoiceItemInsert {
+  invoice_id: string
+  description: string
+  quantity: number
+  unit_price: number
+  amount: number
+  time_entry_id?: string | null
+  sort_order?: number
+}
+
+export interface InvoiceItemUpdate {
+  description?: string
+  quantity?: number
+  unit_price?: number
+  amount?: number
+  sort_order?: number
+}
+
+export type InvoiceWithRelations = Invoice & {
+  clients: Client | null
+  projects: Project | null
+  invoice_items: InvoiceItem[]
+}
+
+// Invoice Settings (part of workspace_settings)
+export interface InvoiceSettings {
+  invoice_prefix: string
+  invoice_next_number: number
+  tax_rate: number
+  tax_label: string
+  currency: string
+  currency_symbol: string
+  bank_details: string | null
+  payment_terms: string
+  invoice_notes: string | null
+  invoice_footer: string | null
+}

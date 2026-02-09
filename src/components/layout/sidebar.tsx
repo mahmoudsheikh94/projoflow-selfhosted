@@ -10,6 +10,7 @@ import {
   Users,
   Clock,
   FileText,
+  Receipt,
   Settings,
   Menu,
   LogOut,
@@ -28,6 +29,7 @@ const navigation = [
   { name: 'Projects', href: '/projects', icon: FolderKanban },
   { name: 'Clients', href: '/clients', icon: Users },
   { name: 'Time', href: '/time', icon: Clock },
+  { name: 'Invoices', href: '/invoices', icon: Receipt },
   { name: 'Reports', href: '/reports', icon: FileText },
 ]
 
