@@ -1,0 +1,164 @@
+════════════════════════════════════════════════════════════
+  ProjoFlow Self-Hosted — Comprehensive Test Suite
+════════════════════════════════════════════════════════════
+
+  Supabase URL: https://bylvbbadzzznjdrymiyg.supabase.co
+  Test started: 2026-02-09T08:35:51.987Z
+
+
+📁 TESTING FILE STRUCTURE
+──────────────────────────────────────────────────
+✅ [FILE_STRUCTURE] package.json | Found
+✅ [FILE_STRUCTURE] next.config.ts | Found
+✅ [FILE_STRUCTURE] tsconfig.json | Found
+✅ [FILE_STRUCTURE] README.md | Found
+✅ [FILE_STRUCTURE] LICENSE.md | Found
+✅ [FILE_STRUCTURE] DEPLOYMENT.md | Found
+✅ [FILE_STRUCTURE] .env.example | Found
+✅ [FILE_STRUCTURE] src/app/page.tsx | Found
+✅ [FILE_STRUCTURE] src/app/layout.tsx | Found
+✅ [FILE_STRUCTURE] src/app/setup/page.tsx | Found
+✅ [FILE_STRUCTURE] src/app/login/page.tsx | Found
+✅ [FILE_STRUCTURE] src/app/(admin)/dashboard/page.tsx | Found
+✅ [FILE_STRUCTURE] src/app/(admin)/projects/page.tsx | Found
+✅ [FILE_STRUCTURE] src/app/(admin)/clients/page.tsx | Found
+✅ [FILE_STRUCTURE] src/app/(admin)/time/page.tsx | Found
+✅ [FILE_STRUCTURE] src/app/(admin)/settings/page.tsx | Found
+✅ [FILE_STRUCTURE] src/app/portal/page.tsx | Found
+✅ [FILE_STRUCTURE] src/app/api/setup/route.ts | Found
+✅ [FILE_STRUCTURE] src/app/api/license/validate/route.ts | Found
+✅ [FILE_STRUCTURE] supabase/migrations/00_complete_schema.sql | Found
+✅ [FILE_STRUCTURE] mcp-server/package.json | Found
+
+📦 TESTING PACKAGE.JSON
+──────────────────────────────────────────────────
+✅ [PACKAGE] Dependency: next
+✅ [PACKAGE] Dependency: react
+✅ [PACKAGE] Dependency: react-dom
+✅ [PACKAGE] Dependency: @supabase/supabase-js
+✅ [PACKAGE] Dependency: tailwindcss
+✅ [PACKAGE] Dependency: typescript
+✅ [PACKAGE] Dependency: @supabase/ssr
+✅ [PACKAGE] Script: dev
+✅ [PACKAGE] Script: build
+✅ [PACKAGE] Script: start
+✅ [PACKAGE] Version: 1.0.0 | 1.0.0
+✅ [PACKAGE] Name: projoflow | projoflow
+
+🔨 TESTING BUILD PROCESS
+──────────────────────────────────────────────────
+  Running TypeScript check...
+❌ [BUILD] TypeScript compilation | Command failed: npx tsc --noEmit 2>&1
+  Running ESLint...
+⚠️ [BUILD] ESLint | Has warnings
+  Running Next.js build (this takes ~60s)...
+✅ [BUILD] Next.js build | Compiled successfully
+
+🗄️ TESTING DATABASE CONNECTION
+──────────────────────────────────────────────────
+✅ [DATABASE] Anon client connection | Connected
+✅ [DATABASE] Service role connection | Found 2 workspaces
+
+📊 TESTING DATABASE SCHEMA
+──────────────────────────────────────────────────
+✅ [SCHEMA] Table: users | Exists
+✅ [SCHEMA] Table: admin_users | Exists
+✅ [SCHEMA] Table: workspaces | Exists
+✅ [SCHEMA] Table: workspace_members | Exists
+✅ [SCHEMA] Table: clients | Exists
+✅ [SCHEMA] Table: projects | Exists
+✅ [SCHEMA] Table: tasks | Exists
+✅ [SCHEMA] Table: task_comments | Exists
+✅ [SCHEMA] Table: time_entries | Exists
+✅ [SCHEMA] Table: notes | Exists
+✅ [SCHEMA] Table: leads | Exists
+✅ [SCHEMA] Table: intake_links | Exists
+✅ [SCHEMA] Table: client_users | Exists
+✅ [SCHEMA] Table: client_invitations | Exists
+✅ [SCHEMA] Table: workspace_settings | Exists
+✅ [SCHEMA] Table: subscriptions | Exists
+✅ [SCHEMA] Table: licenses | Exists
+
+🔒 TESTING RLS POLICIES
+──────────────────────────────────────────────────
+✅ [RLS] Anonymous blocked from workspaces | No data returned
+✅ [RLS] Anonymous blocked from projects | No data returned
+✅ [RLS] Anonymous blocked from clients | No data returned
+✅ [RLS] Anonymous blocked from tasks | No data returned
+✅ [RLS] Anonymous blocked from users | No data returned
+
+🌐 TESTING API ROUTES
+──────────────────────────────────────────────────
+✅ [API] /api/setup | Route exists
+✅ [API] /api/setup/migrate | Route exists
+✅ [API] /api/setup/verify | Route exists
+✅ [API] /api/license/validate | Route exists
+✅ [API] /api/invitations/send | Route exists
+✅ [API] /api/mentions/notify | Route exists
+✅ [API] /api/webhooks/stripe | Route exists
+✅ [API] /api/webhooks/gumroad | Route exists
+✅ [API] /api/webhooks/lemonsqueezy | Route exists
+✅ [API] /api/admin/license/generate | Route exists
+
+🤖 TESTING MCP SERVER
+──────────────────────────────────────────────────
+✅ [MCP] File: package.json
+❌ [MCP] File: src/index.ts
+❌ [MCP] File: tsconfig.json
+✅ [MCP] MCP SDK dependency
+
+🎨 TESTING UI COMPONENTS
+──────────────────────────────────────────────────
+✅ [UI] layout/sidebar.tsx | Found
+✅ [UI] layout/header.tsx | Found
+✅ [UI] project/kanban/kanban-card.tsx | Found
+✅ [UI] ui/button.tsx | Found
+✅ [UI] ui/dialog.tsx | Found
+✅ [UI] ui/input.tsx | Found
+❌ [UI] Tailwind config
+✅ [UI] CSS variables defined
+❌ [UI] Tailwind directives
+
+📚 TESTING DOCUMENTATION
+──────────────────────────────────────────────────
+✅ [DOCS] README.md | 7897 bytes (min: 5000)
+✅ [DOCS] DEPLOYMENT.md | 9295 bytes (min: 2000)
+✅ [DOCS] LICENSE.md | 3255 bytes (min: 500)
+✅ [DOCS] .env.example | 2478 bytes (min: 200)
+✅ [DOCS] README: Quick Start section
+✅ [DOCS] README: Environment section
+✅ [DOCS] README: Deploy section
+✅ [DOCS] README: License section
+✅ [DOCS] README: MCP section
+
+🔐 TESTING SECURITY
+──────────────────────────────────────────────────
+✅ [SECURITY] .gitignore: .env.local
+✅ [SECURITY] .gitignore: node_modules
+✅ [SECURITY] .gitignore: .next
+✅ [SECURITY] No hardcoded secrets: src/app/page.tsx | Clean
+✅ [SECURITY] No hardcoded secrets: src/app/layout.tsx | Clean
+✅ [SECURITY] No hardcoded secrets: src/middleware.ts | Clean
+✅ [SECURITY] Client uses only anon key
+
+✅ TESTING DATA INTEGRITY
+──────────────────────────────────────────────────
+✅ [DATA] Workspace default has name
+✅ [DATA] Workspace default has slug
+✅ [DATA] Workspace mahmoud-personal-agency has name
+✅ [DATA] Workspace mahmoud-personal-agency has slug
+✅ [DATA] Project "Self Hosting Projo F" has workspace
+
+════════════════════════════════════════════════════════════
+  TEST SUMMARY
+════════════════════════════════════════════════════════════
+
+  ✅ PASSED: 98
+  ❌ FAILED: 5
+  ⚠️  WARNED: 1
+  📊 TOTAL:  104
+
+  Pass Rate: 94.2%
+
+  📄 Report saved to: tests/TEST_REPORT.json
+

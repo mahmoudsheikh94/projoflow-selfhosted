@@ -1,0 +1,636 @@
+{
+  "timestamp": "2026-02-09T08:36:42.483Z",
+  "summary": {
+    "passed": 98,
+    "failed": 5,
+    "warned": 1,
+    "total": 104,
+    "passRate": "94.2%"
+  },
+  "results": [
+    {
+      "category": "FILE_STRUCTURE",
+      "test": "package.json",
+      "status": "PASS",
+      "details": "Found"
+    },
+    {
+      "category": "FILE_STRUCTURE",
+      "test": "next.config.ts",
+      "status": "PASS",
+      "details": "Found"
+    },
+    {
+      "category": "FILE_STRUCTURE",
+      "test": "tsconfig.json",
+      "status": "PASS",
+      "details": "Found"
+    },
+    {
+      "category": "FILE_STRUCTURE",
+      "test": "README.md",
+      "status": "PASS",
+      "details": "Found"
+    },
+    {
+      "category": "FILE_STRUCTURE",
+      "test": "LICENSE.md",
+      "status": "PASS",
+      "details": "Found"
+    },
+    {
+      "category": "FILE_STRUCTURE",
+      "test": "DEPLOYMENT.md",
+      "status": "PASS",
+      "details": "Found"
+    },
+    {
+      "category": "FILE_STRUCTURE",
+      "test": ".env.example",
+      "status": "PASS",
+      "details": "Found"
+    },
+    {
+      "category": "FILE_STRUCTURE",
+      "test": "src/app/page.tsx",
+      "status": "PASS",
+      "details": "Found"
+    },
+    {
+      "category": "FILE_STRUCTURE",
+      "test": "src/app/layout.tsx",
+      "status": "PASS",
+      "details": "Found"
+    },
+    {
+      "category": "FILE_STRUCTURE",
+      "test": "src/app/setup/page.tsx",
+      "status": "PASS",
+      "details": "Found"
+    },
+    {
+      "category": "FILE_STRUCTURE",
+      "test": "src/app/login/page.tsx",
+      "status": "PASS",
+      "details": "Found"
+    },
+    {
+      "category": "FILE_STRUCTURE",
+      "test": "src/app/(admin)/dashboard/page.tsx",
+      "status": "PASS",
+      "details": "Found"
+    },
+    {
+      "category": "FILE_STRUCTURE",
+      "test": "src/app/(admin)/projects/page.tsx",
+      "status": "PASS",
+      "details": "Found"
+    },
+    {
+      "category": "FILE_STRUCTURE",
+      "test": "src/app/(admin)/clients/page.tsx",
+      "status": "PASS",
+      "details": "Found"
+    },
+    {
+      "category": "FILE_STRUCTURE",
+      "test": "src/app/(admin)/time/page.tsx",
+      "status": "PASS",
+      "details": "Found"
+    },
+    {
+      "category": "FILE_STRUCTURE",
+      "test": "src/app/(admin)/settings/page.tsx",
+      "status": "PASS",
+      "details": "Found"
+    },
+    {
+      "category": "FILE_STRUCTURE",
+      "test": "src/app/portal/page.tsx",
+      "status": "PASS",
+      "details": "Found"
+    },
+    {
+      "category": "FILE_STRUCTURE",
+      "test": "src/app/api/setup/route.ts",
+      "status": "PASS",
+      "details": "Found"
+    },
+    {
+      "category": "FILE_STRUCTURE",
+      "test": "src/app/api/license/validate/route.ts",
+      "status": "PASS",
+      "details": "Found"
+    },
+    {
+      "category": "FILE_STRUCTURE",
+      "test": "supabase/migrations/00_complete_schema.sql",
+      "status": "PASS",
+      "details": "Found"
+    },
+    {
+      "category": "FILE_STRUCTURE",
+      "test": "mcp-server/package.json",
+      "status": "PASS",
+      "details": "Found"
+    },
+    {
+      "category": "PACKAGE",
+      "test": "Dependency: next",
+      "status": "PASS",
+      "details": ""
+    },
+    {
+      "category": "PACKAGE",
+      "test": "Dependency: react",
+      "status": "PASS",
+      "details": ""
+    },
+    {
+      "category": "PACKAGE",
+      "test": "Dependency: react-dom",
+      "status": "PASS",
+      "details": ""
+    },
+    {
+      "category": "PACKAGE",
+      "test": "Dependency: @supabase/supabase-js",
+      "status": "PASS",
+      "details": ""
+    },
+    {
+      "category": "PACKAGE",
+      "test": "Dependency: tailwindcss",
+      "status": "PASS",
+      "details": ""
+    },
+    {
+      "category": "PACKAGE",
+      "test": "Dependency: typescript",
+      "status": "PASS",
+      "details": ""
+    },
+    {
+      "category": "PACKAGE",
+      "test": "Dependency: @supabase/ssr",
+      "status": "PASS",
+      "details": ""
+    },
+    {
+      "category": "PACKAGE",
+      "test": "Script: dev",
+      "status": "PASS",
+      "details": ""
+    },
+    {
+      "category": "PACKAGE",
+      "test": "Script: build",
+      "status": "PASS",
+      "details": ""
+    },
+    {
+      "category": "PACKAGE",
+      "test": "Script: start",
+      "status": "PASS",
+      "details": ""
+    },
+    {
+      "category": "PACKAGE",
+      "test": "Version: 1.0.0",
+      "status": "PASS",
+      "details": "1.0.0"
+    },
+    {
+      "category": "PACKAGE",
+      "test": "Name: projoflow",
+      "status": "PASS",
+      "details": "projoflow"
+    },
+    {
+      "category": "BUILD",
+      "test": "TypeScript compilation",
+      "status": "FAIL",
+      "details": "Command failed: npx tsc --noEmit 2>&1"
+    },
+    {
+      "category": "BUILD",
+      "test": "ESLint",
+      "status": "WARN",
+      "details": "Has warnings"
+    },
+    {
+      "category": "BUILD",
+      "test": "Next.js build",
+      "status": "PASS",
+      "details": "Compiled successfully"
+    },
+    {
+      "category": "DATABASE",
+      "test": "Anon client connection",
+      "status": "PASS",
+      "details": "Connected"
+    },
+    {
+      "category": "DATABASE",
+      "test": "Service role connection",
+      "status": "PASS",
+      "details": "Found 2 workspaces"
+    },
+    {
+      "category": "SCHEMA",
+      "test": "Table: users",
+      "status": "PASS",
+      "details": "Exists"
+    },
+    {
+      "category": "SCHEMA",
+      "test": "Table: admin_users",
+      "status": "PASS",
+      "details": "Exists"
+    },
+    {
+      "category": "SCHEMA",
+      "test": "Table: workspaces",
+      "status": "PASS",
+      "details": "Exists"
+    },
+    {
+      "category": "SCHEMA",
+      "test": "Table: workspace_members",
+      "status": "PASS",
+      "details": "Exists"
+    },
+    {
+      "category": "SCHEMA",
+      "test": "Table: clients",
+      "status": "PASS",
+      "details": "Exists"
+    },
+    {
+      "category": "SCHEMA",
+      "test": "Table: projects",
+      "status": "PASS",
+      "details": "Exists"
+    },
+    {
+      "category": "SCHEMA",
+      "test": "Table: tasks",
+      "status": "PASS",
+      "details": "Exists"
+    },
+    {
+      "category": "SCHEMA",
+      "test": "Table: task_comments",
+      "status": "PASS",
+      "details": "Exists"
+    },
+    {
+      "category": "SCHEMA",
+      "test": "Table: time_entries",
+      "status": "PASS",
+      "details": "Exists"
+    },
+    {
+      "category": "SCHEMA",
+      "test": "Table: notes",
+      "status": "PASS",
+      "details": "Exists"
+    },
+    {
+      "category": "SCHEMA",
+      "test": "Table: leads",
+      "status": "PASS",
+      "details": "Exists"
+    },
+    {
+      "category": "SCHEMA",
+      "test": "Table: intake_links",
+      "status": "PASS",
+      "details": "Exists"
+    },
+    {
+      "category": "SCHEMA",
+      "test": "Table: client_users",
+      "status": "PASS",
+      "details": "Exists"
+    },
+    {
+      "category": "SCHEMA",
+      "test": "Table: client_invitations",
+      "status": "PASS",
+      "details": "Exists"
+    },
+    {
+      "category": "SCHEMA",
+      "test": "Table: workspace_settings",
+      "status": "PASS",
+      "details": "Exists"
+    },
+    {
+      "category": "SCHEMA",
+      "test": "Table: subscriptions",
+      "status": "PASS",
+      "details": "Exists"
+    },
+    {
+      "category": "SCHEMA",
+      "test": "Table: licenses",
+      "status": "PASS",
+      "details": "Exists"
+    },
+    {
+      "category": "RLS",
+      "test": "Anonymous blocked from workspaces",
+      "status": "PASS",
+      "details": "No data returned"
+    },
+    {
+      "category": "RLS",
+      "test": "Anonymous blocked from projects",
+      "status": "PASS",
+      "details": "No data returned"
+    },
+    {
+      "category": "RLS",
+      "test": "Anonymous blocked from clients",
+      "status": "PASS",
+      "details": "No data returned"
+    },
+    {
+      "category": "RLS",
+      "test": "Anonymous blocked from tasks",
+      "status": "PASS",
+      "details": "No data returned"
+    },
+    {
+      "category": "RLS",
+      "test": "Anonymous blocked from users",
+      "status": "PASS",
+      "details": "No data returned"
+    },
+    {
+      "category": "API",
+      "test": "/api/setup",
+      "status": "PASS",
+      "details": "Route exists"
+    },
+    {
+      "category": "API",
+      "test": "/api/setup/migrate",
+      "status": "PASS",
+      "details": "Route exists"
+    },
+    {
+      "category": "API",
+      "test": "/api/setup/verify",
+      "status": "PASS",
+      "details": "Route exists"
+    },
+    {
+      "category": "API",
+      "test": "/api/license/validate",
+      "status": "PASS",
+      "details": "Route exists"
+    },
+    {
+      "category": "API",
+      "test": "/api/invitations/send",
+      "status": "PASS",
+      "details": "Route exists"
+    },
+    {
+      "category": "API",
+      "test": "/api/mentions/notify",
+      "status": "PASS",
+      "details": "Route exists"
+    },
+    {
+      "category": "API",
+      "test": "/api/webhooks/stripe",
+      "status": "PASS",
+      "details": "Route exists"
+    },
+    {
+      "category": "API",
+      "test": "/api/webhooks/gumroad",
+      "status": "PASS",
+      "details": "Route exists"
+    },
+    {
+      "category": "API",
+      "test": "/api/webhooks/lemonsqueezy",
+      "status": "PASS",
+      "details": "Route exists"
+    },
+    {
+      "category": "API",
+      "test": "/api/admin/license/generate",
+      "status": "PASS",
+      "details": "Route exists"
+    },
+    {
+      "category": "MCP",
+      "test": "File: package.json",
+      "status": "PASS",
+      "details": ""
+    },
+    {
+      "category": "MCP",
+      "test": "File: src/index.ts",
+      "status": "FAIL",
+      "details": ""
+    },
+    {
+      "category": "MCP",
+      "test": "File: tsconfig.json",
+      "status": "FAIL",
+      "details": ""
+    },
+    {
+      "category": "MCP",
+      "test": "MCP SDK dependency",
+      "status": "PASS",
+      "details": ""
+    },
+    {
+      "category": "UI",
+      "test": "layout/sidebar.tsx",
+      "status": "PASS",
+      "details": "Found"
+    },
+    {
+      "category": "UI",
+      "test": "layout/header.tsx",
+      "status": "PASS",
+      "details": "Found"
+    },
+    {
+      "category": "UI",
+      "test": "project/kanban/kanban-card.tsx",
+      "status": "PASS",
+      "details": "Found"
+    },
+    {
+      "category": "UI",
+      "test": "ui/button.tsx",
+      "status": "PASS",
+      "details": "Found"
+    },
+    {
+      "category": "UI",
+      "test": "ui/dialog.tsx",
+      "status": "PASS",
+      "details": "Found"
+    },
+    {
+      "category": "UI",
+      "test": "ui/input.tsx",
+      "status": "PASS",
+      "details": "Found"
+    },
+    {
+      "category": "UI",
+      "test": "Tailwind config",
+      "status": "FAIL",
+      "details": ""
+    },
+    {
+      "category": "UI",
+      "test": "CSS variables defined",
+      "status": "PASS",
+      "details": ""
+    },
+    {
+      "category": "UI",
+      "test": "Tailwind directives",
+      "status": "FAIL",
+      "details": ""
+    },
+    {
+      "category": "DOCS",
+      "test": "README.md",
+      "status": "PASS",
+      "details": "7897 bytes (min: 5000)"
+    },
+    {
+      "category": "DOCS",
+      "test": "DEPLOYMENT.md",
+      "status": "PASS",
+      "details": "9295 bytes (min: 2000)"
+    },
+    {
+      "category": "DOCS",
+      "test": "LICENSE.md",
+      "status": "PASS",
+      "details": "3255 bytes (min: 500)"
+    },
+    {
+      "category": "DOCS",
+      "test": ".env.example",
+      "status": "PASS",
+      "details": "2478 bytes (min: 200)"
+    },
+    {
+      "category": "DOCS",
+      "test": "README: Quick Start section",
+      "status": "PASS",
+      "details": ""
+    },
+    {
+      "category": "DOCS",
+      "test": "README: Environment section",
+      "status": "PASS",
+      "details": ""
+    },
+    {
+      "category": "DOCS",
+      "test": "README: Deploy section",
+      "status": "PASS",
+      "details": ""
+    },
+    {
+      "category": "DOCS",
+      "test": "README: License section",
+      "status": "PASS",
+      "details": ""
+    },
+    {
+      "category": "DOCS",
+      "test": "README: MCP section",
+      "status": "PASS",
+      "details": ""
+    },
+    {
+      "category": "SECURITY",
+      "test": ".gitignore: .env.local",
+      "status": "PASS",
+      "details": ""
+    },
+    {
+      "category": "SECURITY",
+      "test": ".gitignore: node_modules",
+      "status": "PASS",
+      "details": ""
+    },
+    {
+      "category": "SECURITY",
+      "test": ".gitignore: .next",
+      "status": "PASS",
+      "details": ""
+    },
+    {
+      "category": "SECURITY",
+      "test": "No hardcoded secrets: src/app/page.tsx",
+      "status": "PASS",
+      "details": "Clean"
+    },
+    {
+      "category": "SECURITY",
+      "test": "No hardcoded secrets: src/app/layout.tsx",
+      "status": "PASS",
+      "details": "Clean"
+    },
+    {
+      "category": "SECURITY",
+      "test": "No hardcoded secrets: src/middleware.ts",
+      "status": "PASS",
+      "details": "Clean"
+    },
+    {
+      "category": "SECURITY",
+      "test": "Client uses only anon key",
+      "status": "PASS",
+      "details": ""
+    },
+    {
+      "category": "DATA",
+      "test": "Workspace default has name",
+      "status": "PASS",
+      "details": ""
+    },
+    {
+      "category": "DATA",
+      "test": "Workspace default has slug",
+      "status": "PASS",
+      "details": ""
+    },
+    {
+      "category": "DATA",
+      "test": "Workspace mahmoud-personal-agency has name",
+      "status": "PASS",
+      "details": ""
+    },
+    {
+      "category": "DATA",
+      "test": "Workspace mahmoud-personal-agency has slug",
+      "status": "PASS",
+      "details": ""
+    },
+    {
+      "category": "DATA",
+      "test": "Project \"Self Hosting Projo F\" has workspace",
+      "status": "PASS",
+      "details": ""
+    }
+  ]
+}
