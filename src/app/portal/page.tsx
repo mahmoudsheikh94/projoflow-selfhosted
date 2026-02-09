@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { useAuthUser, useClientAccess, useClientProjects, useSignOut } from '@/lib/hooks/use-client-portal'
 import { ProjectStatus } from '@/types/database'
-import { FolderKanban, LogOut, Loader2, Clock, CheckCircle2, Menu } from 'lucide-react'
+import { FolderKanban, LogOut, Loader2, Clock, CheckCircle2, Menu, User } from 'lucide-react'
 import Image from 'next/image'
 import { appConfig } from '@/lib/config/theme'
 import Link from 'next/link'
@@ -89,6 +89,16 @@ export default function PortalDashboard() {
           </div>
           <div className="flex items-center gap-2 md:gap-4">
             <span className="text-xs md:text-sm text-text-secondary hidden sm:block truncate max-w-[150px]">{user.email}</span>
+            <Link href="/portal/profile">
+              <Button
+                variant="outline"
+                size="sm"
+                className="border-border-default text-text-primary hover:bg-surface-raised text-xs md:text-sm h-8"
+              >
+                <User className="h-4 w-4 md:mr-2" />
+                <span className="hidden md:inline">Profile</span>
+              </Button>
+            </Link>
             <Button
               variant="outline"
               size="sm"

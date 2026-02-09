@@ -27,6 +27,7 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { toast } from 'sonner'
 import { InvoiceSettings } from '@/components/settings/invoice-settings'
+import { ProfileSettings } from '@/components/settings/profile-settings'
 
 // Color picker for a single color
 function ColorInput({
@@ -250,6 +251,9 @@ export default function SettingsPage() {
         <h1 className="text-2xl font-bold text-text-primary">Settings</h1>
         <p className="text-text-secondary">Manage your workspace preferences</p>
       </div>
+
+      {/* Profile */}
+      <ProfileSettings variant="admin" />
 
       {/* Theme Mode */}
       <Card className="bg-surface-raised border-border-default">
