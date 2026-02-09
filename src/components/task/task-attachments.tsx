@@ -17,7 +17,6 @@ interface TaskAttachment {
   file_size: number
   mime_type: string
   uploaded_by: string
-  workspace_id: string
   created_at: string
 }
 
@@ -115,7 +114,6 @@ export function TaskAttachments({
           file_size: file.size,
           mime_type: file.type || 'application/octet-stream',
           uploaded_by: currentUserId,
-          workspace_id: workspaceId,
         })
 
       if (dbError) throw dbError
