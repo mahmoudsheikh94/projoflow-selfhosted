@@ -435,7 +435,7 @@ export default function TimePage() {
           <InvoiceDialog
             open={invoiceDialogOpen}
             onOpenChange={setInvoiceDialogOpen}
-            projectId={selectedProjectId}
+            preselectedProjectId={selectedProjectId}
           />
         </>
       )}
