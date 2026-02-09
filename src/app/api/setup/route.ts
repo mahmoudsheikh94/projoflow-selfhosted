@@ -59,7 +59,27 @@ export async function GET() {
       return NextResponse.json({ setupRequired: true })
     }
 
-    const supabase = createSetupClient()
+    // IMPORTANT: Use service role client to check admin_users
+    // The anon client can't read admin_users due to RLS policies
+    const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+    if (!serviceKey) {
+      // If no service key, try with anon client (might work if RLS allows)
+      console.log('No service role key, using anon client for setup check')
+      const supabase = createSetupClient()
+      const { count, error } = await supabase
+        .from('admin_users')
+        .select('*', { count: 'exact', head: true })
+      
+      if (error) {
+        // RLS blocking or table doesn't exist - setup required
+        console.log('Setup check error (expected with anon):', error.message)
+        return NextResponse.json({ setupRequired: true })
+      }
+      return NextResponse.json({ setupRequired: (count ?? 0) === 0 })
+    }
+
+    // Use service role to bypass RLS and accurately check admin_users
+    const supabase = createAdminClient()
 
     // Check if any admin user exists
     const { count, error } = await supabase
@@ -80,6 +100,7 @@ export async function GET() {
       )
     }
 
+    console.log(`Setup check: found ${count} admin users`)
     return NextResponse.json({
       setupRequired: (count ?? 0) === 0,
     })
