@@ -19,12 +19,15 @@ import {
   LayoutGrid,
   X,
   Filter,
-  User
+  User,
+  Plus,
+  Pencil
 } from 'lucide-react'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
 import { format } from 'date-fns'
 import { PortalTaskComments } from '@/components/portal/portal-task-comments'
+import { PortalTaskDialog } from '@/components/portal/portal-task-dialog'
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from '@/components/ui/sheet'
 import {
   DropdownMenu,
@@ -108,6 +111,14 @@ export default function PortalProjectPage() {
   const [assigneeFilter, setAssigneeFilter] = useState<AssigneeFilter>('all')
   const [statusFilters, setStatusFilters] = useState<Set<TaskStatus>>(new Set())
   const [selectedTask, setSelectedTask] = useState<TaskWithAssignee | null>(null)
+  
+  // Task dialog state
+  const [taskDialogOpen, setTaskDialogOpen] = useState(false)
+  const [editingTask, setEditingTask] = useState<TaskWithAssignee | null>(null)
+  
+  // Check if user has editor role for this project's client
+  const clientAccessForProject = clientAccess?.find(ca => ca.client_id === project?.client_id)
+  const isEditor = clientAccessForProject?.role === 'editor'
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -216,6 +227,22 @@ export default function PortalProjectPage() {
 
             {/* View Toggle & Filters */}
             <div className="flex items-center gap-2 flex-wrap">
+              {/* Add Task Button - only for editors */}
+              {isEditor && (
+                <Button
+                  size="sm"
+                  onClick={() => {
+                    setEditingTask(null)
+                    setTaskDialogOpen(true)
+                  }}
+                  className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm"
+                >
+                  <Plus className="h-4 w-4 mr-1 sm:mr-2" />
+                  <span className="hidden sm:inline">Add Task</span>
+                  <span className="sm:hidden">Add</span>
+                </Button>
+              )}
+
               {/* Assignee Filter */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -583,6 +610,22 @@ export default function PortalProjectPage() {
                       </Badge>
                     </div>
                   </div>
+                  {/* Edit button for editors */}
+                  {isEditor && (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => {
+                        setEditingTask(selectedTask)
+                        setSelectedTask(null)
+                        setTaskDialogOpen(true)
+                      }}
+                      className="border-zinc-700 text-zinc-300 hover:bg-zinc-800 hover:text-white shrink-0"
+                    >
+                      <Pencil className="h-4 w-4 mr-2" />
+                      Edit
+                    </Button>
+                  )}
                 </div>
               </SheetHeader>
 
@@ -666,6 +709,19 @@ export default function PortalProjectPage() {
           )}
         </SheetContent>
       </Sheet>
+
+      {/* Task Dialog for creating/editing - editors only */}
+      {isEditor && (
+        <PortalTaskDialog
+          open={taskDialogOpen}
+          onOpenChange={(open) => {
+            setTaskDialogOpen(open)
+            if (!open) setEditingTask(null)
+          }}
+          projectId={projectId}
+          task={editingTask || undefined}
+        />
+      )}
     </div>
   )
 }
