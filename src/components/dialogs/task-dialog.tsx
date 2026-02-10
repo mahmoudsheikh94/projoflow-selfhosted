@@ -23,7 +23,7 @@ import { useCreateTask, useUpdateTask } from '@/lib/hooks'
 import { Task, TaskStatus, TaskPriority } from '@/types/database'
 import { TaskComments } from '@/components/task/task-comments'
 import { TaskAttachments } from '@/components/task/task-attachments'
-import { UserSelector } from '@/components/ui/user-selector'
+import { ProjectUserSelector } from '@/components/ui/project-user-selector'
 import { toast } from 'sonner'
 import { createClient } from '@/lib/supabase/client'
 
@@ -201,9 +201,10 @@ export function TaskDialog({ open, onOpenChange, projectId, task, initialStatus 
 
           <div className="space-y-2">
             <Label>Assigned To</Label>
-            <UserSelector
+            <ProjectUserSelector
               value={formData.assigned_to}
               onValueChange={(value) => setFormData({ ...formData, assigned_to: value })}
+              projectId={projectId}
               className="bg-input-bg border-border-default"
             />
           </div>
