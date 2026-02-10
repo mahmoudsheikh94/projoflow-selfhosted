@@ -263,14 +263,15 @@ export function useAcceptInvitation() {
           }
         })
         
-        // Also update users table if it exists
-        await supabase
-          .from('users')
-          .update({ name: name.trim() })
-          .eq('id', userId)
-          .single()
-          .then(() => {})
-          .catch(() => {}) // Ignore if users table doesn't exist or user not found
+        // Also update users table if it exists (ignore errors)
+        try {
+          await supabase
+            .from('users')
+            .update({ name: name.trim() })
+            .eq('id', userId)
+        } catch {
+          // Ignore if users table doesn't exist or user not found
+        }
       }
       
       // Mark invitation as accepted
