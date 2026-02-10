@@ -81,7 +81,7 @@ export function ProjectUserSelector({
             ))}
             
             {/* Client users - show with indicator */}
-            {projectId && users?.filter(u => u.type === 'client').length > 0 && (
+            {projectId && (users?.filter(u => u.type === 'client')?.length ?? 0) > 0 && (
               <>
                 <div className="px-2 py-1.5 text-xs text-zinc-500 flex items-center gap-1">
                   <Users className="h-3 w-3" />
