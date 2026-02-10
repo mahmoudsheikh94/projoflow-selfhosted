@@ -27,11 +27,38 @@ export default function InviteAcceptPage() {
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [isCreatingAccount, setIsCreatingAccount] = useState(false)
+  const [pendingConfirmation, setPendingConfirmation] = useState(false)
+
+  useEffect(() => {
+    // Check if there's a pending invitation acceptance from before email confirmation
+    const pendingInvite = localStorage.getItem('pending_invitation')
+    if (pendingInvite) {
+      try {
+        const { storedToken, storedName } = JSON.parse(pendingInvite)
+        if (storedToken === token && storedName) {
+          setName(storedName)
+        }
+      } catch {}
+    }
+  }, [token])
 
   useEffect(() => {
     // If user is logged in and invitation is valid, auto-accept
     if (user && invitation && !acceptInvitation.isPending && !acceptInvitation.isSuccess) {
-      handleAccept()
+      // Get stored name from pending invitation if available
+      const pendingInvite = localStorage.getItem('pending_invitation')
+      let storedName = name
+      if (pendingInvite) {
+        try {
+          const parsed = JSON.parse(pendingInvite)
+          if (parsed.storedToken === token && parsed.storedName) {
+            storedName = parsed.storedName
+          }
+        } catch {}
+        // Clear pending invitation after use
+        localStorage.removeItem('pending_invitation')
+      }
+      handleAccept(storedName)
     }
   }, [user, invitation])
 
@@ -91,6 +118,14 @@ export default function InviteAcceptPage() {
         })
         toast.success('Account created! Welcome to the portal.')
         router.push('/portal')
+      } else if (result.user && !result.session) {
+        // Email confirmation required - store invitation details for after confirmation
+        localStorage.setItem('pending_invitation', JSON.stringify({
+          storedToken: token,
+          storedName: name.trim()
+        }))
+        setPendingConfirmation(true)
+        toast.success('Account created! Please check your email to confirm.')
       } else {
         toast.error('Account created but login failed. Please try signing in.')
         router.push(`/portal/login?redirect=/portal/invite/${token}`)
@@ -156,6 +191,37 @@ export default function InviteAcceptPage() {
                 Go to Portal →
               </Button>
             </Link>
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
+
+  // Show email confirmation pending message
+  if (pendingConfirmation) {
+    return (
+      <div className="min-h-screen flex items-center justify-center p-4">
+        <Card className="w-full max-w-md bg-zinc-900 border-zinc-800">
+          <CardContent className="pt-6 text-center">
+            <div className="h-16 w-16 rounded-full bg-blue-500/10 flex items-center justify-center mx-auto mb-4">
+              <svg className="h-8 w-8 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+            </div>
+            <h2 className="text-xl font-semibold text-white mb-2">Check Your Email</h2>
+            <p className="text-zinc-400 mb-4">
+              We&apos;ve sent a confirmation link to <strong className="text-white">{invitation.email}</strong>
+            </p>
+            <p className="text-sm text-zinc-500 mb-6">
+              Click the link in the email to confirm your account, then return to this page to access the portal.
+            </p>
+            <Button
+              variant="outline"
+              className="border-zinc-700 text-zinc-300 hover:bg-zinc-800"
+              onClick={() => window.location.reload()}
+            >
+              I&apos;ve Confirmed My Email
+            </Button>
           </CardContent>
         </Card>
       </div>
