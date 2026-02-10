@@ -254,6 +254,25 @@ export function useAcceptInvitation() {
       
       if (linkError) throw linkError
       
+      // Update auth user metadata with display name
+      if (name) {
+        await supabase.auth.updateUser({
+          data: { 
+            name: name.trim(),
+            display_name: name.trim()
+          }
+        })
+        
+        // Also update users table if it exists
+        await supabase
+          .from('users')
+          .update({ name: name.trim() })
+          .eq('id', userId)
+          .single()
+          .then(() => {})
+          .catch(() => {}) // Ignore if users table doesn't exist or user not found
+      }
+      
       // Mark invitation as accepted
       await supabase
         .from('client_invitations')
