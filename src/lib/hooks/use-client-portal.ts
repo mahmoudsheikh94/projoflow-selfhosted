@@ -248,7 +248,6 @@ export function useAcceptInvitation() {
           user_id: userId,
           client_id: invitation.client_id,
           role: invitation.role,
-          invited_by: invitation.email,
           accepted_at: new Date().toISOString(),
           name: name || null
         })
