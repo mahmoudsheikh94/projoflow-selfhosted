@@ -463,7 +463,7 @@ export interface ClientUser {
   id: string
   user_id: string
   client_id: string
-  role: 'viewer' | 'admin'
+  role: 'viewer' | 'admin' | 'editor'
   invited_by: string | null
   invited_at: string
   accepted_at: string | null
@@ -476,7 +476,7 @@ export interface ClientInvitation {
   client_id: string
   email: string
   token: string
-  role: 'viewer' | 'admin'
+  role: 'viewer' | 'admin' | 'editor'
   expires_at: string
   accepted_at: string | null
   created_at: string
@@ -486,7 +486,7 @@ export interface ClientInvitationInsert {
   client_id: string
   email: string
   token: string
-  role?: 'viewer' | 'admin'
+  role?: 'viewer' | 'admin' | 'editor'
   expires_at: string
 }
 

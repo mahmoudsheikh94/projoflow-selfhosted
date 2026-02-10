@@ -116,7 +116,7 @@ export function useCreateInvitation() {
   const queryClient = useQueryClient()
   
   return useMutation({
-    mutationFn: async ({ clientId, email, role = 'viewer' }: { clientId: string; email: string; role?: 'viewer' | 'admin' }) => {
+    mutationFn: async ({ clientId, email, role = 'viewer' }: { clientId: string; email: string; role?: 'viewer' | 'admin' | 'editor' }) => {
       const supabase = createClient()
       const token = generateToken()
       const expires_at = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString() // 7 days
