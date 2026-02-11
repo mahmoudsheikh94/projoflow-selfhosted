@@ -1079,27 +1079,59 @@ CREATE INDEX IF NOT EXISTS idx_task_attachments_comment_id ON task_attachments(c
 ALTER TABLE task_attachments ENABLE ROW LEVEL SECURITY;
 
 -- RLS Policies for task_attachments (idempotent: drop then create)
+-- Includes client access for portal users
+
 DROP POLICY IF EXISTS "task_attachments_select" ON task_attachments;
 CREATE POLICY "task_attachments_select" ON task_attachments FOR SELECT TO authenticated
   USING (
+    -- Workspace members
     task_id IN (
       SELECT t.id FROM tasks t WHERE t.workspace_id IN (SELECT get_user_workspace_ids(auth.uid()))
+    )
+    OR
+    -- Clients can see attachments on tasks in their projects
+    task_id IN (
+      SELECT t.id FROM tasks t
+      JOIN projects p ON p.id = t.project_id
+      JOIN client_users cu ON cu.client_id = p.client_id
+      WHERE cu.user_id = auth.uid()
     )
   );
 
 DROP POLICY IF EXISTS "task_attachments_insert" ON task_attachments;
 CREATE POLICY "task_attachments_insert" ON task_attachments FOR INSERT TO authenticated
   WITH CHECK (
+    -- Workspace members
     task_id IN (
       SELECT t.id FROM tasks t WHERE t.workspace_id IN (SELECT get_user_workspace_ids(auth.uid()))
+    )
+    OR
+    -- Client editors can add attachments to tasks in their projects
+    task_id IN (
+      SELECT t.id FROM tasks t
+      JOIN projects p ON p.id = t.project_id
+      JOIN client_users cu ON cu.client_id = p.client_id
+      WHERE cu.user_id = auth.uid() AND cu.role = 'editor'
     )
   );
 
 DROP POLICY IF EXISTS "task_attachments_delete" ON task_attachments;
 CREATE POLICY "task_attachments_delete" ON task_attachments FOR DELETE TO authenticated
   USING (
+    -- Workspace members can delete any attachment
     task_id IN (
       SELECT t.id FROM tasks t WHERE t.workspace_id IN (SELECT get_user_workspace_ids(auth.uid()))
+    )
+    OR
+    -- Client editors can delete their own attachments
+    (
+      uploaded_by = auth.uid()
+      AND task_id IN (
+        SELECT t.id FROM tasks t
+        JOIN projects p ON p.id = t.project_id
+        JOIN client_users cu ON cu.client_id = p.client_id
+        WHERE cu.user_id = auth.uid() AND cu.role = 'editor'
+      )
     )
   );
 

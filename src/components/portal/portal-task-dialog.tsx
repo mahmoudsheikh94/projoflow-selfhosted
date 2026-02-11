@@ -34,6 +34,7 @@ import { toast } from 'sonner'
 import { Loader2, User, Trash2 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { TaskAttachments } from '@/components/task/task-attachments'
 
 interface AssignableUser {
   id: string
@@ -157,6 +158,16 @@ export function PortalTaskDialog({
   const [formData, setFormData] = useState(defaultValues)
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false)
   const { data: assignableUsers, isLoading: usersLoading } = useAssignableUsers(workspaceId, clientId)
+
+  // Get current user for attachments
+  const { data: currentUser } = useQuery({
+    queryKey: ['current-user'],
+    queryFn: async () => {
+      const supabase = createClient()
+      const { data: { user } } = await supabase.auth.getUser()
+      return user
+    }
+  })
 
   const createTask = useCreateTask()
   const updateTask = useUpdateTask()
@@ -372,6 +383,16 @@ export function PortalTaskDialog({
                 />
               </div>
             </div>
+
+            {/* Attachments - only show when editing existing task */}
+            {task && currentUser && (
+              <div className="border-t border-zinc-800 pt-4">
+                <TaskAttachments
+                  taskId={task.id}
+                  currentUserId={currentUser.id}
+                />
+              </div>
+            )}
 
             <div className="flex justify-end gap-2 pt-4">
               <Button

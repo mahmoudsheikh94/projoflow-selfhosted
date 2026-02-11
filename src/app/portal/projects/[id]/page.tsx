@@ -28,6 +28,7 @@ import { cn } from '@/lib/utils'
 import { format } from 'date-fns'
 import { PortalTaskComments } from '@/components/portal/portal-task-comments'
 import { PortalTaskDialog } from '@/components/portal/portal-task-dialog'
+import { TaskAttachments } from '@/components/task/task-attachments'
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from '@/components/ui/sheet'
 import {
   DropdownMenu,
@@ -689,6 +690,18 @@ export default function PortalProjectPage() {
                   </div>
                 </div>
 
+                {/* Attachments Section */}
+                {user && (
+                  <div className="border-t border-zinc-800 pt-6">
+                    <div className="bg-zinc-800/30 rounded-lg p-4 border border-zinc-800">
+                      <TaskAttachments
+                        taskId={selectedTask.id}
+                        currentUserId={user.id}
+                      />
+                    </div>
+                  </div>
+                )}
+
                 {/* Comments Section */}
                 <div className="border-t border-zinc-800 pt-6">
                   <h4 className="text-sm font-medium text-white mb-4">Comments & Updates</h4>
@@ -711,7 +724,7 @@ export default function PortalProjectPage() {
       </Sheet>
 
       {/* Task Dialog for creating/editing - editors only */}
-      {isEditor && (
+      {isEditor && project && (
         <PortalTaskDialog
           open={taskDialogOpen}
           onOpenChange={(open) => {
@@ -719,6 +732,8 @@ export default function PortalProjectPage() {
             if (!open) setEditingTask(null)
           }}
           projectId={projectId}
+          workspaceId={project.workspace_id}
+          clientId={project.client_id || undefined}
           task={editingTask || undefined}
         />
       )}
