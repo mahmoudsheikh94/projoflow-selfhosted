@@ -9,17 +9,23 @@ import { createClient } from '@supabase/supabase-js'
  */
 export async function POST(request: Request) {
   try {
-    const body = await request.json()
+    // Gumroad sends form-urlencoded data, NOT JSON
+    const formData = await request.formData()
     
-    // Gumroad sends: { sale_id, sale_timestamp, product_name, product_permalink, 
-    //                  email, full_name, price, currency, etc. }
+    // Convert FormData to object for easier access
+    const body: Record<string, string> = {}
+    formData.forEach((value, key) => {
+      body[key] = value.toString()
+    })
     
-    const {
-      sale_id,
-      email,
-      product_name,
-      full_name,
-    } = body
+    console.log('Gumroad webhook received:', JSON.stringify(body, null, 2))
+    
+    // Gumroad sends: seller_id, product_id, product_name, permalink, 
+    //                email, sale_id, full_name, price, etc.
+    const sale_id = body.sale_id
+    const email = body.email
+    const product_name = body.product_name
+    const full_name = body.full_name
 
     if (!sale_id || !email) {
       return NextResponse.json(
