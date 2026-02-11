@@ -76,7 +76,7 @@ EXCEPTION WHEN duplicate_object THEN NULL;
 END $$;
 
 DO $$ BEGIN
-  CREATE TYPE client_user_role AS ENUM ('viewer', 'admin');
+  CREATE TYPE client_user_role AS ENUM ('viewer', 'editor', 'admin');
 EXCEPTION WHEN duplicate_object THEN NULL;
 END $$;
 
@@ -1263,3 +1263,160 @@ $$;
 DROP TRIGGER IF EXISTS set_updated_at ON invoices;
 CREATE TRIGGER set_updated_at BEFORE UPDATE ON invoices
   FOR EACH ROW EXECUTE FUNCTION update_updated_at();
+
+
+-- ============================================================
+-- ADDITIONS FROM FEB 2026 UPDATES
+-- ============================================================
+
+-- Credential types enum
+DO $$ BEGIN
+  CREATE TYPE credential_type AS ENUM ('login', 'api_key', 'oauth', 'ssh', 'database', 'other');
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
+
+-- Client credentials table
+CREATE TABLE IF NOT EXISTS client_credentials (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  client_id uuid NOT NULL REFERENCES clients(id) ON DELETE CASCADE,
+  name text NOT NULL,
+  credential_type credential_type DEFAULT 'other',
+  username text,
+  password text,
+  api_key text,
+  url text,
+  notes text,
+  created_by uuid REFERENCES auth.users(id) ON DELETE SET NULL,
+  created_at timestamptz DEFAULT now(),
+  updated_at timestamptz DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS idx_client_credentials_client_id ON client_credentials(client_id);
+
+-- Project documents table
+CREATE TABLE IF NOT EXISTS project_documents (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  project_id uuid NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
+  workspace_id uuid NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE,
+  name text NOT NULL,
+  description text,
+  file_path text NOT NULL,
+  file_size bigint,
+  mime_type text,
+  uploaded_by uuid REFERENCES auth.users(id) ON DELETE SET NULL,
+  uploaded_by_type text DEFAULT 'admin',
+  created_at timestamptz DEFAULT now(),
+  updated_at timestamptz DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS idx_project_documents_project_id ON project_documents(project_id);
+CREATE INDEX IF NOT EXISTS idx_project_documents_workspace_id ON project_documents(workspace_id);
+
+-- Add foreign keys for user joins (if not exists)
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM information_schema.table_constraints 
+    WHERE constraint_name = 'workspace_members_user_id_users_fkey'
+    AND table_name = 'workspace_members'
+  ) THEN
+    ALTER TABLE workspace_members 
+    ADD CONSTRAINT workspace_members_user_id_users_fkey 
+    FOREIGN KEY (user_id) REFERENCES public.users(id) ON DELETE CASCADE;
+  END IF;
+END $$;
+
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM information_schema.table_constraints 
+    WHERE constraint_name = 'client_users_user_id_users_fkey'
+    AND table_name = 'client_users'
+  ) THEN
+    ALTER TABLE client_users 
+    ADD CONSTRAINT client_users_user_id_users_fkey 
+    FOREIGN KEY (user_id) REFERENCES public.users(id) ON DELETE CASCADE;
+  END IF;
+END $$;
+
+-- Enable RLS on new tables
+ALTER TABLE client_credentials ENABLE ROW LEVEL SECURITY;
+ALTER TABLE project_documents ENABLE ROW LEVEL SECURITY;
+
+-- RLS: Client credentials
+CREATE POLICY "wm_credentials_all" ON client_credentials FOR ALL TO authenticated
+USING (client_id IN (SELECT client_id FROM projects WHERE workspace_id IN (SELECT get_user_workspace_ids(auth.uid()))))
+WITH CHECK (client_id IN (SELECT client_id FROM projects WHERE workspace_id IN (SELECT get_user_workspace_ids(auth.uid()))));
+
+CREATE POLICY "client_credentials_select" ON client_credentials FOR SELECT TO authenticated
+USING (client_id IN (SELECT client_id FROM client_users WHERE user_id = auth.uid()));
+
+CREATE POLICY "client_credentials_insert" ON client_credentials FOR INSERT TO authenticated
+WITH CHECK (client_id IN (SELECT client_id FROM client_users WHERE user_id = auth.uid()));
+
+CREATE POLICY "client_credentials_update" ON client_credentials FOR UPDATE TO authenticated
+USING (client_id IN (SELECT client_id FROM client_users WHERE user_id = auth.uid()));
+
+CREATE POLICY "client_credentials_delete" ON client_credentials FOR DELETE TO authenticated
+USING (client_id IN (SELECT client_id FROM client_users WHERE user_id = auth.uid()));
+
+-- RLS: Project documents
+CREATE POLICY "wm_project_documents_all" ON project_documents FOR ALL TO authenticated
+USING (workspace_id IN (SELECT get_user_workspace_ids(auth.uid())))
+WITH CHECK (workspace_id IN (SELECT get_user_workspace_ids(auth.uid())));
+
+CREATE POLICY "client_project_documents_select" ON project_documents FOR SELECT TO authenticated
+USING (project_id IN (SELECT id FROM projects WHERE client_id IN (SELECT client_id FROM client_users WHERE user_id = auth.uid())));
+
+CREATE POLICY "client_project_documents_insert" ON project_documents FOR INSERT TO authenticated
+WITH CHECK (project_id IN (SELECT id FROM projects p JOIN client_users cu ON cu.client_id = p.client_id WHERE cu.user_id = auth.uid() AND cu.role = 'editor'));
+
+CREATE POLICY "client_project_documents_delete" ON project_documents FOR DELETE TO authenticated
+USING (uploaded_by = auth.uid() AND project_id IN (SELECT id FROM projects p JOIN client_users cu ON cu.client_id = p.client_id WHERE cu.user_id = auth.uid() AND cu.role = 'editor'));
+
+-- RLS: Client users can view workspace members (for assignment)
+DROP POLICY IF EXISTS "client_view_workspace_members" ON workspace_members;
+CREATE POLICY "client_view_workspace_members" ON workspace_members FOR SELECT TO authenticated
+USING (
+  workspace_id IN (SELECT get_user_workspace_ids(auth.uid()))
+  OR
+  workspace_id IN (
+    SELECT p.workspace_id FROM projects p
+    JOIN client_users cu ON cu.client_id = p.client_id
+    WHERE cu.user_id = auth.uid()
+  )
+);
+
+-- RLS: Client users can view team users (for assignment display)
+DROP POLICY IF EXISTS "client_view_team_users" ON users;
+CREATE POLICY "client_view_team_users" ON users FOR SELECT TO authenticated
+USING (
+  id IN (SELECT wm.user_id FROM workspace_members wm JOIN projects p ON p.workspace_id = wm.workspace_id JOIN client_users cu ON cu.client_id = p.client_id WHERE cu.user_id = auth.uid())
+  OR id = auth.uid()
+  OR id IN (SELECT user_id FROM workspace_members WHERE workspace_id IN (SELECT get_user_workspace_ids(auth.uid())))
+);
+
+-- Update tasks_delete policy to include client editors
+DROP POLICY IF EXISTS "tasks_delete" ON tasks;
+CREATE POLICY "tasks_delete" ON tasks FOR DELETE TO authenticated
+USING (
+  workspace_id IN (SELECT get_user_workspace_ids(auth.uid()))
+  OR
+  project_id IN (SELECT p.id FROM projects p JOIN client_users cu ON cu.client_id = p.client_id WHERE cu.user_id = auth.uid() AND cu.role = 'editor')
+);
+
+-- Grants
+GRANT ALL ON client_credentials TO authenticated;
+GRANT ALL ON client_credentials TO service_role;
+GRANT ALL ON project_documents TO authenticated;
+GRANT ALL ON project_documents TO service_role;
+
+-- Triggers for updated_at
+DROP TRIGGER IF EXISTS set_updated_at ON client_credentials;
+CREATE TRIGGER set_updated_at BEFORE UPDATE ON client_credentials
+  FOR EACH ROW EXECUTE FUNCTION update_updated_at();
+
+DROP TRIGGER IF EXISTS set_updated_at ON project_documents;
+CREATE TRIGGER set_updated_at BEFORE UPDATE ON project_documents
+  FOR EACH ROW EXECUTE FUNCTION update_updated_at();
+
