@@ -99,7 +99,7 @@ export async function POST(request: Request) {
         const resend = new Resend(process.env.RESEND_API_KEY)
         
         await resend.emails.send({
-          from: 'ProjoFlow <no-reply@z-flow.de>',
+          from: 'ProjoFlow <no-reply@projoflow.com>',
           to: email,
           subject: '🎉 Your ProjoFlow License Key',
           html: `
