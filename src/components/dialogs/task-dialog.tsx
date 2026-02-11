@@ -19,11 +19,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { useCreateTask, useUpdateTask } from '@/lib/hooks'
+import { useCreateTask, useUpdateTask, useProject } from '@/lib/hooks'
 import { Task, TaskStatus, TaskPriority } from '@/types/database'
 import { TaskComments } from '@/components/task/task-comments'
 import { TaskAttachments } from '@/components/task/task-attachments'
-import { ProjectUserSelector } from '@/components/ui/project-user-selector'
+import { UserSelector } from '@/components/ui/user-selector'
 import { toast } from 'sonner'
 import { createClient } from '@/lib/supabase/client'
 
@@ -48,6 +48,7 @@ const defaultValues = {
 export function TaskDialog({ open, onOpenChange, projectId, task, initialStatus }: TaskDialogProps) {
   const [formData, setFormData] = useState(defaultValues)
   const [currentUser, setCurrentUser] = useState<{ id: string; email: string } | null>(null)
+  const { data: project } = useProject(projectId)
 
   const createTask = useCreateTask()
   const updateTask = useUpdateTask()
@@ -110,7 +111,7 @@ export function TaskDialog({ open, onOpenChange, projectId, task, initialStatus 
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-surface-raised border-border-default text-text-primary max-w-2xl max-h-[90vh] overflow-y-auto overflow-x-hidden">
+      <DialogContent className="bg-zinc-900 border-zinc-800 text-white max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>{task ? 'Edit Task' : 'New Task'}</DialogTitle>
         </DialogHeader>
@@ -122,7 +123,7 @@ export function TaskDialog({ open, onOpenChange, projectId, task, initialStatus 
               value={formData.title}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
               placeholder="Build user authentication"
-              className="bg-input-bg border-border-default"
+              className="bg-zinc-800 border-zinc-700"
               required
             />
           </div>
@@ -133,7 +134,7 @@ export function TaskDialog({ open, onOpenChange, projectId, task, initialStatus 
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               placeholder="Details about this task..."
-              className="bg-input-bg border-border-default min-h-[80px]"
+              className="bg-zinc-800 border-zinc-700 min-h-[80px]"
             />
           </div>
 
@@ -144,10 +145,10 @@ export function TaskDialog({ open, onOpenChange, projectId, task, initialStatus 
                 value={formData.status}
                 onValueChange={(v) => setFormData({ ...formData, status: v as TaskStatus })}
               >
-                <SelectTrigger className="bg-input-bg border-border-default">
+                <SelectTrigger className="bg-zinc-800 border-zinc-700">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent className="bg-surface-raised border-border-default">
+                <SelectContent className="bg-zinc-800 border-zinc-700">
                   <SelectItem value="todo">To Do</SelectItem>
                   <SelectItem value="in_progress">In Progress</SelectItem>
                   <SelectItem value="review">Review</SelectItem>
@@ -162,10 +163,10 @@ export function TaskDialog({ open, onOpenChange, projectId, task, initialStatus 
                 value={formData.priority}
                 onValueChange={(v) => setFormData({ ...formData, priority: v as TaskPriority })}
               >
-                <SelectTrigger className="bg-input-bg border-border-default">
+                <SelectTrigger className="bg-zinc-800 border-zinc-700">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent className="bg-surface-raised border-border-default">
+                <SelectContent className="bg-zinc-800 border-zinc-700">
                   <SelectItem value="low">Low</SelectItem>
                   <SelectItem value="medium">Medium</SelectItem>
                   <SelectItem value="high">High</SelectItem>
@@ -182,7 +183,7 @@ export function TaskDialog({ open, onOpenChange, projectId, task, initialStatus 
                 type="date"
                 value={formData.due_date}
                 onChange={(e) => setFormData({ ...formData, due_date: e.target.value })}
-                className="bg-input-bg border-border-default"
+                className="bg-zinc-800 border-zinc-700"
               />
             </div>
 
@@ -193,7 +194,7 @@ export function TaskDialog({ open, onOpenChange, projectId, task, initialStatus 
                 step="0.5"
                 value={formData.estimated_hours || ''}
                 onChange={(e) => setFormData({ ...formData, estimated_hours: parseFloat(e.target.value) || null })}
-                className="bg-input-bg border-border-default"
+                className="bg-zinc-800 border-zinc-700"
                 placeholder="2.5"
               />
             </div>
@@ -201,11 +202,11 @@ export function TaskDialog({ open, onOpenChange, projectId, task, initialStatus 
 
           <div className="space-y-2">
             <Label>Assigned To</Label>
-            <ProjectUserSelector
+            <UserSelector
               value={formData.assigned_to}
               onValueChange={(value) => setFormData({ ...formData, assigned_to: value })}
-              projectId={projectId}
-              className="bg-input-bg border-border-default"
+              className="bg-zinc-800 border-zinc-700"
+              clientId={project?.client_id}
             />
           </div>
 
@@ -214,13 +215,13 @@ export function TaskDialog({ open, onOpenChange, projectId, task, initialStatus 
               type="button"
               variant="outline"
               onClick={() => onOpenChange(false)}
-              className="border-border-default text-text-secondary hover:bg-surface-hover"
+              className="border-zinc-700 text-zinc-300 hover:bg-zinc-800"
             >
               Cancel
             </Button>
             <Button
               type="submit"
-              className="bg-brand hover:bg-brand-hover text-white"
+              className="bg-emerald-600 hover:bg-emerald-700"
               disabled={createTask.isPending || updateTask.isPending}
             >
               {task ? 'Update' : 'Create'} Task
@@ -231,10 +232,9 @@ export function TaskDialog({ open, onOpenChange, projectId, task, initialStatus 
         {/* Attachments Section - only show when editing existing task */}
         {task && currentUser && (
           <>
-            <Separator className="bg-border-default" />
+            <Separator className="bg-zinc-800" />
             <TaskAttachments
               taskId={task.id}
-              workspaceId={task.workspace_id}
               currentUserId={currentUser.id}
             />
           </>
@@ -243,11 +243,10 @@ export function TaskDialog({ open, onOpenChange, projectId, task, initialStatus 
         {/* Comments Section - only show when editing existing task */}
         {task && currentUser && (
           <>
-            <Separator className="bg-border-default" />
+            <Separator className="bg-zinc-800" />
             <TaskComments
               taskId={task.id}
               projectId={projectId}
-              workspaceId={task.workspace_id}
               currentUserId={currentUser.id}
               currentUserName={currentUser.email}
               authorType="admin"

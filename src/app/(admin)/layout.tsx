@@ -20,16 +20,6 @@ export default function AdminLayout({
     const checkAuth = async () => {
       const supabase = createClient()
 
-      // Check if setup has been completed (any admin exists)
-      const { count } = await supabase
-        .from('admin_users')
-        .select('*', { count: 'exact', head: true })
-
-      if (count === 0) {
-        router.replace('/setup')
-        return
-      }
-
       const { data: { user } } = await supabase.auth.getUser()
 
       if (!user) {
@@ -70,8 +60,8 @@ export default function AdminLayout({
 
   if (isLoading) {
     return (
-      <div className="flex h-screen items-center justify-center bg-page-bg">
-        <Loader2 className="h-8 w-8 animate-spin text-brand" />
+      <div className="flex h-screen items-center justify-center bg-zinc-900">
+        <Loader2 className="h-8 w-8 animate-spin text-emerald-500" />
       </div>
     )
   }
@@ -85,7 +75,7 @@ export default function AdminLayout({
       <div className="flex flex-col h-screen lg:flex-row">
         <MobileHeader />
         <Sidebar />
-        <main className="flex-1 overflow-auto bg-surface">
+        <main className="flex-1 overflow-auto bg-zinc-50 dark:bg-zinc-900">
           {children}
         </main>
       </div>

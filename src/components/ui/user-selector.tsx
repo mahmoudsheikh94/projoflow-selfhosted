@@ -1,6 +1,8 @@
 'use client'
 
 import { useAdminUsers } from '@/lib/hooks'
+import { useQuery } from '@tanstack/react-query'
+import { createClient } from '@/lib/supabase/client'
 import {
   Select,
   SelectContent,
@@ -15,18 +17,68 @@ interface UserSelectorProps {
   onValueChange: (value: string | null) => void
   placeholder?: string
   className?: string
+  clientId?: string | null  // If provided, also show client users
+}
+
+interface SelectableUser {
+  id: string
+  name: string | null
+  email: string
+  type: 'team' | 'client'
+}
+
+// Hook to fetch client users for a specific client
+function useClientUsers(clientId?: string | null) {
+  return useQuery({
+    queryKey: ['client-users-for-assignment', clientId],
+    queryFn: async () => {
+      if (!clientId) return []
+      const supabase = createClient()
+      const { data, error } = await supabase
+        .from('client_users')
+        .select('user_id, name, users(email)')
+        .eq('client_id', clientId)
+      
+      if (error) {
+        console.warn('Error fetching client users:', error)
+        return []
+      }
+      
+      return data.map(cu => ({
+        id: cu.user_id,
+        name: cu.name,
+        email: (cu.users as any)?.email || 'Unknown',
+        type: 'client' as const
+      }))
+    },
+    enabled: !!clientId
+  })
 }
 
 export function UserSelector({ 
   value, 
   onValueChange, 
   placeholder = "Select user...",
-  className 
+  className,
+  clientId
 }: UserSelectorProps) {
-  const { data: users, isLoading } = useAdminUsers()
+  const { data: adminUsers, isLoading: adminsLoading } = useAdminUsers()
+  const { data: clientUsers, isLoading: clientsLoading } = useClientUsers(clientId)
+
+  const isLoading = adminsLoading || clientsLoading
+
+  // Combine admin users and client users
+  const allUsers: SelectableUser[] = [
+    ...(adminUsers?.map(u => ({ ...u, type: 'team' as const })) || []),
+    ...(clientUsers || [])
+  ]
+
+  // Remove duplicates (same user might be in both)
+  const uniqueUsers = allUsers.filter((user, index, self) => 
+    index === self.findIndex(u => u.id === user.id)
+  )
 
   const handleValueChange = (newValue: string) => {
-    // If "unassigned" is selected, pass null
     if (newValue === '__unassigned__') {
       onValueChange(null)
     } else {
@@ -52,10 +104,21 @@ export function UserSelector({
           <SelectItem value="__loading__" disabled>
             Loading users...
           </SelectItem>
+        ) : uniqueUsers.length === 0 ? (
+          <SelectItem value="__none__" disabled>
+            No users available
+          </SelectItem>
         ) : (
-          users?.map((user) => (
+          uniqueUsers.map((user) => (
             <SelectItem key={user.id} value={user.id}>
-              {user.name || user.email}
+              <div className="flex items-center gap-2">
+                <span>{user.name || user.email}</span>
+                {clientId && (
+                  <span className="text-xs text-zinc-500">
+                    ({user.type === 'team' ? 'Team' : 'Client'})
+                  </span>
+                )}
+              </div>
             </SelectItem>
           ))
         )}

@@ -647,3 +647,42 @@ export interface InvoiceSettings {
   invoice_notes: string | null
   invoice_footer: string | null
 }
+
+// Client Credentials
+export type CredentialType = 'login' | 'api_key' | 'oauth' | 'ssh' | 'database' | 'other'
+
+export interface ClientCredential {
+  id: string
+  client_id: string
+  name: string
+  credential_type: CredentialType
+  username: string | null
+  password: string | null
+  api_key: string | null
+  url: string | null
+  notes: string | null
+  created_by: string | null
+  created_at: string
+  updated_at: string
+}
+
+export interface ClientCredentialInsert {
+  client_id: string
+  name: string
+  credential_type?: CredentialType
+  username?: string | null
+  password?: string | null
+  api_key?: string | null
+  url?: string | null
+  notes?: string | null
+}
+
+export interface ClientCredentialUpdate {
+  name?: string
+  credential_type?: CredentialType
+  username?: string | null
+  password?: string | null
+  api_key?: string | null
+  url?: string | null
+  notes?: string | null
+}
