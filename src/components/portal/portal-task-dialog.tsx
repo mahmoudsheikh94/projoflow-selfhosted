@@ -126,12 +126,15 @@ function useDeleteTask() {
   return useMutation({
     mutationFn: async ({ id, projectId }: { id: string; projectId: string }) => {
       const supabase = createClient()
-      const { error } = await supabase
+      const { error, count } = await supabase
         .from('tasks')
-        .delete()
+        .delete({ count: 'exact' })
         .eq('id', id)
       
       if (error) throw error
+      if (count === 0) {
+        throw new Error('You do not have permission to delete this task')
+      }
       return { id, projectId }
     },
     onSuccess: (data) => {
