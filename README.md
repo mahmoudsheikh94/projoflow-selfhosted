@@ -9,7 +9,7 @@ One-time license · Self-hosted · Full branding · Native AI integration (MCP)
 
 **This is open-source code, but requires a valid license key to use.**
 
-- 📦 **Purchase:** [Get your license](https://projoflow.com/purchase)
+- 📦 **Purchase:** [Get your license](https://salardian1.gumroad.com/l/tkqgfd)
 - 🔑 **License key** required during setup
 - 💰 **One-time payment** — no recurring fees
 - 🔄 **Free updates forever**
@@ -51,7 +51,7 @@ One-time license · Self-hosted · Full branding · Native AI integration (MCP)
 ## ⚙️ Quick Start
 
 ### Prerequisites
-- **Valid ProjoFlow license key** ([purchase here](https://projoflow.com/purchase))
+- **Valid ProjoFlow license key** ([purchase here](https://salardian1.gumroad.com/l/tkqgfd))
 - Node.js 20+ and npm/pnpm/yarn
 - Supabase account (free tier works)
 - Vercel account (optional, for one-click deploy)
