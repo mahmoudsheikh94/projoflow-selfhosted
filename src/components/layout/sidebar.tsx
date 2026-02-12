@@ -14,6 +14,7 @@ import {
   Settings,
   Menu,
   LogOut,
+  KeyRound,
 } from 'lucide-react'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { Button } from '@/components/ui/button'
@@ -28,6 +29,7 @@ const navigation = [
   { name: 'Leads', href: '/leads', icon: LayoutDashboard },
   { name: 'Projects', href: '/projects', icon: FolderKanban },
   { name: 'Clients', href: '/clients', icon: Users },
+  { name: 'Credentials', href: '/credentials', icon: KeyRound },
   { name: 'Time', href: '/time', icon: Clock },
   { name: 'Invoices', href: '/invoices', icon: Receipt },
   { name: 'Reports', href: '/reports', icon: FileText },

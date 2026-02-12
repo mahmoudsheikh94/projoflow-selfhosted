@@ -390,6 +390,7 @@ export function PortalTaskDialog({
                 <TaskAttachments
                   taskId={task.id}
                   currentUserId={currentUser.id}
+                  workspaceId={workspaceId}
                 />
               </div>
             )}

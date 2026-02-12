@@ -236,6 +236,7 @@ export function TaskDialog({ open, onOpenChange, projectId, task, initialStatus 
             <TaskAttachments
               taskId={task.id}
               currentUserId={currentUser.id}
+              workspaceId={task.workspace_id}
             />
           </>
         )}
@@ -247,6 +248,7 @@ export function TaskDialog({ open, onOpenChange, projectId, task, initialStatus 
             <TaskComments
               taskId={task.id}
               projectId={projectId}
+              workspaceId={task.workspace_id}
               currentUserId={currentUser.id}
               currentUserName={currentUser.email}
               authorType="admin"

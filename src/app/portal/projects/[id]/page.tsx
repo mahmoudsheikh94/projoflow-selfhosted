@@ -697,6 +697,7 @@ export default function PortalProjectPage() {
                       <TaskAttachments
                         taskId={selectedTask.id}
                         currentUserId={user.id}
+                        workspaceId={project.workspace_id}
                       />
                     </div>
                   </div>
