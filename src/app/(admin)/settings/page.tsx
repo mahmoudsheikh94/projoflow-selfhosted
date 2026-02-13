@@ -28,6 +28,7 @@ import { createClient } from '@/lib/supabase/client'
 import { toast } from 'sonner'
 import { InvoiceSettings } from '@/components/settings/invoice-settings'
 import { ProfileSettings } from '@/components/settings/profile-settings'
+import { TeamSettings } from '@/components/settings/team-settings'
 
 // Color picker for a single color
 function ColorInput({
@@ -254,6 +255,9 @@ export default function SettingsPage() {
 
       {/* Profile */}
       <ProfileSettings variant="admin" />
+
+      {/* Team Management */}
+      <TeamSettings />
 
       {/* Theme Mode */}
       <Card className="bg-surface-raised border-border-default">
