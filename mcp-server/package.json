@@ -1,7 +1,7 @@
 {
   "name": "projoflow-mcp-server",
   "version": "1.0.0",
-  "description": "MCP server for ProjoFlow - connect your AI assistant to your project management",
+  "description": "MCP server for ProjoFlow - connect your AI assistant (Claude, Cursor) to your project management",
   "main": "index.js",
   "type": "module",
   "bin": {
@@ -10,9 +10,30 @@
   "scripts": {
     "start": "node index.js"
   },
-  "keywords": ["mcp", "project-management", "projoflow", "claude", "ai-assistant"],
-  "author": "ProjoFlow",
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "project-management",
+    "projoflow",
+    "claude",
+    "cursor",
+    "ai-assistant",
+    "supabase"
+  ],
+  "author": "ProjoFlow <hello@projoflow.com>",
   "license": "MIT",
+  "homepage": "https://projoflow.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mahmoudsheikh94/projoflow-selfhosted.git",
+    "directory": "mcp-server"
+  },
+  "bugs": {
+    "url": "https://github.com/mahmoudsheikh94/projoflow-selfhosted/issues"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0",
     "@supabase/supabase-js": "^2.0.0"

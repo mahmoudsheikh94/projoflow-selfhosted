@@ -1,0 +1,13 @@
+# Dependencies installed locally for dev
+node_modules/
+
+# Lock files (users will generate their own)
+package-lock.json
+
+# Test files
+*.test.js
+__tests__/
+
+# Dev files
+.env*
+.DS_Store
