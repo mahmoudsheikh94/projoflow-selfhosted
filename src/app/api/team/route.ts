@@ -39,20 +39,31 @@ export async function GET() {
       return NextResponse.json({ error: error.message }, { status: 500 })
     }
 
-    // Get user details from admin_users
+    // Get user details from users table (has name) and admin_users (has email)
     const userIds = members.map(m => m.user_id)
-    const { data: users } = await supabase
-      .from('admin_users')
+    
+    // Try users table first (has name)
+    const { data: usersData } = await supabase
+      .from('users')
       .select('id, email, name')
       .in('id', userIds)
 
-    // Merge user info
+    // Also get from admin_users as fallback for email
+    const { data: adminUsers } = await supabase
+      .from('admin_users')
+      .select('id, email')
+      .in('id', userIds)
+
+    // Merge user info - prefer users table, fallback to admin_users
     const enrichedMembers = members.map(m => {
-      const userInfo = users?.find(u => u.id === m.user_id)
+      const userInfo = usersData?.find(u => u.id === m.user_id)
+      const adminInfo = adminUsers?.find(u => u.id === m.user_id)
+      const email = userInfo?.email || adminInfo?.email || 'Unknown'
+      const name = userInfo?.name || email.split('@')[0] || 'Unknown'
       return {
         ...m,
-        email: userInfo?.email || 'Unknown',
-        name: userInfo?.name || userInfo?.email || 'Unknown'
+        email,
+        name
       }
     })
 
@@ -92,11 +103,11 @@ export async function POST(request: NextRequest) {
 
     let targetUserId = userId
 
-    // If email provided, find or create user
+    // If email provided, find user
     if (email && !userId) {
-      // Check if user exists in admin_users
+      // Check users table first, then admin_users
       const { data: existingUser } = await supabase
-        .from('admin_users')
+        .from('users')
         .select('id')
         .eq('email', email)
         .single()
@@ -104,9 +115,20 @@ export async function POST(request: NextRequest) {
       if (existingUser) {
         targetUserId = existingUser.id
       } else {
-        return NextResponse.json({ 
-          error: 'User not found. They must sign up first, then you can add them.' 
-        }, { status: 404 })
+        // Fallback to admin_users
+        const { data: adminUser } = await supabase
+          .from('admin_users')
+          .select('id')
+          .eq('email', email)
+          .single()
+        
+        if (adminUser) {
+          targetUserId = adminUser.id
+        } else {
+          return NextResponse.json({ 
+            error: 'User not found. They must sign up first, then you can add them.' 
+          }, { status: 404 })
+        }
       }
     }
 
