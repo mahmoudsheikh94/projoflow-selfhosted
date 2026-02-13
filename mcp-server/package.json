@@ -1,17 +1,17 @@
 {
-  "name": "taskflow-pro-mcp-server",
+  "name": "projoflow-mcp-server",
   "version": "1.0.0",
-  "description": "MCP server for TaskFlow Pro project management",
+  "description": "MCP server for ProjoFlow - connect your AI assistant to your project management",
   "main": "index.js",
   "type": "module",
   "bin": {
-    "taskflow-mcp": "./index.js"
+    "projoflow-mcp": "./index.js"
   },
   "scripts": {
     "start": "node index.js"
   },
-  "keywords": ["mcp", "project-management", "taskflow-pro"],
-  "author": "TaskFlow Pro",
+  "keywords": ["mcp", "project-management", "projoflow", "claude", "ai-assistant"],
+  "author": "ProjoFlow",
   "license": "MIT",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0",

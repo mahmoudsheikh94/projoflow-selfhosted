@@ -1,5 +1,22 @@
 #!/usr/bin/env node
 
+/**
+ * ProjoFlow MCP Server
+ * 
+ * Connect your AI assistant (Claude Code, Cursor, etc.) to your ProjoFlow instance.
+ * 
+ * Setup:
+ * 1. Create a user account in your ProjoFlow instance for the MCP server
+ * 2. Set environment variables (see below)
+ * 3. Add to your Claude Code / Cursor config
+ * 
+ * Required Environment Variables:
+ *   PROJOFLOW_SUPABASE_URL     - Your Supabase project URL
+ *   PROJOFLOW_SUPABASE_ANON_KEY - Your Supabase anon/public key
+ *   PROJOFLOW_MCP_EMAIL        - Email of the MCP service account user
+ *   PROJOFLOW_MCP_PASSWORD     - Password of the MCP service account user
+ */
+
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import {
@@ -8,27 +25,32 @@ import {
 } from "@modelcontextprotocol/sdk/types.js";
 import { createClient } from "@supabase/supabase-js";
 
-// Supabase config - all values from environment variables
-const SUPABASE_URL = process.env.ZFLOW_SUPABASE_URL || "https://gpsztpweqkqvalgsckdd.supabase.co";
-const SUPABASE_ANON_KEY = process.env.ZFLOW_SUPABASE_ANON_KEY;
+// Configuration from environment variables
+const SUPABASE_URL = process.env.PROJOFLOW_SUPABASE_URL;
+const SUPABASE_ANON_KEY = process.env.PROJOFLOW_SUPABASE_ANON_KEY;
+const MCP_EMAIL = process.env.PROJOFLOW_MCP_EMAIL;
+const MCP_PASSWORD = process.env.PROJOFLOW_MCP_PASSWORD;
 
-// MCP service account credentials
-const MCP_EMAIL = process.env.ZFLOW_MCP_EMAIL;
-const MCP_PASSWORD = process.env.ZFLOW_MCP_PASSWORD;
-
-// Validate required env vars
+// Validate required environment variables
 const missing = [];
-if (!SUPABASE_ANON_KEY) missing.push("ZFLOW_SUPABASE_ANON_KEY");
-if (!MCP_EMAIL) missing.push("ZFLOW_MCP_EMAIL");
-if (!MCP_PASSWORD) missing.push("ZFLOW_MCP_PASSWORD");
+if (!SUPABASE_URL) missing.push("PROJOFLOW_SUPABASE_URL");
+if (!SUPABASE_ANON_KEY) missing.push("PROJOFLOW_SUPABASE_ANON_KEY");
+if (!MCP_EMAIL) missing.push("PROJOFLOW_MCP_EMAIL");
+if (!MCP_PASSWORD) missing.push("PROJOFLOW_MCP_PASSWORD");
 
 if (missing.length > 0) {
   console.error(`ERROR: Missing required environment variables: ${missing.join(", ")}`);
-  console.error("Set these in your shell profile (~/.zshrc or ~/.bashrc)");
+  console.error("\nSetup instructions:");
+  console.error("1. Create a user in your ProjoFlow instance for MCP access");
+  console.error("2. Set these environment variables in your shell profile or Claude Code config:");
+  console.error("   PROJOFLOW_SUPABASE_URL=https://your-project.supabase.co");
+  console.error("   PROJOFLOW_SUPABASE_ANON_KEY=your-anon-key");
+  console.error("   PROJOFLOW_MCP_EMAIL=mcp@your-domain.com");
+  console.error("   PROJOFLOW_MCP_PASSWORD=your-password");
   process.exit(1);
 }
 
-// Create Supabase client with anon key (will authenticate as user)
+// Create Supabase client
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // Authenticate on startup
@@ -40,10 +62,11 @@ async function authenticate() {
   
   if (error) {
     console.error(`Authentication failed: ${error.message}`);
+    console.error("Make sure the MCP user exists in your ProjoFlow instance.");
     process.exit(1);
   }
   
-  console.error(`Authenticated as ${data.user.email}`);
+  console.error(`✓ Authenticated as ${data.user.email}`);
   return data;
 }
 
@@ -578,9 +601,9 @@ async function handleTool(name, args) {
   }
 }
 
-// Create server
+// Create MCP server
 const server = new Server(
-  { name: "taskflow-mcp", version: "1.0.0" },
+  { name: "projoflow-mcp", version: "1.0.0" },
   { capabilities: { tools: {} } }
 );
 
@@ -609,7 +632,7 @@ async function main() {
   await authenticate();
   const transport = new StdioServerTransport();
   await server.connect(transport);
-  console.error("TaskFlow Pro MCP server running");
+  console.error("✓ ProjoFlow MCP server running");
 }
 
 main().catch(err => {
